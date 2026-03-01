@@ -1,0 +1,87 @@
+<!--
+  @component list-item-pk
+  @props primary:string; secondary:string?; href:string?; active:boolean?; disabled:boolean?; divider:boolean?
+  @slots leading, trailing
+  @layer molecules
+-->
+<template>
+  <li class="list-item">
+    <div class="list-item__leading">
+      <slot name="leading"></slot>
+    </div>
+    <div class="list-item__content">
+      <span class="list-item__primary">
+        <slot>Item</slot>
+      </span>
+      <span class="list-item__secondary">
+        <slot name="secondary"></slot>
+      </span>
+    </div>
+    <div class="list-item__trailing">
+      <slot name="trailing"></slot>
+    </div>
+  </li>
+</template>
+
+<style>
+  @scope (.list-item) {
+    :scope {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      padding: .625rem .75rem;
+      background-color: transparent;
+      transition: background-color .12s;
+      cursor: default;
+    }
+
+    :scope[divider] {
+      border-bottom: 1px solid var(--color-border, #e2e8f0);
+    }
+
+    :scope[active] {
+      background-color: var(--color-primary-light, #eff6ff);
+      color: var(--color-primary, #3b82f6);
+    }
+
+    :scope:not([disabled]):hover {
+      background-color: var(--color-surface-2, #f8fafc);
+    }
+
+    :scope[disabled] {
+      opacity: .45;
+      pointer-events: none;
+    }
+
+    .list-item__leading:empty,
+    .list-item__trailing:empty { display: none; }
+
+    .list-item__content {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: .1rem;
+    }
+
+    .list-item__primary {
+      font-size: var(--text-sm, .875rem);
+      color: var(--color-text, #1a202c);
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .list-item__secondary {
+      font-size: var(--text-xs, .75rem);
+      color: var(--color-text-muted, #64748b);
+    }
+    .list-item__secondary:empty { display: none; }
+
+    .list-item__trailing {
+      flex-shrink: 0;
+      color: var(--color-text-muted, #64748b);
+    }
+  }
+</style>

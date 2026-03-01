@@ -1,0 +1,57 @@
+<!--
+  @component thumbnail-grid-pk
+  @props columns:number?; gap:enum(sm|md|lg)?; masonry:boolean?
+  @slots default
+  @layer organisms
+-->
+<template>
+  <div class="thumbnail-grid">
+    <slot>
+      <!-- thumbnail items -->
+    </slot>
+  </div>
+</template>
+
+<style>
+  @scope (.thumbnail-grid) {
+    :scope {
+      display: grid;
+      grid-template-columns: repeat(var(--tg-cols, 4), minmax(0, 1fr));
+      gap: var(--tg-gap, 1rem);
+      width: 100%;
+    }
+
+    /* Gap modifiers */
+    :scope[gap="sm"] { --tg-gap: .5rem; }
+    :scope[gap="lg"] { --tg-gap: 1.5rem; }
+
+    /* Column modifiers via attribute */
+    :scope[columns="2"] { --tg-cols: 2; }
+    :scope[columns="3"] { --tg-cols: 3; }
+    :scope[columns="5"] { --tg-cols: 5; }
+    :scope[columns="6"] { --tg-cols: 6; }
+
+    /* Masonry layout (CSS-native when supported) */
+    :scope[masonry] {
+      grid-template-rows: masonry;
+      align-tracks: stretch;
+    }
+
+    /* Responsive column collapse */
+    @media (max-width: 1024px) {
+      :scope { --tg-cols: 3; }
+      :scope[columns="2"] { --tg-cols: 2; }
+    }
+    @media (max-width: 768px) {
+      :scope { --tg-cols: 2; }
+      :scope[columns="2"] { --tg-cols: 2; }
+    }
+    @media (max-width: 480px) {
+      :scope { --tg-cols: 2; }
+      :scope[columns="6"],
+      :scope[columns="5"],
+      :scope[columns="4"],
+      :scope[columns="3"] { --tg-cols: 2; }
+    }
+  }
+</style>

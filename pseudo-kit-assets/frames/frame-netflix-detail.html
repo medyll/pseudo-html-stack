@@ -1,0 +1,43 @@
+<!--
+  @frame netflix-detail
+  @slots hero, info, row-related
+  @description Movie/show detail page skeleton
+-->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Netflix Detail — Frame</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #141414; color: #fff; font-family: system-ui, sans-serif; min-height: 100dvh; }
+    .frame-netflix-detail { display: flex; flex-direction: column; min-height: 100dvh; }
+    .frame__navbar  { position: absolute; top: 0; left: 0; right: 0; z-index: 10; }
+    .frame__hero    { position: relative; width: 100%; min-height: 70vh; }
+    .frame__info    { padding: 2rem; max-width: 56rem; }
+    .frame__related { padding: 0 2rem 3rem; }
+  </style>
+</head>
+<body>
+  <div class="frame-netflix-detail">
+
+    <div class="frame__navbar">
+      <slot name="navbar"></slot>
+    </div>
+
+    <div class="frame__hero">
+      <slot name="hero"></slot>
+    </div>
+
+    <div class="frame__info">
+      <slot name="info"></slot>
+    </div>
+
+    <div class="frame__related">
+      <slot name="row-related"></slot>
+    </div>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!--
+  @component story-ring-pk
+  @props label:string?; seen:boolean?; add:boolean?
+  @slots default, add-icon
+  @layer organisms
+-->
+<template>
+  <div class="story-ring">
+    <div class="story-ring__track">
+      <!-- story items supplied via slot -->
+      <slot>
+        <div class="story-ring__item">
+          <div class="story-ring__avatar">
+            <span class="story-ring__add-icon" aria-hidden="true">+</span>
+          </div>
+          <span class="story-ring__label">Add Story</span>
+        </div>
+      </slot>
+    </div>
+  </div>
+</template>
+
+<style>
+  @scope (.story-ring) {
+    :scope {
+      display: block;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .story-ring__track {
+      display: flex;
+      gap: .75rem;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      padding: .5rem .25rem;
+    }
+    .story-ring__track::-webkit-scrollbar { display: none; }
+
+    /* Individual story item (used as the skeleton pattern) */
+    .story-ring__item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .35rem;
+      flex-shrink: 0;
+      cursor: pointer;
+      scroll-snap-align: start;
+    }
+
+    .story-ring__avatar {
+      width: 4rem;
+      height: 4rem;
+      border-radius: 50%;
+      background-color: var(--color-surface-2, #f1f5f9);
+      /* gradient ring = unseen story */
+      border: 2.5px solid transparent;
+      background-clip: padding-box;
+      box-shadow: 0 0 0 2.5px var(--color-primary, #3b82f6);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: box-shadow .15s;
+    }
+
+    /* seen story: grey ring */
+    .story-ring__item[seen] .story-ring__avatar,
+    :scope[seen] .story-ring__avatar {
+      box-shadow: 0 0 0 2.5px var(--color-border, #e2e8f0);
+    }
+
+    /* add button variant */
+    .story-ring__item[add] .story-ring__avatar {
+      box-shadow: 0 0 0 2px var(--color-border, #e2e8f0);
+      background-color: var(--color-primary-light, #eff6ff);
+    }
+
+    .story-ring__add-icon {
+      font-size: 1.5rem;
+      font-weight: 300;
+      color: var(--color-primary, #3b82f6);
+      line-height: 1;
+    }
+
+    .story-ring__label {
+      font-size: var(--text-xs, .75rem);
+      color: var(--color-text-muted, #64748b);
+      max-width: 4.5rem;
+      text-align: center;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+</style>

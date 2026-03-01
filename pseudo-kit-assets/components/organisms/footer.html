@@ -1,0 +1,93 @@
+<!--
+  @component footer-pk
+  @props variant:enum(simple|full)?
+  @slots brand, links, social, legal
+  @layer organisms
+-->
+<template>
+  <footer class="footer">
+    <div class="footer__inner">
+      <div class="footer__brand">
+        <slot name="brand">Brand</slot>
+      </div>
+      <nav class="footer__links" aria-label="Footer navigation">
+        <slot name="links"></slot>
+      </nav>
+      <div class="footer__social">
+        <slot name="social"></slot>
+      </div>
+    </div>
+    <div class="footer__legal">
+      <slot name="legal">© 2025 Company. All rights reserved.</slot>
+    </div>
+  </footer>
+</template>
+
+<style>
+  @scope (.footer) {
+    :scope {
+      display: flex;
+      flex-direction: column;
+      background-color: var(--color-surface-2, #f8fafc);
+      border-top: 1px solid var(--color-border, #e2e8f0);
+      color: var(--color-text-muted, #64748b);
+      font-size: var(--text-sm, .875rem);
+    }
+
+    .footer__inner {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 2rem;
+      padding: 2.5rem var(--page-x, 2rem);
+    }
+
+    .footer__brand {
+      flex: 0 0 auto;
+      font-size: var(--text-lg, 1.125rem);
+      font-weight: 700;
+      color: var(--color-text, #1a202c);
+    }
+
+    .footer__links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .75rem 2rem;
+    }
+    .footer__links:empty { display: none; }
+
+    .footer__social {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+    }
+    .footer__social:empty { display: none; }
+
+    .footer__legal {
+      padding: 1rem var(--page-x, 2rem);
+      border-top: 1px solid var(--color-border, #e2e8f0);
+      text-align: center;
+      font-size: var(--text-xs, .75rem);
+    }
+
+    /* Simple variant: single row */
+    :scope[variant="simple"] .footer__inner {
+      flex-direction: row;
+      align-items: center;
+      padding-bottom: 1rem;
+    }
+    :scope[variant="simple"] .footer__legal {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .footer__inner {
+        flex-direction: column;
+        gap: 1.5rem;
+        padding: 2rem 1.25rem;
+      }
+      .footer__legal { padding: 1rem 1.25rem; }
+    }
+  }
+</style>

@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stranger Dimensions S4 — Pseudo-Netflix</title>
+  <link rel="stylesheet" href="tokens.css" />
+  <style>
+    /* ── Navbar ── */
+    .nf-nav {
+      position:fixed; top:0; left:0; right:0; z-index:100;
+      display:flex; align-items:center; gap:2rem; padding:.9rem 4vw;
+      background:#141414;
+    }
+    .nf-logo { color:#e50914; font-size:1.8rem; font-weight:900; letter-spacing:-.04em; }
+    .nf-nav-links { display:flex; gap:1.2rem; font-size:.875rem; }
+    .nf-nav-links a { color:#e5e5e5; }
+    .nf-nav-right { margin-left:auto; display:flex; gap:1rem; align-items:center; }
+    .nf-nav-avatar { width:32px;height:32px;border-radius:.2rem;background:#e50914;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700; }
+
+    /* ── Hero ── */
+    .nf-detail-hero {
+      position:relative; height:70dvh; min-height:420px;
+      display:flex; align-items:flex-end;
+      padding: 0 4vw 5%;
+      background: linear-gradient(to right, rgba(0,0,0,.9) 0%, transparent 60%),
+                  linear-gradient(to top, #141414 0%, transparent 50%),
+                  linear-gradient(135deg,#1a0a2e 0%,#3d0000 50%,#0d1a2e 100%);
+      margin-top: 60px;
+    }
+    .nf-detail-hero-wrap { max-width:650px; }
+    .nf-hero-meta-row { display:flex; align-items:center; gap:.75rem; font-size:.875rem; margin-bottom:.75rem; }
+    .nf-match { color:#46d369; font-weight:700; font-size:1.1rem; }
+    .nf-badge { border:1px solid #999; padding:.1rem .4rem; font-size:.75rem; border-radius:.15rem; }
+    .nf-hero-title { font-size:clamp(2.5rem,5vw,4rem); font-weight:700; margin-bottom:.5rem; }
+    .nf-subtitle { font-size:1.2rem; color:#aaa; margin-bottom:1rem; }
+    .nf-hero-desc { color:#d2d2d2; line-height:1.6; max-width:500px; margin-bottom:1.5rem; }
+    .nf-actions { display:flex; gap:1rem; flex-wrap:wrap; }
+    .nf-btn { display:inline-flex; align-items:center; gap:.5rem; padding:.7rem 1.6rem; border:none; border-radius:.2rem; font-size:1rem; font-weight:700; cursor:pointer; }
+    .nf-btn-play { background:#fff; color:#000; }
+    .nf-btn-info { background:rgba(109,109,110,.7); color:#fff; }
+    .nf-btn-list { background:rgba(109,109,110,.7); color:#fff; border:2px solid #fff; }
+
+    /* ── Details Section ── */
+    .nf-detail-body { padding: 2rem 4vw 4rem; }
+    .nf-detail-grid { display:grid; grid-template-columns: 1fr 300px; gap:2rem; max-width:1100px; }
+    @media (max-width:768px) { .nf-detail-grid { grid-template-columns:1fr; } }
+
+    .nf-episodes h2 { font-size:1.4rem; font-weight:700; margin-bottom:1.5rem; }
+    .nf-season-select { background:#333; color:#fff; border:none; padding:.4rem .8rem; border-radius:.2rem; font-size:.875rem; margin-bottom:1.5rem; }
+    .nf-episode {
+      display:grid; grid-template-columns:auto 1fr; gap:1rem; padding:1rem 0;
+      border-top:1px solid #2a2a2a; cursor:pointer;
+    }
+    .nf-episode:hover { background:rgba(255,255,255,.05); border-radius:.3rem; padding-left:.75rem; }
+    .nf-ep-num { font-size:1.4rem; color:#999; width:2rem; text-align:center; align-self:center; }
+    .nf-ep-thumb { width:140px; height:79px; border-radius:.2rem; background:var(--bg,#333); flex-shrink:0; }
+    .nf-ep-info h3 { font-size:.9rem; font-weight:700; margin-bottom:.3rem; }
+    .nf-ep-info p { font-size:.8rem; color:#aaa; line-height:1.5; }
+    .nf-ep-dur { font-size:.75rem; color:#777; margin-top:.4rem; }
+
+    .nf-detail-sidebar h3 { font-size:.9rem; font-weight:700; color:#777; text-transform:uppercase; letter-spacing:.05em; margin-bottom:.4rem; }
+    .nf-detail-sidebar p { font-size:.875rem; margin-bottom:1.2rem; color:#ccc; }
+    .nf-tags { display:flex; flex-wrap:wrap; gap:.4rem; }
+    .nf-tag { background:#333; color:#ccc; font-size:.75rem; padding:.2rem .6rem; border-radius:.15rem; }
+
+    /* ── More Like This ── */
+    .nf-more h2 { font-size:1.4rem; font-weight:700; margin:2rem 0 1rem; }
+    .nf-more-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:1rem; }
+    .nf-more-tile { border-radius:.3rem; overflow:hidden; background:#181818; cursor:pointer; }
+    .nf-more-thumb { height:110px; background:var(--bg,#333); }
+    .nf-more-info { padding:.7rem; }
+    .nf-more-info h4 { font-size:.875rem; font-weight:700; margin-bottom:.3rem; }
+    .nf-more-info p { font-size:.75rem; color:#aaa; line-height:1.5; }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="nf-nav">
+    <a href="index.html" class="nf-logo">PSEUDOFLIX</a>
+    <div class="nf-nav-links"><a href="index.html">Home</a><a href="#">TV Shows</a><a href="#">Movies</a></div>
+    <div class="nf-nav-right"><div class="nf-nav-avatar">J</div></div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="nf-detail-hero">
+    <div class="nf-detail-hero-wrap">
+      <div class="nf-hero-meta-row">
+        <span class="nf-match">98% Match</span>
+        <span>2024</span>
+        <span class="nf-badge">TV-MA</span>
+        <span>4 Seasons</span>
+        <span class="nf-badge">HD</span>
+        <span class="nf-badge">5.1</span>
+      </div>
+      <h1 class="nf-hero-title">Stranger Dimensions</h1>
+      <p class="nf-subtitle">Season 4</p>
+      <p class="nf-hero-desc">
+        The group faces their most terrifying challenge yet as the dimensional rift
+        threatens to consume the entire town. New alliances must be forged and old
+        secrets uncovered before it's too late.
+      </p>
+      <div class="nf-actions">
+        <button class="nf-btn nf-btn-play">▶ Play S4:E1</button>
+        <button class="nf-btn nf-btn-list">+ My List</button>
+        <button class="nf-btn nf-btn-info">👍 Rate</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Detail Body -->
+  <main class="nf-detail-body">
+    <div class="nf-detail-grid">
+
+      <!-- Episodes -->
+      <div class="nf-episodes">
+        <h2>Episodes</h2>
+        <select class="nf-season-select">
+          <option>Season 4</option><option>Season 3</option><option>Season 2</option><option>Season 1</option>
+        </select>
+
+        <div class="nf-episode">
+          <div class="nf-ep-num">1</div>
+          <div style="display:flex;gap:1rem">
+            <div class="nf-ep-thumb" style="--bg:linear-gradient(135deg,#1a0a2e,#3d0000)"></div>
+            <div class="nf-ep-info">
+              <h3>The Awakening</h3>
+              <p>After a summer of apparent calm, the group discovers a new rift opening beneath the school's foundations.</p>
+              <div class="nf-ep-dur">52m</div>
+            </div>
+          </div>
+        </div>
+        <div class="nf-episode">
+          <div class="nf-ep-num">2</div>
+          <div style="display:flex;gap:1rem">
+            <div class="nf-ep-thumb" style="--bg:linear-gradient(135deg,#0d1a2e,#1a3a5e)"></div>
+            <div class="nf-ep-info">
+              <h3>The Cold Front</h3>
+              <p>A mysterious cold snap freezes the town while strange creatures are spotted near the old Hawkins Lab.</p>
+              <div class="nf-ep-dur">48m</div>
+            </div>
+          </div>
+        </div>
+        <div class="nf-episode">
+          <div class="nf-ep-num">3</div>
+          <div style="display:flex;gap:1rem">
+            <div class="nf-ep-thumb" style="--bg:linear-gradient(135deg,#2d1b69,#1a0040)"></div>
+            <div class="nf-ep-info">
+              <h3>The Vanishing</h3>
+              <p>Two members of the group disappear overnight. The remaining friends must navigate the Upside Down alone.</p>
+              <div class="nf-ep-dur">55m</div>
+            </div>
+          </div>
+        </div>
+        <div class="nf-episode">
+          <div class="nf-ep-num">4</div>
+          <div style="display:flex;gap:1rem">
+            <div class="nf-ep-thumb" style="--bg:linear-gradient(135deg,#3e0000,#760000)"></div>
+            <div class="nf-ep-info">
+              <h3>The Gate Reopens</h3>
+              <p>With the gate fully open, shadows pour into Hawkins. The military arrives but brings its own hidden agenda.</p>
+              <div class="nf-ep-dur">62m</div>
+            </div>
+          </div>
+        </div>
+        <div class="nf-episode">
+          <div class="nf-ep-num">5</div>
+          <div style="display:flex;gap:1rem">
+            <div class="nf-ep-thumb" style="--bg:linear-gradient(135deg,#1b5e20,#003300)"></div>
+            <div class="nf-ep-info">
+              <h3>The Mind Flayer Returns</h3>
+              <p>An old enemy resurfaces with new power. Eleven's abilities are tested to their absolute limits.</p>
+              <div class="nf-ep-dur">71m</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="nf-detail-sidebar">
+        <h3>Cast</h3>
+        <p>Millie Bobby Brown, Finn Wolfhard, Gaten Matarazzo, Caleb McLaughlin, Noah Schnapp</p>
+        <h3>Genres</h3>
+        <div class="nf-tags">
+          <span class="nf-tag">Sci-Fi</span><span class="nf-tag">Horror</span>
+          <span class="nf-tag">Thriller</span><span class="nf-tag">80s Nostalgia</span>
+          <span class="nf-tag">Supernatural</span>
+        </div>
+        <br/>
+        <h3>This show is</h3>
+        <div class="nf-tags">
+          <span class="nf-tag">Suspenseful</span><span class="nf-tag">Dark</span>
+          <span class="nf-tag">Nostalgic</span><span class="nf-tag">Critically Acclaimed</span>
+        </div>
+        <br/>
+        <h3>Maturity rating</h3>
+        <p><span class="nf-badge" style="border:1px solid #aaa;padding:.2rem .5rem">TV-MA</span> &nbsp;Violence, Language</p>
+      </aside>
+
+    </div>
+
+    <!-- More Like This -->
+    <div class="nf-more">
+      <h2>More Like This</h2>
+      <div class="nf-more-grid">
+        <div class="nf-more-tile">
+          <div class="nf-more-thumb" style="--bg:linear-gradient(135deg,#0f2027,#2c5364)"></div>
+          <div class="nf-more-info"><h4>The Overlap</h4><p>Two parallel realities begin to merge with devastating consequences.</p></div>
+        </div>
+        <div class="nf-more-tile">
+          <div class="nf-more-thumb" style="--bg:linear-gradient(135deg,#360033,#0b8793)"></div>
+          <div class="nf-more-info"><h4>Parallel Lives</h4><p>A quantum physicist discovers she has been living two lives simultaneously.</p></div>
+        </div>
+        <div class="nf-more-tile">
+          <div class="nf-more-thumb" style="--bg:linear-gradient(135deg,#4a0e8f,#1a0040)"></div>
+          <div class="nf-more-info"><h4>Cosmos: Origins</h4><p>The universe's most profound secrets lie buried beneath an ancient civilization.</p></div>
+        </div>
+        <div class="nf-more-tile">
+          <div class="nf-more-thumb" style="--bg:linear-gradient(135deg,#37006e,#5e00b5)"></div>
+          <div class="nf-more-info"><h4>Quantum Leap</h4><p>A scientist gets trapped jumping through time with no way to return home.</p></div>
+        </div>
+        <div class="nf-more-tile">
+          <div class="nf-more-thumb" style="--bg:linear-gradient(135deg,#1c1c1c,#4a4a4a)"></div>
+          <div class="nf-more-info"><h4>Shadow Code</h4><p>A hacker discovers that digital shadows are windows into another realm.</p></div>
+        </div>
+        <div class="nf-more-tile">
+          <div class="nf-more-thumb" style="--bg:linear-gradient(135deg,#1a237e,#283593)"></div>
+          <div class="nf-more-info"><h4>Midnight Protocol</h4><p>A covert agency operates in the space between dreams and reality.</p></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>

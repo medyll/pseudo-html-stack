@@ -1,0 +1,88 @@
+<!--
+  @component pagination-pk
+  @props page:number; total:number; perPage:number?; siblings:number?
+  @slots default
+  @layer molecules
+-->
+<template>
+  <nav class="pagination" aria-label="Pagination">
+    <button class="pagination__btn pagination__btn--prev" type="button" aria-label="Previous page">‹</button>
+    <ul class="pagination__list">
+      <li class="pagination__item pagination__item--active">
+        <button class="pagination__page" type="button" aria-current="page">1</button>
+      </li>
+      <li class="pagination__item">
+        <button class="pagination__page" type="button">2</button>
+      </li>
+      <li class="pagination__item">
+        <button class="pagination__page" type="button">3</button>
+      </li>
+    </ul>
+    <button class="pagination__btn pagination__btn--next" type="button" aria-label="Next page">›</button>
+  </nav>
+</template>
+
+<style>
+  @scope (.pagination) {
+    :scope {
+      display: flex;
+      align-items: center;
+      gap: .25rem;
+      font-size: var(--text-sm, .875rem);
+    }
+
+    .pagination__list {
+      display: flex;
+      align-items: center;
+      gap: .25rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .pagination__page,
+    .pagination__btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 2rem;
+      height: 2rem;
+      padding: 0 .25rem;
+      border: 1px solid var(--color-border, #e2e8f0);
+      border-radius: var(--radius-sm, .25rem);
+      background: var(--color-surface, #fff);
+      color: var(--color-text, #1a202c);
+      cursor: pointer;
+      font-size: inherit;
+      transition: background-color .12s, border-color .12s;
+    }
+    .pagination__page:hover,
+    .pagination__btn:hover {
+      background-color: var(--color-surface-2, #f8fafc);
+      border-color: var(--color-primary, #3b82f6);
+    }
+    .pagination__page:focus-visible,
+    .pagination__btn:focus-visible {
+      outline: 2px solid var(--color-primary, #3b82f6);
+      outline-offset: 1px;
+    }
+
+    .pagination__item--active .pagination__page {
+      background-color: var(--color-primary, #3b82f6);
+      border-color: var(--color-primary, #3b82f6);
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .pagination__btn:disabled {
+      opacity: .35;
+      pointer-events: none;
+    }
+
+    @media (max-width: 480px) {
+      .pagination__list { gap: .15rem; }
+      .pagination__page,
+      .pagination__btn { min-width: 1.75rem; height: 1.75rem; }
+    }
+  }
+</style>

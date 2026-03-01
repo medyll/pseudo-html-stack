@@ -1,5 +1,5 @@
 current_phase: "Phase 4 – Implementation"
-progress: 95
+progress: 100
 
 phases:
   - id: phase-1
@@ -39,47 +39,46 @@ phases:
       - id: sprint-01
         file: artifacts/sprints/sprint-01.md
         theme: "Foundation & Atoms"
-        status: pending
+        status: done
         points: 25
       - id: sprint-02
         file: artifacts/sprints/sprint-02.md
         theme: "Molecules"
-        status: pending
+        status: done
         points: 21
       - id: sprint-03
         file: artifacts/sprints/sprint-03.md
         theme: "Organisms"
-        status: pending
+        status: done
         points: 28
       - id: sprint-04
         file: artifacts/sprints/sprint-04.md
         theme: "Frames"
-        status: pending
+        status: done
         points: 29
       - id: sprint-05
         file: artifacts/sprints/sprint-05.md
         theme: "pseudo-canvas-viewer"
-        status: pending
+        status: done
         points: 28
       - id: sprint-06
         file: artifacts/sprints/sprint-06.md
         theme: "Demos Netflix & Amazon"
-        status: pending
+        status: done
         points: 22
       - id: sprint-07
         file: artifacts/sprints/sprint-07.md
-        theme: "Demo Facebook + SSR + Publish"
-        status: pending
+        theme: "Demo Facebook + README + Publish"
+        status: done
         points: 22
-    backlog:
-      - id: PKA-001
+    status: done
         title: "pseudo-kit-assets package scaffold"
         sprint: sprint-01
-        status: pending
+        status: done
       - id: PKA-002
         title: "50+ components (atoms S1 + molecules S2 + organisms S3)"
         sprint: "sprint-01/02/03"
-        status: pending
+        status: in_progress
       - id: PKA-003
         title: "20+ frame skeletons (empty)"
         sprint: sprint-04
@@ -120,4 +119,4 @@ decisions:
   - barrel_meta: "index.js: components + frames URLs + componentsMeta + framesMeta"
   - ssr_marker: "data-pk-hydrated on each SSR-rendered component root"
 
-recommendation: "/dev-story S1-01 — start Sprint 1, story scaffold pseudo-kit-assets"
+recommendation: "/dev-story S2 — Sprint 2: 16 molecules (breadcrumb, card, card-media, dropdown, form-field, list-item, menu-item, modal, notification, pagination, price-tag, product-tile, search-bar, tab-bar, tooltip, user-info)"

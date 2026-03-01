@@ -1,0 +1,55 @@
+<!--
+  @component card-media-pk
+  @props src:string; alt:string; ratio:enum(square|16x9|4x3|3x2|auto)?; fit:enum(cover|contain)?
+  @slots overlay
+  @layer molecules
+-->
+<template>
+  <figure class="card-media">
+    <div class="card-media__wrap">
+      <img class="card-media__img" src="" alt="" loading="lazy" />
+      <div class="card-media__overlay">
+        <slot name="overlay"></slot>
+      </div>
+    </div>
+  </figure>
+</template>
+
+<style>
+  @scope (.card-media) {
+    :scope {
+      display: block;
+      margin: 0;
+      overflow: hidden;
+      background-color: var(--color-surface-2, #f1f5f9);
+    }
+
+    .card-media__wrap {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%; /* default 16×9 */
+    }
+    :scope[ratio="square"]  .card-media__wrap { padding-top: 100%; }
+    :scope[ratio="4x3"]     .card-media__wrap { padding-top: 75%; }
+    :scope[ratio="3x2"]     .card-media__wrap { padding-top: 66.67%; }
+    :scope[ratio="auto"]    .card-media__wrap { padding-top: 0; }
+    :scope[ratio="auto"]    .card-media__img  { position: static; height: auto; }
+
+    .card-media__img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: var(--card-media-fit, cover);
+    }
+    :scope[fit="contain"] .card-media__img { object-fit: contain; }
+
+    .card-media__overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: flex-end;
+    }
+    .card-media__overlay:empty { display: none; }
+  }
+</style>

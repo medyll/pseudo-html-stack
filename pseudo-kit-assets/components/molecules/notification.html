@@ -1,0 +1,86 @@
+<!--
+  @component notification-pk
+  @props message:string?; variant:enum(info|success|warning|danger)?; dismissible:boolean?; icon:boolean?
+  @slots default, action
+  @layer molecules
+-->
+<template>
+  <div class="notification" role="alert">
+    <span class="notification__icon" aria-hidden="true"></span>
+    <div class="notification__content">
+      <slot>Notification message</slot>
+    </div>
+    <div class="notification__action">
+      <slot name="action"></slot>
+    </div>
+    <button class="notification__dismiss" type="button" aria-label="Dismiss">✕</button>
+  </div>
+</template>
+
+<style>
+  @scope (.notification) {
+    :scope {
+      display: flex;
+      align-items: flex-start;
+      gap: .75rem;
+      padding: .875rem 1rem;
+      border-radius: var(--radius-md, .375rem);
+      border: 1px solid transparent;
+      background-color: var(--color-surface-2, #f8fafc);
+      font-size: var(--text-sm, .875rem);
+    }
+
+    /* Variants */
+    :scope[variant="info"] {
+      background-color: var(--color-info-light, #eff6ff);
+      border-color: var(--color-info, #3b82f6);
+      color: var(--color-info-dark, #1e40af);
+    }
+    :scope[variant="success"] {
+      background-color: var(--color-success-light, #f0fdf4);
+      border-color: var(--color-success, #22c55e);
+      color: var(--color-success-dark, #15803d);
+    }
+    :scope[variant="warning"] {
+      background-color: var(--color-warning-light, #fffbeb);
+      border-color: var(--color-warning, #f59e0b);
+      color: var(--color-warning-dark, #92400e);
+    }
+    :scope[variant="danger"] {
+      background-color: var(--color-danger-light, #fef2f2);
+      border-color: var(--color-danger, #ef4444);
+      color: var(--color-danger-dark, #991b1b);
+    }
+
+    .notification__icon {
+      flex-shrink: 0;
+      font-size: 1rem;
+      margin-top: .05rem;
+    }
+    :scope:not([icon]) .notification__icon { display: none; }
+    :scope[variant="info"]    .notification__icon::before { content: 'ℹ'; }
+    :scope[variant="success"] .notification__icon::before { content: '✓'; }
+    :scope[variant="warning"] .notification__icon::before { content: '⚠'; }
+    :scope[variant="danger"]  .notification__icon::before { content: '✕'; }
+
+    .notification__content { flex: 1; }
+
+    .notification__action { flex-shrink: 0; }
+    .notification__action:empty { display: none; }
+
+    .notification__dismiss {
+      flex-shrink: 0;
+      align-self: flex-start;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: .8rem;
+      color: currentColor;
+      opacity: .6;
+      padding: .1rem;
+      line-height: 1;
+    }
+    .notification__dismiss:hover { opacity: 1; }
+    :scope:not([dismissible]) .notification__dismiss { display: none; }
+  }
+</style>

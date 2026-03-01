@@ -1,0 +1,121 @@
+<!--
+  @component tooltip-pk
+  @props content:string; position:enum(top|bottom|left|right)?; delay:number?
+  @slots default
+  @layer molecules
+-->
+<template>
+  <span class="tooltip" role="tooltip">
+    <span class="tooltip__trigger">
+      <slot>Hover me</slot>
+    </span>
+    <span class="tooltip__content" aria-live="polite">
+      <slot name="content">Tooltip text</slot>
+    </span>
+  </span>
+</template>
+
+<style>
+  @scope (.tooltip) {
+    :scope {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .tooltip__content {
+      position: absolute;
+      z-index: var(--z-tooltip, 600);
+      padding: .35rem .65rem;
+      font-size: var(--text-xs, .75rem);
+      font-weight: 500;
+      white-space: nowrap;
+      color: #fff;
+      background-color: var(--color-text, #1a202c);
+      border-radius: var(--radius-sm, .25rem);
+      box-shadow: 0 2px 8px rgba(0,0,0,.15);
+      pointer-events: none;
+      /* hidden by default */
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .15s, visibility .15s;
+      /* default: top */
+      bottom: calc(100% + .4rem);
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    /* Arrow */
+    .tooltip__content::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: -4px;
+      border: 4px solid transparent;
+      border-bottom-width: 0;
+      border-top-color: var(--color-text, #1a202c);
+    }
+
+    /* Bottom */
+    :scope[position="bottom"] .tooltip__content {
+      bottom: auto;
+      top: calc(100% + .4rem);
+    }
+    :scope[position="bottom"] .tooltip__content::after {
+      bottom: auto;
+      top: -4px;
+      border-top-width: 0;
+      border-bottom-width: 4px;
+      border-bottom-color: var(--color-text, #1a202c);
+      border-top-color: transparent;
+    }
+
+    /* Left */
+    :scope[position="left"] .tooltip__content {
+      bottom: auto;
+      left: auto;
+      right: calc(100% + .4rem);
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    :scope[position="left"] .tooltip__content::after {
+      left: auto;
+      right: -4px;
+      top: 50%;
+      bottom: auto;
+      transform: translateY(-50%);
+      border-right-width: 0;
+      border-left-width: 4px;
+      border-left-color: var(--color-text, #1a202c);
+      border-top-color: transparent;
+    }
+
+    /* Right */
+    :scope[position="right"] .tooltip__content {
+      bottom: auto;
+      left: calc(100% + .4rem);
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    :scope[position="right"] .tooltip__content::after {
+      left: -4px;
+      top: 50%;
+      bottom: auto;
+      transform: translateY(-50%);
+      border-left-width: 0;
+      border-right-width: 4px;
+      border-right-color: var(--color-text, #1a202c);
+      border-top-color: transparent;
+    }
+
+    /* Show on hover/focus */
+    :scope:hover .tooltip__content,
+    .tooltip__trigger:focus-visible ~ .tooltip__content {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+</style>

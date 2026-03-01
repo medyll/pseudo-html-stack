@@ -1,0 +1,59 @@
+<!--
+  @component breadcrumb-pk
+  @props items:[{label:string,href:string?}][]
+  @slots default
+  @layer molecules
+-->
+<template>
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <ol class="breadcrumb__list">
+      <li class="breadcrumb__item breadcrumb__item--active">
+        <slot>Home</slot>
+      </li>
+    </ol>
+  </nav>
+</template>
+
+<style>
+  @scope (.breadcrumb) {
+    :scope {
+      display: block;
+      font-size: var(--text-sm, .875rem);
+      color: var(--color-text-muted, #64748b);
+    }
+
+    .breadcrumb__list {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: .25rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .breadcrumb__item {
+      display: inline-flex;
+      align-items: center;
+      gap: .25rem;
+    }
+
+    /* chevron separator between items */
+    .breadcrumb__item + .breadcrumb__item::before {
+      content: '/';
+      color: var(--color-border, #cbd5e0);
+      user-select: none;
+    }
+
+    .breadcrumb__item a {
+      color: var(--color-primary, #3b82f6);
+      text-decoration: none;
+    }
+    .breadcrumb__item a:hover { text-decoration: underline; }
+
+    .breadcrumb__item--active {
+      color: var(--color-text, #1a202c);
+      font-weight: 500;
+    }
+  }
+</style>

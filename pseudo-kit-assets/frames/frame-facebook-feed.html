@@ -1,0 +1,53 @@
+<!--
+  @frame facebook-feed
+  @slots topbar, stories, feed, sidebar
+  @description Social feed layout skeleton
+-->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Facebook Feed — Frame</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #f0f2f5; font-family: system-ui, sans-serif; min-height: 100dvh; }
+    .frame-facebook-feed { display: flex; flex-direction: column; min-height: 100dvh; }
+    .frame__topbar   { position: sticky; top: 0; z-index: 100; }
+    .frame__layout   { flex: 1; display: grid; grid-template-columns: 16rem 1fr 20rem; gap: 1rem; max-width: 1400px; margin: 0 auto; width: 100%; padding: 1rem; }
+    .frame__leftnav  { position: sticky; top: 4.5rem; height: fit-content; }
+    .frame__center   { display: flex; flex-direction: column; gap: 1rem; }
+    .frame__stories  { }
+    .frame__posts    { display: flex; flex-direction: column; gap: 1rem; }
+    .frame__sidebar  { position: sticky; top: 4.5rem; height: fit-content; }
+    @media (max-width: 1200px) { .frame__layout { grid-template-columns: 14rem 1fr; } .frame__sidebar { display: none; } }
+    @media (max-width: 768px)  { .frame__layout { grid-template-columns: 1fr; padding: .5rem; } .frame__leftnav { display: none; } }
+  </style>
+</head>
+<body>
+  <div class="frame-facebook-feed">
+
+    <div class="frame__topbar">
+      <slot name="topbar"></slot>
+    </div>
+
+    <div class="frame__layout">
+      <div class="frame__leftnav">
+        <slot name="leftnav"></slot>
+      </div>
+      <div class="frame__center">
+        <div class="frame__stories">
+          <slot name="stories"></slot>
+        </div>
+        <div class="frame__posts">
+          <slot name="feed"></slot>
+        </div>
+      </div>
+      <div class="frame__sidebar">
+        <slot name="sidebar"></slot>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

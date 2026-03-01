@@ -1,0 +1,39 @@
+<!--
+  @component icon-pk
+  @props name:string?; size:enum(xs|sm|md|lg|xl)?; label:string?
+  @slots default (SVG content)
+  @layer atoms
+-->
+<template>
+  <span class="icon" role="img" aria-hidden="true">
+    <slot></slot>
+  </span>
+</template>
+
+<style>
+  @scope (.icon) {
+    :scope {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      width: var(--icon-size-md, 1.25rem);
+      height: var(--icon-size-md, 1.25rem);
+      color: inherit;
+    }
+
+    :scope[size="xs"] { width: var(--icon-size-xs, .75rem);  height: var(--icon-size-xs, .75rem); }
+    :scope[size="sm"] { width: var(--icon-size-sm, 1rem);    height: var(--icon-size-sm, 1rem); }
+    :scope[size="lg"] { width: var(--icon-size-lg, 1.5rem);  height: var(--icon-size-lg, 1.5rem); }
+    :scope[size="xl"] { width: var(--icon-size-xl, 2rem);    height: var(--icon-size-xl, 2rem); }
+
+    :scope[label] { aria-hidden: false; }
+
+    /* Ensure SVG fills the icon container */
+    ::slotted(svg) {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+  }
+</style>

@@ -1,0 +1,62 @@
+<!--
+  @component skeleton-pk
+  @props width:string?; height:string?; variant:enum(text|circle|rect)?; lines:number?; animated:boolean?
+  @slots (none)
+  @layer atoms
+-->
+<template>
+  <span class="skeleton" aria-hidden="true" aria-busy="true"></span>
+</template>
+
+<style>
+  @scope (.skeleton) {
+    :scope {
+      display: block;
+      background-color: var(--color-skeleton-bg, #e2e8f0);
+      border-radius: var(--radius-sm, .25rem);
+      overflow: hidden;
+      position: relative;
+      width: var(--skeleton-width, 100%);
+      height: var(--skeleton-height, 1rem);
+    }
+
+    :scope[variant="text"] {
+      height: var(--skeleton-height, 1em);
+      border-radius: var(--radius-full, 9999px);
+    }
+
+    :scope[variant="circle"] {
+      border-radius: 50%;
+      width: var(--skeleton-width, 2.5rem);
+      height: var(--skeleton-height, 2.5rem);
+    }
+
+    :scope[variant="rect"] {
+      border-radius: 0;
+    }
+
+    /* Shimmer animation */
+    :scope::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        var(--color-skeleton-shine, rgba(255,255,255,.6)) 50%,
+        transparent 100%
+      );
+      background-size: 200% 100%;
+      animation: skeleton-shimmer 1.5s ease-in-out infinite;
+    }
+
+    @keyframes skeleton-shimmer {
+      0%   { background-position: -200% center; }
+      100% { background-position:  200% center; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      :scope::after { animation: none; }
+    }
+  }
+</style>

@@ -1,0 +1,61 @@
+<!--
+  @component price-tag-pk
+  @props price:number; currency:string?; original:number?; discount:boolean?; size:enum(sm|md|lg)?
+  @slots default
+  @layer molecules
+-->
+<template>
+  <div class="price-tag">
+    <span class="price-tag__original">
+      <slot name="original"></slot>
+    </span>
+    <span class="price-tag__current">
+      <slot>$0.00</slot>
+    </span>
+    <span class="price-tag__badge">
+      <slot name="badge"></slot>
+    </span>
+  </div>
+</template>
+
+<style>
+  @scope (.price-tag) {
+    :scope {
+      display: inline-flex;
+      align-items: baseline;
+      gap: .4rem;
+      flex-wrap: wrap;
+    }
+
+    .price-tag__current {
+      font-size: var(--text-xl, 1.25rem);
+      font-weight: 700;
+      color: var(--color-text, #1a202c);
+      line-height: 1.2;
+    }
+
+    :scope[size="sm"] .price-tag__current { font-size: var(--text-base, 1rem); }
+    :scope[size="lg"] .price-tag__current { font-size: var(--text-2xl, 1.5rem); }
+
+    :scope[discount] .price-tag__current {
+      color: var(--color-danger, #ef4444);
+    }
+
+    .price-tag__original {
+      font-size: var(--text-sm, .875rem);
+      color: var(--color-text-muted, #64748b);
+      text-decoration: line-through;
+    }
+    .price-tag__original:empty { display: none; }
+
+    .price-tag__badge {
+      font-size: var(--text-xs, .75rem);
+      font-weight: 600;
+      padding: .1rem .4rem;
+      border-radius: var(--radius-sm, .25rem);
+      background-color: var(--color-danger-light, #fef2f2);
+      color: var(--color-danger, #ef4444);
+    }
+    .price-tag__badge:empty { display: none; }
+  }
+</style>

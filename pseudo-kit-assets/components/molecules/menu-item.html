@@ -1,0 +1,68 @@
+<!--
+  @component menu-item-pk
+  @props label:string; href:string?; icon:string?; active:boolean?; disabled:boolean?; danger:boolean?
+  @slots icon
+  @layer molecules
+-->
+<template>
+  <li class="menu-item" role="none">
+    <a class="menu-item__link" role="menuitem" tabindex="0">
+      <span class="menu-item__icon" aria-hidden="true">
+        <slot name="icon"></slot>
+      </span>
+      <span class="menu-item__label">
+        <slot>Menu item</slot>
+      </span>
+    </a>
+  </li>
+</template>
+
+<style>
+  @scope (.menu-item) {
+    :scope {
+      display: block;
+      list-style: none;
+    }
+
+    .menu-item__link {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      padding: .5rem .75rem;
+      font-size: var(--text-sm, .875rem);
+      color: var(--color-text, #1a202c);
+      text-decoration: none;
+      border-radius: var(--radius-sm, .25rem);
+      cursor: pointer;
+      transition: background-color .12s, color .12s;
+      outline: none;
+    }
+
+    .menu-item__link:hover,
+    .menu-item__link:focus-visible {
+      background-color: var(--color-surface-2, #f8fafc);
+    }
+
+    :scope[active] .menu-item__link {
+      background-color: var(--color-primary-light, #eff6ff);
+      color: var(--color-primary, #3b82f6);
+      font-weight: 500;
+    }
+
+    :scope[danger] .menu-item__link {
+      color: var(--color-danger, #ef4444);
+    }
+    :scope[danger] .menu-item__link:hover {
+      background-color: var(--color-danger-light, #fef2f2);
+    }
+
+    :scope[disabled] .menu-item__link {
+      opacity: .45;
+      pointer-events: none;
+      cursor: not-allowed;
+    }
+
+    .menu-item__icon:empty { display: none; }
+    .menu-item__icon { flex-shrink: 0; width: 1.1em; }
+  }
+</style>

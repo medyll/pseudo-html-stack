@@ -1,0 +1,63 @@
+<!--
+  @component comment-thread-pk
+  @props count:number?; loading:boolean?
+  @slots default, composer, header
+  @layer organisms
+-->
+<template>
+  <section class="comment-thread">
+    <header class="comment-thread__header">
+      <slot name="header">
+        <h3 class="comment-thread__title">Comments</h3>
+      </slot>
+    </header>
+    <div class="comment-thread__list">
+      <slot>
+        <!-- comment items go here -->
+      </slot>
+    </div>
+    <div class="comment-thread__composer">
+      <slot name="composer"></slot>
+    </div>
+  </section>
+</template>
+
+<style>
+  @scope (.comment-thread) {
+    :scope {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .comment-thread__header {
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--color-border, #e2e8f0);
+      margin-bottom: 1rem;
+    }
+
+    .comment-thread__title {
+      margin: 0;
+      font-size: var(--text-base, 1rem);
+      font-weight: 700;
+      color: var(--color-text, #1a202c);
+    }
+
+    .comment-thread__list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+    :scope[loading] .comment-thread__list {
+      opacity: .5;
+      pointer-events: none;
+    }
+
+    .comment-thread__composer {
+      margin-top: 1.5rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--color-border, #e2e8f0);
+    }
+    .comment-thread__composer:empty { display: none; }
+  }
+</style>

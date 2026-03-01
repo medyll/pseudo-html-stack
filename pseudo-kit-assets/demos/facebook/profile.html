@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jean Dupont — Pseudo-Facebook Profile</title>
+  <link rel="stylesheet" href="tokens.css" />
+  <style>
+    body { background:#f0f2f5; }
+
+    /* Topbar */
+    .fb-topbar {
+      position:fixed; top:0; left:0; right:0; z-index:100;
+      background:#fff; border-bottom:1px solid #e4e6eb; height:56px;
+      display:flex; align-items:center; padding:0 1rem; gap:1rem;
+      box-shadow:0 2px 4px rgba(0,0,0,.1);
+    }
+    .fb-logo { font-size:2.2rem; color:#1877f2; line-height:1; flex-shrink:0; }
+    .fb-search { background:#f0f2f5; border-radius:9999px; padding:.5rem .85rem; display:flex; gap:.4rem; align-items:center; }
+    .fb-search input { background:none; border:none; outline:none; font-size:.875rem; width:180px; }
+    .fb-nav-right { margin-left:auto; display:flex; gap:.5rem; align-items:center; }
+    .fb-nav-icon { width:36px;height:36px;background:#e4e6eb;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.1rem; }
+    .fb-avatar-sm { width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#1877f2,#42b883);display:flex;align-items:center;justify-content:center;font-size:.875rem;font-weight:700;color:#fff; }
+
+    /* Cover + Profile Header */
+    .fb-cover-wrapper { padding-top:56px; max-width:1050px; margin:0 auto; }
+    .fb-cover { height:400px; background:linear-gradient(135deg,#1877f2 0%,#42b72a 50%,#ff9800 100%); position:relative; border-radius:0 0 .5rem .5rem; overflow:hidden; cursor:pointer; }
+    .fb-cover::after { content:''; position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.25), transparent 40%); }
+    .fb-cover-edit { position:absolute; bottom:1rem; right:1rem; background:rgba(0,0,0,.6); color:#fff; border:none; padding:.45rem .9rem; border-radius:.4rem; font-size:.8rem; font-weight:600; cursor:pointer; z-index:1; }
+
+    .fb-profile-header { background:#fff; padding:0 2rem 1rem; border-bottom:1px solid #e4e6eb; }
+    .fb-profile-top { display:flex; align-items:flex-end; gap:1.5rem; margin-top:-3rem; padding-bottom:1rem; flex-wrap:wrap; }
+    .fb-profile-avatar-wrap { position:relative; flex-shrink:0; }
+    .fb-profile-avatar { width:168px; height:168px; border-radius:50%; border:4px solid #fff; background:linear-gradient(135deg,#1877f2,#42b883); display:flex; align-items:center; justify-content:center; font-size:4rem; font-weight:700; color:#fff; cursor:pointer; }
+    .fb-profile-avatar-edit { position:absolute; bottom:.5rem; right:.5rem; width:32px;height:32px;background:#e4e6eb;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.875rem;border:2px solid #fff; }
+    .fb-profile-info { flex:1; padding-top:1.5rem; }
+    .fb-profile-name { font-size:2rem; font-weight:700; margin-bottom:.25rem; }
+    .fb-profile-bio { color:#65676b; font-size:.9375rem; margin-bottom:.75rem; }
+    .fb-profile-friends { display:flex; align-items:center; gap:.3rem; font-size:.875rem; color:#65676b; }
+    .fb-friends-stack { display:flex; margin-left:0; }
+    .fb-friends-stack .fb-friend-dot { width:28px;height:28px;border-radius:50%;background:var(--c,#e4e6eb);border:2px solid #fff;margin-right:-6px; }
+    .fb-profile-actions { display:flex; gap:.5rem; flex-wrap:wrap; padding-top:.5rem; }
+    .fb-btn-primary { background:#1877f2;color:#fff;border:none;padding:.55rem 1rem;border-radius:.5rem;font-size:.875rem;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:.3rem; }
+    .fb-btn-secondary { background:#e4e6eb;color:#050505;border:none;padding:.55rem 1rem;border-radius:.5rem;font-size:.875rem;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:.3rem; }
+
+    /* Profile Nav Tabs */
+    .fb-profile-tabs { display:flex; gap:.25rem; overflow-x:auto; padding-top:.5rem; }
+    .fb-profile-tabs::-webkit-scrollbar { display:none; }
+    .fb-profile-tab { padding:.75rem 1rem;font-size:.9375rem;font-weight:600;border:none;background:none;cursor:pointer;border-bottom:3px solid transparent;color:#65676b;border-radius:.5rem .5rem 0 0;white-space:nowrap; }
+    .fb-profile-tab.active { color:#1877f2; border-bottom-color:#1877f2; }
+    .fb-profile-tab:hover:not(.active) { background:#f0f2f5; }
+
+    /* Content Grid */
+    .fb-profile-content { max-width:1050px; margin:0 auto; padding:1rem 1rem; display:grid; grid-template-columns:360px 1fr; gap:1rem; }
+    @media (max-width:768px) { .fb-profile-content { grid-template-columns:1fr; } }
+
+    /* Left Column */
+    .fb-profile-left { display:flex; flex-direction:column; gap:1rem; }
+    .fb-widget { background:#fff; border-radius:.75rem; padding:1rem; box-shadow:0 1px 2px rgba(0,0,0,.1); }
+    .fb-widget h2 { font-size:1.1rem; font-weight:700; margin-bottom:.75rem; }
+    .fb-widget-see-all { color:#1877f2; font-size:.875rem; font-weight:600; cursor:pointer; }
+    .fb-intro-item { display:flex; align-items:center; gap:.75rem; padding:.4rem 0; font-size:.875rem; color:#050505; }
+    .fb-intro-item span:first-child { font-size:1.1rem; }
+    .fb-photo-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:.2rem; }
+    .fb-photo-thumb { aspect-ratio:1; background:var(--bg,#e4e6eb); border-radius:.2rem; cursor:pointer; }
+    .fb-friend-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:.5rem; }
+    .fb-friend-tile { cursor:pointer; }
+    .fb-friend-avatar { aspect-ratio:1; background:var(--av,#e4e6eb); border-radius:.5rem; display:flex; align-items:center; justify-content:center; font-size:1.5rem; font-weight:700; color:#fff; margin-bottom:.3rem; }
+    .fb-friend-name { font-size:.75rem; font-weight:600; text-align:center; }
+
+    /* Right Column — Feed */
+    .fb-profile-feed { display:flex; flex-direction:column; gap:1rem; }
+    .fb-post { background:#fff; border-radius:.75rem; box-shadow:0 1px 2px rgba(0,0,0,.1); overflow:hidden; }
+    .fb-post-header { display:flex; align-items:center; gap:.75rem; padding:1rem; }
+    .fb-post-avatar { width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#1877f2,#42b883);display:flex;align-items:center;justify-content:center;font-size:.875rem;font-weight:700;color:#fff; }
+    .fb-post-meta { flex:1; }
+    .fb-post-name { font-size:.9375rem; font-weight:700; }
+    .fb-post-info { font-size:.8rem; color:#65676b; }
+    .fb-post-menu { width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.2rem;color:#65676b; }
+    .fb-post-body { padding:.25rem 1rem 1rem; font-size:.9375rem; line-height:1.5; }
+    .fb-post-img { width:100%; height:300px; background:var(--bg,#e4e6eb); display:flex; align-items:center; justify-content:center; font-size:3rem; }
+    .fb-post-reactions { display:flex; align-items:center; gap:.3rem; padding:.5rem 1rem; font-size:.875rem; color:#65676b; border-bottom:1px solid #e4e6eb; }
+    .fb-post-actions { display:flex; }
+    .fb-action-btn { flex:1;display:flex;align-items:center;justify-content:center;gap:.4rem;padding:.75rem;border:none;background:none;cursor:pointer;font-size:.875rem;font-weight:600;color:#65676b;border-radius:.3rem; }
+    .fb-action-btn:hover { background:#f0f2f5; }
+    .fb-action-btn.liked { color:#1877f2; }
+  </style>
+</head>
+<body>
+
+  <!-- Topbar -->
+  <header class="fb-topbar">
+    <a href="index.html" class="fb-logo">f</a>
+    <div class="fb-search"><span>🔍</span><input placeholder="Search Facebook" /></div>
+    <div class="fb-nav-right">
+      <div class="fb-avatar-sm">J</div>
+      <div class="fb-nav-icon">⋯</div>
+      <div class="fb-nav-icon">💬</div>
+      <div class="fb-nav-icon">🔔</div>
+    </div>
+  </header>
+
+  <!-- Cover + Header -->
+  <div class="fb-cover-wrapper">
+    <div class="fb-cover">
+      <button class="fb-cover-edit">✏️ Edit Cover Photo</button>
+    </div>
+
+    <div class="fb-profile-header">
+      <div class="fb-profile-top">
+        <div class="fb-profile-avatar-wrap">
+          <div class="fb-profile-avatar">J</div>
+          <div class="fb-profile-avatar-edit">📷</div>
+        </div>
+        <div class="fb-profile-info">
+          <h1 class="fb-profile-name">Jean Dupont</h1>
+          <div class="fb-profile-bio">Software developer · Loves music, travel and good food 🎵✈️🍕</div>
+          <div class="fb-profile-friends">
+            <div class="fb-friends-stack">
+              <div class="fb-friend-dot" style="--c:linear-gradient(135deg,#e91e63,#9c27b0)"></div>
+              <div class="fb-friend-dot" style="--c:linear-gradient(135deg,#2196f3,#00bcd4)"></div>
+              <div class="fb-friend-dot" style="--c:linear-gradient(135deg,#ff5722,#ff9800)"></div>
+              <div class="fb-friend-dot" style="--c:linear-gradient(135deg,#4caf50,#8bc34a)"></div>
+              <div class="fb-friend-dot" style="--c:linear-gradient(135deg,#9c27b0,#673ab7)"></div>
+            </div>
+            <span><strong>842 friends</strong></span>
+          </div>
+          <div class="fb-profile-actions">
+            <button class="fb-btn-primary">➕ Add to Story</button>
+            <button class="fb-btn-secondary">✏️ Edit Profile</button>
+            <button class="fb-btn-secondary">⋯</button>
+          </div>
+        </div>
+      </div>
+      <div class="fb-profile-tabs">
+        <button class="fb-profile-tab active">Posts</button>
+        <button class="fb-profile-tab">About</button>
+        <button class="fb-profile-tab">Friends <span style="font-size:.75rem;background:#e4e6eb;border-radius:9999px;padding:.1rem .4rem;margin-left:.2rem">842</span></button>
+        <button class="fb-profile-tab">Photos</button>
+        <button class="fb-profile-tab">Videos</button>
+        <button class="fb-profile-tab">Check-ins</button>
+        <button class="fb-profile-tab">More ▾</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Profile Content -->
+  <div class="fb-profile-content">
+
+    <!-- Left -->
+    <div class="fb-profile-left">
+
+      <div class="fb-widget">
+        <h2>Intro</h2>
+        <div class="fb-intro-item"><span>💼</span> <span>Works at <strong>TechCorp Paris</strong></span></div>
+        <div class="fb-intro-item"><span>🎓</span> <span>Studied at <strong>EPFL Lausanne</strong></span></div>
+        <div class="fb-intro-item"><span>🏡</span> <span>Lives in <strong>Paris, France</strong></span></div>
+        <div class="fb-intro-item"><span>📍</span> <span>From <strong>Lyon, France</strong></span></div>
+        <div class="fb-intro-item"><span>❤️</span> <span>In a relationship with <strong>Claire Blanc</strong></span></div>
+        <div class="fb-intro-item"><span>🔗</span> <span style="color:#1877f2;cursor:pointer">pseudodev.io</span></div>
+        <button style="width:100%;background:#e4e6eb;border:none;border-radius:.5rem;padding:.6rem;font-size:.875rem;font-weight:700;cursor:pointer;margin-top:.5rem">Edit details</button>
+        <button style="width:100%;background:#e4e6eb;border:none;border-radius:.5rem;padding:.6rem;font-size:.875rem;font-weight:700;cursor:pointer;margin-top:.4rem">Add hobbies</button>
+        <button style="width:100%;background:#e4e6eb;border:none;border-radius:.5rem;padding:.6rem;font-size:.875rem;font-weight:700;cursor:pointer;margin-top:.4rem">Add featured</button>
+      </div>
+
+      <div class="fb-widget">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem">
+          <h2 style="margin:0">Photos</h2>
+          <span class="fb-widget-see-all">See all photos</span>
+        </div>
+        <div class="fb-photo-grid">
+          <div class="fb-photo-thumb" style="--bg:linear-gradient(135deg,#ff9800,#e91e63)"></div>
+          <div class="fb-photo-thumb" style="--bg:linear-gradient(135deg,#1877f2,#42b72a)"></div>
+          <div class="fb-photo-thumb" style="--bg:linear-gradient(135deg,#9c27b0,#3f51b5)"></div>
+          <div class="fb-photo-thumb" style="--bg:linear-gradient(135deg,#4caf50,#8bc34a)"></div>
+          <div class="fb-photo-thumb" style="--bg:linear-gradient(135deg,#ff5722,#ff9800)"></div>
+          <div class="fb-photo-thumb" style="--bg:linear-gradient(135deg,#00bcd4,#1877f2)"></div>
+          <div class="fb-photo-thumb" style="--bg:linear-gradient(135deg,#e91e63,#ff9800)"></div>
+          <div class="fb-photo-thumb" style="--bg:linear-gradient(135deg,#673ab7,#9c27b0)"></div>
+          <div class="fb-photo-thumb" style="--bg:linear-gradient(135deg,#2196f3,#00e5ff)"></div>
+        </div>
+      </div>
+
+      <div class="fb-widget">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem">
+          <h2 style="margin:0">Friends <span style="font-size:.875rem;font-weight:400;color:#65676b">842</span></h2>
+          <span class="fb-widget-see-all">See all friends</span>
+        </div>
+        <div class="fb-friend-grid">
+          <div class="fb-friend-tile">
+            <div class="fb-friend-avatar" style="--av:linear-gradient(135deg,#e91e63,#9c27b0)">M</div>
+            <div class="fb-friend-name">Marie D.</div>
+          </div>
+          <div class="fb-friend-tile">
+            <div class="fb-friend-avatar" style="--av:linear-gradient(135deg,#9c27b0,#673ab7)">P</div>
+            <div class="fb-friend-name">Pierre M.</div>
+          </div>
+          <div class="fb-friend-tile">
+            <div class="fb-friend-avatar" style="--av:linear-gradient(135deg,#2196f3,#00bcd4)">S</div>
+            <div class="fb-friend-name">Sophie L.</div>
+          </div>
+          <div class="fb-friend-tile">
+            <div class="fb-friend-avatar" style="--av:linear-gradient(135deg,#ff5722,#ff9800)">A</div>
+            <div class="fb-friend-name">Antoine R.</div>
+          </div>
+          <div class="fb-friend-tile">
+            <div class="fb-friend-avatar" style="--av:linear-gradient(135deg,#4caf50,#8bc34a)">C</div>
+            <div class="fb-friend-name">Claire B.</div>
+          </div>
+          <div class="fb-friend-tile">
+            <div class="fb-friend-avatar" style="--av:linear-gradient(135deg,#f44336,#e91e63)">L</div>
+            <div class="fb-friend-name">Lucas B.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right — Posts -->
+    <div class="fb-profile-feed">
+
+      <!-- Create Post -->
+      <div class="fb-widget" style="padding:.75rem 1rem">
+        <div style="display:flex;gap:.75rem;align-items:center">
+          <div class="fb-post-avatar">J</div>
+          <div style="flex:1;background:#f0f2f5;border-radius:9999px;padding:.7rem 1rem;font-size:.9375rem;color:#65676b;cursor:pointer">What's on your mind, Jean?</div>
+        </div>
+        <hr style="border:none;border-top:1px solid #e4e6eb;margin:.75rem 0" />
+        <div style="display:flex;justify-content:space-around">
+          <button style="display:flex;align-items:center;gap:.4rem;padding:.5rem 1rem;border:none;background:none;border-radius:.5rem;cursor:pointer;font-size:.875rem;font-weight:600;color:#65676b">🎥 Live Video</button>
+          <button style="display:flex;align-items:center;gap:.4rem;padding:.5rem 1rem;border:none;background:none;border-radius:.5rem;cursor:pointer;font-size:.875rem;font-weight:600;color:#65676b">📷 Photo/Video</button>
+          <button style="display:flex;align-items:center;gap:.4rem;padding:.5rem 1rem;border:none;background:none;border-radius:.5rem;cursor:pointer;font-size:.875rem;font-weight:600;color:#65676b">😊 Feeling</button>
+        </div>
+      </div>
+
+      <!-- Post 1 -->
+      <article class="fb-post">
+        <div class="fb-post-header">
+          <div class="fb-post-avatar">J</div>
+          <div class="fb-post-meta">
+            <div class="fb-post-name">Jean Dupont</div>
+            <div class="fb-post-info">1 day ago · 🌍 Public</div>
+          </div>
+          <div class="fb-post-menu">···</div>
+        </div>
+        <div class="fb-post-body">
+          Weekend hackathon with the team — we built a full component library in 48h! 💻🚀 Shoutout to the pseudo-html-kit, absolute lifesaver. Check it out! #WebDev #Hackathon #OpenSource
+        </div>
+        <div class="fb-post-img" style="--bg:linear-gradient(135deg,#1877f2 0%,#42b72a 100%)">💻</div>
+        <div class="fb-post-reactions">
+          <span>👍❤️😮</span>
+          <span>423</span>
+          <span style="margin-left:auto">89 comments · 34 shares</span>
+        </div>
+        <div class="fb-post-actions">
+          <button class="fb-action-btn liked">👍 Like</button>
+          <button class="fb-action-btn">💬 Comment</button>
+          <button class="fb-action-btn">↗ Share</button>
+        </div>
+      </article>
+
+      <!-- Post 2 -->
+      <article class="fb-post">
+        <div class="fb-post-header">
+          <div class="fb-post-avatar">J</div>
+          <div class="fb-post-meta">
+            <div class="fb-post-name">Jean Dupont</div>
+            <div class="fb-post-info">3 days ago · 👥 Friends</div>
+          </div>
+          <div class="fb-post-menu">···</div>
+        </div>
+        <div class="fb-post-body">
+          Beautiful morning run along the Seine 🌅🏃 Paris never gets old. Starting the day right before diving into code. Who else is an early morning runner?
+        </div>
+        <div class="fb-post-img" style="--bg:linear-gradient(135deg,#ff9800,#f44336,#e91e63)">🌅</div>
+        <div class="fb-post-reactions">
+          <span>👍❤️</span>
+          <span>187</span>
+          <span style="margin-left:auto">22 comments</span>
+        </div>
+        <div class="fb-post-actions">
+          <button class="fb-action-btn liked">👍 Like</button>
+          <button class="fb-action-btn">💬 Comment</button>
+          <button class="fb-action-btn">↗ Share</button>
+        </div>
+      </article>
+
+      <!-- Post 3 -->
+      <article class="fb-post">
+        <div class="fb-post-header">
+          <div class="fb-post-avatar">J</div>
+          <div class="fb-post-meta">
+            <div class="fb-post-name">Jean Dupont</div>
+            <div class="fb-post-info">1 week ago · 🌍 Public</div>
+          </div>
+          <div class="fb-post-menu">···</div>
+        </div>
+        <div class="fb-post-body">
+          Just released my first open-source project! 🎉 A vanilla JS component kit with zero dependencies. Would love feedback from the community. Link in bio! #JavaScript #OpenSource #WebComponents
+        </div>
+        <div class="fb-post-reactions">
+          <span>👍❤️😮🎉</span>
+          <span>891</span>
+          <span style="margin-left:auto">156 comments · 203 shares</span>
+        </div>
+        <div class="fb-post-actions">
+          <button class="fb-action-btn liked">👍 Like</button>
+          <button class="fb-action-btn">💬 Comment</button>
+          <button class="fb-action-btn">↗ Share</button>
+        </div>
+      </article>
+
+    </div>
+  </div>
+
+</body>
+</html>

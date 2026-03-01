@@ -1,0 +1,53 @@
+<!--
+  @frame landing
+  @slots navbar, hero, features, cta, footer
+  @description Marketing landing page skeleton
+-->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Landing — Frame</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #fff; font-family: system-ui, sans-serif; min-height: 100dvh; }
+    .frame-landing  { display: flex; flex-direction: column; min-height: 100dvh; }
+    .frame__navbar  { position: sticky; top: 0; z-index: 100; }
+    .frame__hero    { }
+    .frame__section { padding: 5rem 2rem; max-width: 1200px; margin: 0 auto; width: 100%; }
+    .frame__features { }
+    .frame__cta     { background: #f8fafc; width: 100%; }
+    .frame__cta-inner { padding: 5rem 2rem; max-width: 1200px; margin: 0 auto; text-align: center; }
+    .frame__footer  { margin-top: auto; }
+    @media (max-width: 768px) { .frame__section { padding: 3rem 1.25rem; } }
+  </style>
+</head>
+<body>
+  <div class="frame-landing">
+
+    <div class="frame__navbar">
+      <slot name="navbar"></slot>
+    </div>
+
+    <div class="frame__hero">
+      <slot name="hero"></slot>
+    </div>
+
+    <div class="frame__section frame__features">
+      <slot name="features"></slot>
+    </div>
+
+    <div class="frame__cta">
+      <div class="frame__cta-inner">
+        <slot name="cta"></slot>
+      </div>
+    </div>
+
+    <div class="frame__footer">
+      <slot name="footer"></slot>
+    </div>
+
+  </div>
+</body>
+</html>

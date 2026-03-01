@@ -1,0 +1,52 @@
+<!--
+  @component tag-pk
+  @props label:string; variant:enum(default|primary|success|warning|danger|info)?; size:enum(sm|md)?; outline:boolean?
+  @slots icon
+  @layer atoms
+-->
+<template>
+  <span class="tag">
+    <span class="tag__icon" aria-hidden="true">
+      <slot name="icon"></slot>
+    </span>
+    <span class="tag__label"></span>
+  </span>
+</template>
+
+<style>
+  @scope (.tag) {
+    :scope {
+      display: inline-flex;
+      align-items: center;
+      gap: .25rem;
+      padding: .2em .5em;
+      border-radius: var(--radius-sm, .25rem);
+      border: 1px solid transparent;
+      font-family: var(--font-sans, system-ui, sans-serif);
+      font-size: var(--text-xs, .75rem);
+      font-weight: 500;
+      line-height: 1.4;
+      white-space: nowrap;
+      background-color: var(--color-surface-2, #e2e8f0);
+      color: var(--color-text, #1a202c);
+    }
+
+    :scope[size="sm"] { font-size: .625rem; padding: .15em .4em; }
+
+    /* Solid variants */
+    :scope[variant="primary"] { background-color: var(--color-primary-bg, #eff6ff);    color: var(--color-primary, #3b82f6);    border-color: var(--color-primary-bg, #eff6ff); }
+    :scope[variant="success"] { background-color: var(--color-success-bg, #d1fae5);   color: var(--color-success, #059669);    border-color: var(--color-success-bg, #d1fae5); }
+    :scope[variant="warning"] { background-color: var(--color-warning-bg, #fef3c7);   color: var(--color-warning, #d97706);    border-color: var(--color-warning-bg, #fef3c7); }
+    :scope[variant="danger"]  { background-color: var(--color-danger-bg, #fee2e2);    color: var(--color-danger, #ef4444);     border-color: var(--color-danger-bg, #fee2e2); }
+    :scope[variant="info"]    { background-color: var(--color-info-bg, #e0f2fe);      color: var(--color-info, #0284c7);       border-color: var(--color-info-bg, #e0f2fe); }
+
+    /* Outline variants */
+    :scope[outline] { background-color: transparent; }
+    :scope[outline][variant="primary"] { border-color: var(--color-primary, #3b82f6); }
+    :scope[outline][variant="success"] { border-color: var(--color-success, #059669); }
+    :scope[outline][variant="warning"] { border-color: var(--color-warning, #d97706); }
+    :scope[outline][variant="danger"]  { border-color: var(--color-danger, #ef4444); }
+
+    .tag__icon:empty { display: none; }
+  }
+</style>

@@ -1,0 +1,62 @@
+<!--
+  @frame portfolio
+  @slots navbar, hero, work, about, contact, footer
+  @description Portfolio page skeleton
+-->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio — Frame</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0f172a; color: #f1f5f9; font-family: system-ui, sans-serif; min-height: 100dvh; }
+    .frame-portfolio { display: flex; flex-direction: column; min-height: 100dvh; }
+    .frame__navbar   { position: sticky; top: 0; z-index: 100; }
+    .frame__section  { padding: 6rem 1.5rem; max-width: 1100px; margin: 0 auto; width: 100%; }
+    .frame__hero     { min-height: 90dvh; display: flex; flex-direction: column; justify-content: center; }
+    .frame__work-grid{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    .frame__about-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+    .frame__contact  { max-width: 640px; margin: 0 auto; display: flex; flex-direction: column; gap: 1rem; }
+    .frame__footer   { margin-top: auto; }
+    @media (max-width: 900px) { .frame__work-grid { grid-template-columns: 1fr 1fr; } .frame__about-layout { grid-template-columns: 1fr; } }
+    @media (max-width: 600px) { .frame__work-grid { grid-template-columns: 1fr; } .frame__section { padding: 4rem 1rem; } }
+  </style>
+</head>
+<body>
+  <div class="frame-portfolio">
+
+    <div class="frame__navbar">
+      <slot name="navbar"></slot>
+    </div>
+
+    <div class="frame__section frame__hero">
+      <slot name="hero"></slot>
+    </div>
+
+    <div class="frame__section">
+      <div class="frame__work-grid">
+        <slot name="work"></slot>
+      </div>
+    </div>
+
+    <div class="frame__section">
+      <div class="frame__about-layout">
+        <slot name="about"></slot>
+      </div>
+    </div>
+
+    <div class="frame__section">
+      <div class="frame__contact">
+        <slot name="contact"></slot>
+      </div>
+    </div>
+
+    <div class="frame__footer">
+      <slot name="footer"></slot>
+    </div>
+
+  </div>
+</body>
+</html>

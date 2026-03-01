@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pseudo-Amazon — Home</title>
+  <link rel="stylesheet" href="tokens.css" />
+  <style>
+    /* ── Base ── */
+    body { background:#eaeded; font-family:'Amazon Ember',Arial,sans-serif; }
+
+    /* ── Top Nav ── */
+    .amz-nav {
+      position:sticky; top:0; z-index:100;
+      background:#131921; color:#fff; padding:.6rem 1rem;
+      display:flex; align-items:center; gap:.75rem;
+    }
+    .amz-logo { font-size:1.4rem; font-weight:700; letter-spacing:-.03em; flex-shrink:0; }
+    .amz-logo span { color:#ff9900; }
+    .amz-location { font-size:.7rem; display:flex; flex-direction:column; align-items:center; white-space:nowrap; }
+    .amz-location strong { font-size:.875rem; }
+    .amz-search { flex:1; display:flex; max-width:800px; }
+    .amz-search-cat { background:#f0f2f2; color:#333; border:none; padding:0 .5rem; font-size:.8rem; border-radius:.3rem 0 0 .3rem; cursor:pointer; }
+    .amz-search-input { flex:1; border:none; padding:.5rem .75rem; font-size:.875rem; outline:none; }
+    .amz-search-btn { background:#ff9900; border:none; padding:.5rem .75rem; border-radius:0 .3rem .3rem 0; cursor:pointer; font-size:1.1rem; }
+    .amz-nav-right { display:flex; gap:.5rem; align-items:center; margin-left:auto; white-space:nowrap; font-size:.8rem; }
+    .amz-nav-right a { color:#fff; display:flex; flex-direction:column; padding:0 .4rem; }
+    .amz-nav-right a small { color:#ccc; font-size:.65rem; }
+    .amz-nav-right a strong { font-size:.875rem; }
+    .amz-cart { position:relative; font-size:1.4rem; }
+    .amz-cart-count { position:absolute; top:-.3rem; right:-.3rem; background:#ff9900; color:#111; font-size:.65rem; font-weight:700; width:16px; height:16px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
+
+    /* ── Sub Nav ── */
+    .amz-subnav {
+      background:#232f3e; color:#fff; padding:.4rem 1rem;
+      display:flex; gap:1.5rem; overflow-x:auto; font-size:.8rem;
+    }
+    .amz-subnav::-webkit-scrollbar { display:none; }
+    .amz-subnav a { color:#fff; white-space:nowrap; padding:.2rem 0; }
+    .amz-subnav a:hover { text-decoration:underline; }
+
+    /* ── Hero Carousel ── */
+    .amz-hero {
+      position:relative; overflow:hidden;
+      background:linear-gradient(135deg,#232f3e 0%,#37475a 100%);
+      height:360px; display:flex; align-items:center;
+    }
+    .amz-hero-slide {
+      position:absolute; inset:0; display:flex; align-items:center; padding:0 6vw;
+      background:linear-gradient(90deg,rgba(0,0,0,.6) 0%,transparent 60%);
+    }
+    .amz-hero-content { max-width:480px; color:#fff; }
+    .amz-hero-title { font-size:clamp(1.5rem,4vw,2.5rem); font-weight:700; margin-bottom:.75rem; }
+    .amz-hero-desc { font-size:.95rem; margin-bottom:1.25rem; color:#ddd; line-height:1.5; }
+    .amz-hero-cta { background:#ff9900; color:#111; border:none; padding:.7rem 1.6rem; border-radius:.2rem; font-size:1rem; font-weight:700; cursor:pointer; border-radius:9999px; }
+    .amz-hero-dots { position:absolute; bottom:1rem; left:50%; transform:translateX(-50%); display:flex; gap:.4rem; }
+    .amz-hero-dot { width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,.5); cursor:pointer; }
+    .amz-hero-dot.active { background:#fff; }
+
+    /* ── Grid Layout ── */
+    .amz-content { max-width:1500px; margin:0 auto; padding:1.5rem 1rem; }
+
+    /* ── Widget Card ── */
+    .amz-widget {
+      background:#fff; border-radius:.4rem; padding:1.2rem 1.2rem .8rem;
+      overflow:hidden;
+    }
+    .amz-widget h2 { font-size:1.2rem; font-weight:700; margin-bottom:1rem; }
+    .amz-widget-row { display:flex; gap:1rem; overflow-x:auto; }
+    .amz-widget-row::-webkit-scrollbar { display:none; }
+
+    /* ── Section Grid ── */
+    .amz-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; margin-bottom:1rem; }
+    @media (max-width:1024px) { .amz-grid { grid-template-columns:repeat(2,1fr); } }
+    @media (max-width:600px) { .amz-grid { grid-template-columns:1fr; } }
+
+    /* ── Deal Card ── */
+    .amz-deal {
+      background:#fff; border-radius:.4rem; padding:1.2rem;
+      display:flex; flex-direction:column; gap:.75rem;
+    }
+    .amz-deal h3 { font-size:1rem; font-weight:700; }
+    .amz-deal-grid { display:grid; grid-template-columns:1fr 1fr; gap:.5rem; }
+    .amz-deal-item { border-radius:.3rem; overflow:hidden; cursor:pointer; }
+    .amz-deal-thumb { height:110px; background:var(--bg,#eee); }
+    .amz-deal-label { font-size:.7rem; padding:.3rem .2rem; }
+
+    /* ── Product Tile ── */
+    .amz-product {
+      flex:0 0 165px; cursor:pointer;
+    }
+    .amz-product-img { height:165px; background:var(--bg,#f3f3f3); border-radius:.3rem; overflow:hidden; margin-bottom:.5rem; }
+    .amz-product-name { font-size:.8rem; color:#0066c0; line-height:1.4; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+    .amz-product-price { font-size:.9rem; font-weight:700; margin-top:.2rem; color:#0f1111; }
+    .amz-product-price small { font-size:.65rem; vertical-align:super; }
+    .amz-product-rating { display:flex; align-items:center; gap:.2rem; font-size:.75rem; color:#ff9900; }
+    .amz-product-prime { color:#00a8e1; font-size:.7rem; font-weight:700; }
+
+    /* ── Footer ── */
+    .amz-footer-top { background:#37475a; color:#fff; text-align:center; padding:1rem; font-size:.875rem; cursor:pointer; }
+    .amz-footer-top:hover { background:#485769; }
+    .amz-footer-mid { background:#232f3e; color:#fff; padding:2.5rem 4vw; display:grid; grid-template-columns:repeat(4,1fr); gap:2rem; }
+    @media (max-width:768px) { .amz-footer-mid { grid-template-columns:repeat(2,1fr); } }
+    .amz-footer-col h3 { font-size:.875rem; font-weight:700; margin-bottom:1rem; }
+    .amz-footer-col a { display:block; font-size:.8rem; color:#ddd; margin-bottom:.5rem; }
+    .amz-footer-bot { background:#131921; color:#999; text-align:center; padding:1rem; font-size:.75rem; }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="amz-nav">
+    <div class="amz-logo">pseudo<span>amazon</span></div>
+    <div class="amz-location">
+      <span>📍 Deliver to</span>
+      <strong>France</strong>
+    </div>
+    <div class="amz-search">
+      <select class="amz-search-cat"><option>All</option><option>Electronics</option><option>Books</option><option>Clothing</option></select>
+      <input class="amz-search-input" placeholder="Search products, brands and more" />
+      <button class="amz-search-btn">🔍</button>
+    </div>
+    <div class="amz-nav-right">
+      <a href="#"><small>Returns</small><strong>&amp; Orders</strong></a>
+      <a href="#"><small>Hello, Jean</small><strong>Account ▾</strong></a>
+      <a href="cart.html" style="font-size:1.6rem;position:relative;">
+        🛒<span style="position:absolute;top:0;right:0;background:#ff9900;color:#111;font-size:.6rem;font-weight:700;width:15px;height:15px;border-radius:50%;display:flex;align-items:center;justify-content:center">3</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- Sub Nav -->
+  <nav class="amz-subnav">
+    <a href="#">☰ All</a>
+    <a href="#">Today's Deals</a>
+    <a href="#">Customer Service</a>
+    <a href="#">Registry</a>
+    <a href="#">Gift Cards</a>
+    <a href="#">Sell</a>
+    <a href="#">Electronics</a>
+    <a href="#">Books</a>
+    <a href="#">Home & Kitchen</a>
+    <a href="#">Clothing</a>
+    <a href="#">Beauty</a>
+    <a href="#">Sports</a>
+    <a href="#">Toys</a>
+    <a href="#">Automotive</a>
+  </nav>
+
+  <!-- Hero Carousel -->
+  <div class="amz-hero">
+    <div class="amz-hero-slide" style="background:linear-gradient(90deg,rgba(0,0,0,.7) 0%,transparent 60%), linear-gradient(135deg,#0f1111 0%,#1a3a5e 100%)">
+      <div class="amz-hero-content">
+        <div style="background:#ff9900;color:#111;display:inline-block;padding:.2rem .6rem;border-radius:.2rem;font-size:.75rem;font-weight:700;margin-bottom:.75rem">⚡ LIGHTNING DEAL</div>
+        <h1 class="amz-hero-title">Echo Pro 4th Gen<br/>Premium Smart Speaker</h1>
+        <p class="amz-hero-desc">Unparalleled audio quality meets Alexa intelligence. Now with spatial audio and enhanced bass.</p>
+        <button class="amz-hero-cta">Shop Now — Up to 40% off</button>
+      </div>
+    </div>
+    <div class="amz-hero-dots">
+      <div class="amz-hero-dot active"></div>
+      <div class="amz-hero-dot"></div>
+      <div class="amz-hero-dot"></div>
+      <div class="amz-hero-dot"></div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main class="amz-content">
+
+    <!-- 4 Deal Widgets -->
+    <div class="amz-grid" style="margin-bottom:1.5rem">
+
+      <div class="amz-deal">
+        <h3>Pick up where you left off</h3>
+        <div class="amz-deal-grid">
+          <div class="amz-deal-item"><div class="amz-deal-thumb" style="--bg:linear-gradient(135deg,#f5f5f5,#e0e0e0)"></div><div class="amz-deal-label">Wireless Headphones</div></div>
+          <div class="amz-deal-item"><div class="amz-deal-thumb" style="--bg:linear-gradient(135deg,#fff3e0,#ffe0b2)"></div><div class="amz-deal-label">Standing Desk</div></div>
+          <div class="amz-deal-item"><div class="amz-deal-thumb" style="--bg:linear-gradient(135deg,#e8f5e9,#c8e6c9)"></div><div class="amz-deal-label">Air Purifier</div></div>
+          <div class="amz-deal-item"><div class="amz-deal-thumb" style="--bg:linear-gradient(135deg,#e3f2fd,#bbdefb)"></div><div class="amz-deal-label">Smart Watch</div></div>
+        </div>
+        <a href="#" style="font-size:.8rem;color:#0066c0">See all recommendations</a>
+      </div>
+
+      <div class="amz-deal">
+        <h3>Deals in Electronics</h3>
+        <div class="amz-deal-grid">
+          <div class="amz-deal-item"><div class="amz-deal-thumb" style="--bg:linear-gradient(135deg,#212121,#424242)"></div><div class="amz-deal-label">4K Monitor</div></div>
+          <div class="amz-deal-item"><div class="amz-deal-thumb" style="--bg:linear-gradient(135deg,#1a1a2e,#16213e)"></div><div class="amz-deal-label">Gaming Keyboard</div></div>
+          <div class="amz-deal-item"><div class="amz-deal-thumb" style="--bg:linear-gradient(135deg,#263238,#37474f)"></div><div class="amz-deal-label">Webcam HD</div></div>
+          <div class="amz-deal-item"><div class="amz-deal-thumb" style="--bg:linear-gradient(135deg,#0d47a1,#1565c0)"></div><div class="amz-deal-label">USB-C Hub</div></div>
+        </div>
+        <a href="#" style="font-size:.8rem;color:#0066c0">See all Electronics deals</a>
+      </div>
+
+      <div class="amz-deal">
+        <h3>Home & Kitchen Finds</h3>
+        <div class="amz-deal-grid">
+          <div class="amz-deal-item"><div class="amz-deal-thumb" style="--bg:linear-gradient(135deg,#efebe9,#d7ccc8)"></div><div class="amz-deal-label">Coffee Maker</div></div>
+          <div class="amz-deal-item"><div class="amz-deal-thumb" style="--bg:linear-gradient(135deg,#fafafa,#f5f5f5)"></div><div class="amz-deal-label">Air Fryer</div></div>
+          <div class="amz-deal-item"><div class="amz-deal-thumb" style="--bg:linear-gradient(135deg,#fff9c4,#fff176)"></div><div class="amz-deal-label">Knife Set</div></div>
+          <div class="amz-deal-item"><div class="amz-deal-thumb" style="--bg:linear-gradient(135deg,#e0f7fa,#b2ebf2)"></div><div class="amz-deal-label">Blender Pro</div></div>
+        </div>
+        <a href="#" style="font-size:.8rem;color:#0066c0">See all Home deals</a>
+      </div>
+
+      <div class="amz-deal">
+        <h3>Fashion Trends 2024</h3>
+        <div class="amz-deal-grid">
+          <div class="amz-deal-item"><div class="amz-deal-thumb" style="--bg:linear-gradient(135deg,#fce4ec,#f8bbd0)"></div><div class="amz-deal-label">Summer Dress</div></div>
+          <div class="amz-deal-item"><div class="amz-deal-thumb" style="--bg:linear-gradient(135deg,#e8eaf6,#c5cae9)"></div><div class="amz-deal-label">Slim Chinos</div></div>
+          <div class="amz-deal-item"><div class="amz-deal-thumb" style="--bg:linear-gradient(135deg,#212121,#424242)"></div><div class="amz-deal-label">Leather Jacket</div></div>
+          <div class="amz-deal-item"><div class="amz-deal-thumb" style="--bg:linear-gradient(135deg,#fff8e1,#ffecb3)"></div><div class="amz-deal-label">Sneakers</div></div>
+        </div>
+        <a href="#" style="font-size:.8rem;color:#0066c0">See all Fashion</a>
+      </div>
+
+    </div>
+
+    <!-- Best Sellers Row -->
+    <div class="amz-widget" style="margin-bottom:1.5rem">
+      <h2>Best Sellers in Electronics</h2>
+      <div class="amz-widget-row">
+        <div class="amz-product">
+          <a href="product.html">
+            <div class="amz-product-img" style="--bg:linear-gradient(135deg,#212121,#424242)"></div>
+            <div class="amz-product-name">Sony WH-1000XM5 Wireless Noise Cancelling Headphones</div>
+            <div class="amz-product-rating">★★★★★ <span style="color:#0066c0;font-size:.7rem">(28,494)</span></div>
+            <div class="amz-product-price"><small>€</small>289<span style="font-size:.7rem">,99</span></div>
+            <div class="amz-product-prime">✓ Prime</div>
+          </a>
+        </div>
+        <div class="amz-product">
+          <a href="product.html">
+            <div class="amz-product-img" style="--bg:linear-gradient(135deg,#0d47a1,#1565c0)"></div>
+            <div class="amz-product-name">Samsung 4K Smart TV 55" Crystal UHD with Alexa</div>
+            <div class="amz-product-rating">★★★★☆ <span style="color:#0066c0;font-size:.7rem">(12,832)</span></div>
+            <div class="amz-product-price"><small>€</small>499<span style="font-size:.7rem">,00</span></div>
+            <div class="amz-product-prime">✓ Prime</div>
+          </a>
+        </div>
+        <div class="amz-product">
+          <a href="product.html">
+            <div class="amz-product-img" style="--bg:linear-gradient(135deg,#1a1a2e,#16213e)"></div>
+            <div class="amz-product-name">Logitech MX Master 3S Wireless Mouse Ultra Precise</div>
+            <div class="amz-product-rating">★★★★★ <span style="color:#0066c0;font-size:.7rem">(54,210)</span></div>
+            <div class="amz-product-price"><small>€</small>99<span style="font-size:.7rem">,99</span></div>
+            <div class="amz-product-prime">✓ Prime</div>
+          </a>
+        </div>
+        <div class="amz-product">
+          <a href="product.html">
+            <div class="amz-product-img" style="--bg:linear-gradient(135deg,#37474f,#546e7a)"></div>
+            <div class="amz-product-name">Apple AirPods Pro 2nd Generation with MagSafe Case</div>
+            <div class="amz-product-rating">★★★★★ <span style="color:#0066c0;font-size:.7rem">(89,643)</span></div>
+            <div class="amz-product-price"><small>€</small>249<span style="font-size:.7rem">,00</span></div>
+            <div class="amz-product-prime">✓ Prime</div>
+          </a>
+        </div>
+        <div class="amz-product">
+          <a href="product.html">
+            <div class="amz-product-img" style="--bg:linear-gradient(135deg,#e8f5e9,#81c784)"></div>
+            <div class="amz-product-name">Kindle Paperwhite 11th Gen Waterproof 8GB</div>
+            <div class="amz-product-rating">★★★★★ <span style="color:#0066c0;font-size:.7rem">(145,291)</span></div>
+            <div class="amz-product-price"><small>€</small>149<span style="font-size:.7rem">,99</span></div>
+            <div class="amz-product-prime">✓ Prime</div>
+          </a>
+        </div>
+        <div class="amz-product">
+          <a href="product.html">
+            <div class="amz-product-img" style="--bg:linear-gradient(135deg,#fff3e0,#ffb300)"></div>
+            <div class="amz-product-name">Ring Doorbell Pro 2 with 3D Motion Detection</div>
+            <div class="amz-product-rating">★★★★☆ <span style="color:#0066c0;font-size:.7rem">(22,876)</span></div>
+            <div class="amz-product-price"><small>€</small>179<span style="font-size:.7rem">,99</span></div>
+            <div class="amz-product-prime">✓ Prime</div>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Prime Video Banner -->
+    <div style="background:linear-gradient(90deg,#00003a,#0044cc);color:#fff;border-radius:.4rem;padding:2rem 2.5rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:2rem;flex-wrap:wrap">
+      <div style="font-size:2rem;font-weight:900;letter-spacing:-.05em">prime</div>
+      <div style="flex:1">
+        <h3 style="font-size:1.1rem;margin-bottom:.4rem">30 days free, then €8.99/month</h3>
+        <p style="font-size:.875rem;color:#cce5ff">Free fast delivery · Prime Video · Prime Music · Prime Gaming and more</p>
+      </div>
+      <button style="background:#ff9900;color:#111;border:none;padding:.7rem 1.4rem;border-radius:9999px;font-weight:700;cursor:pointer;font-size:.9rem">Try Prime Free</button>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <div class="amz-footer-top" onclick="window.scrollTo(0,0)">↑ Back to top</div>
+  <div class="amz-footer-mid">
+    <div class="amz-footer-col">
+      <h3>Get to Know Us</h3>
+      <a href="#">Careers</a><a href="#">Blog</a><a href="#">About Amazon</a><a href="#">Investor Relations</a><a href="#">Sustainability</a>
+    </div>
+    <div class="amz-footer-col">
+      <h3>Make Money with Us</h3>
+      <a href="#">Sell on Amazon</a><a href="#">Sell on Amazon Handmade</a><a href="#">Amazon Merch</a><a href="#">Associates</a><a href="#">Advertise</a>
+    </div>
+    <div class="amz-footer-col">
+      <h3>Amazon Payment Products</h3>
+      <a href="#">Amazon Business Card</a><a href="#">Shop with Points</a><a href="#">Reload Your Balance</a><a href="#">Amazon Currency Converter</a>
+    </div>
+    <div class="amz-footer-col">
+      <h3>Let Us Help You</h3>
+      <a href="#">Your Account</a><a href="#">Your Orders</a><a href="#">Shipping Rates & Policies</a><a href="#">Returns & Replacements</a><a href="#">Help</a>
+    </div>
+  </div>
+  <div class="amz-footer-bot">
+    <p>© 2024 Pseudo-Amazon Demo — built with <strong>pseudo-html-kit</strong></p>
+  </div>
+
+</body>
+</html>

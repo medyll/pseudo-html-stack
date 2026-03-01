@@ -1,0 +1,91 @@
+<!--
+  @component content-row-pk
+  @props title:string?; href:string?; seeAll:boolean?; cols:enum(2|3|4|5|6)?
+  @slots default, header
+  @layer organisms
+-->
+<template>
+  <section class="content-row">
+    <div class="content-row__header">
+      <slot name="header">
+        <h2 class="content-row__title">
+          <slot name="title">Section</slot>
+        </h2>
+        <a class="content-row__see-all" href="#">See all</a>
+      </slot>
+    </div>
+    <div class="content-row__track">
+      <slot></slot>
+    </div>
+  </section>
+</template>
+
+<style>
+  @scope (.content-row) {
+    :scope {
+      display: flex;
+      flex-direction: column;
+      gap: .75rem;
+    }
+
+    .content-row__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .content-row__title {
+      margin: 0;
+      font-size: var(--text-xl, 1.25rem);
+      font-weight: 700;
+      color: var(--color-text, #1a202c);
+    }
+
+    .content-row__see-all {
+      font-size: var(--text-sm, .875rem);
+      font-weight: 500;
+      color: var(--color-primary, #3b82f6);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .content-row__see-all:hover { text-decoration: underline; }
+    :scope:not([seeAll]) .content-row__see-all { display: none; }
+
+    /* Horizontal scrollable track */
+    .content-row__track {
+      display: grid;
+      grid-template-columns: repeat(var(--cols, 4), minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    :scope[cols="2"] .content-row__track { --cols: 2; }
+    :scope[cols="3"] .content-row__track { --cols: 3; }
+    :scope[cols="5"] .content-row__track { --cols: 5; }
+    :scope[cols="6"] .content-row__track { --cols: 6; }
+
+    @media (max-width: 1024px) {
+      .content-row__track { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+    @media (max-width: 768px) {
+      .content-row__track {
+        grid-template-columns: unset;
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+        gap: .75rem;
+        padding-bottom: .5rem;
+      }
+      .content-row__track::-webkit-scrollbar { display: none; }
+      .content-row__track > * {
+        flex-shrink: 0;
+        width: 40vw;
+        scroll-snap-align: start;
+      }
+    }
+    @media (max-width: 480px) {
+      .content-row__track > * { width: 65vw; }
+    }
+  }
+</style>

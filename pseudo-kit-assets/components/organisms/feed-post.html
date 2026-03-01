@@ -1,0 +1,142 @@
+<!--
+  @component feed-post-pk
+  @props author:string?; time:string?; liked:boolean?; bookmarked:boolean?
+  @slots avatar, media, body, actions, header
+  @layer organisms
+-->
+<template>
+  <article class="feed-post">
+    <header class="feed-post__header">
+      <div class="feed-post__avatar">
+        <slot name="avatar"></slot>
+      </div>
+      <div class="feed-post__meta">
+        <slot name="header">
+          <span class="feed-post__author">Author</span>
+          <span class="feed-post__time">just now</span>
+        </slot>
+      </div>
+      <div class="feed-post__menu">
+        <slot name="menu"></slot>
+      </div>
+    </header>
+    <div class="feed-post__body">
+      <slot name="body">Post content goes here.</slot>
+    </div>
+    <div class="feed-post__media">
+      <slot name="media"></slot>
+    </div>
+    <footer class="feed-post__actions">
+      <slot name="actions">
+        <button class="feed-post__action" type="button">
+          <span aria-hidden="true">♡</span> Like
+        </button>
+        <button class="feed-post__action" type="button">
+          <span aria-hidden="true">💬</span> Comment
+        </button>
+        <button class="feed-post__action" type="button">
+          <span aria-hidden="true">↗</span> Share
+        </button>
+      </slot>
+    </footer>
+  </article>
+</template>
+
+<style>
+  @scope (.feed-post) {
+    :scope {
+      display: flex;
+      flex-direction: column;
+      background-color: var(--color-surface, #fff);
+      border: 1px solid var(--color-border, #e2e8f0);
+      border-radius: var(--radius-xl, .75rem);
+      overflow: hidden;
+    }
+
+    .feed-post__header {
+      display: flex;
+      align-items: flex-start;
+      gap: .75rem;
+      padding: 1rem 1rem .5rem;
+    }
+
+    .feed-post__avatar {
+      flex-shrink: 0;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      overflow: hidden;
+      background-color: var(--color-surface-2, #f1f5f9);
+    }
+    .feed-post__avatar:empty { display: none; }
+
+    .feed-post__meta {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: .1rem;
+    }
+
+    .feed-post__author {
+      font-size: var(--text-sm, .875rem);
+      font-weight: 700;
+      color: var(--color-text, #1a202c);
+    }
+
+    .feed-post__time {
+      font-size: var(--text-xs, .75rem);
+      color: var(--color-text-muted, #64748b);
+    }
+
+    .feed-post__menu { flex-shrink: 0; }
+    .feed-post__menu:empty { display: none; }
+
+    .feed-post__body {
+      padding: .5rem 1rem;
+      font-size: var(--text-sm, .875rem);
+      color: var(--color-text, #1a202c);
+      line-height: 1.55;
+    }
+
+    .feed-post__media {
+      width: 100%;
+      overflow: hidden;
+    }
+    .feed-post__media:empty { display: none; }
+
+    .feed-post__actions {
+      display: flex;
+      align-items: center;
+      gap: .25rem;
+      padding: .5rem .75rem;
+      border-top: 1px solid var(--color-border, #e2e8f0);
+    }
+
+    .feed-post__action {
+      display: inline-flex;
+      align-items: center;
+      gap: .35rem;
+      padding: .4rem .75rem;
+      border: none;
+      background: none;
+      border-radius: var(--radius-md, .375rem);
+      font-size: var(--text-sm, .875rem);
+      font-weight: 500;
+      color: var(--color-text-muted, #64748b);
+      cursor: pointer;
+      transition: background-color .12s, color .12s;
+    }
+    .feed-post__action:hover {
+      background-color: var(--color-surface-2, #f8fafc);
+      color: var(--color-text, #1a202c);
+    }
+
+    :scope[liked] .feed-post__action:first-child {
+      color: var(--color-danger, #ef4444);
+    }
+
+    @media (max-width: 480px) {
+      .feed-post__action { padding: .4rem .5rem; font-size: var(--text-xs, .75rem); }
+    }
+  }
+</style>

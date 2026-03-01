@@ -1,0 +1,72 @@
+<!--
+  @component form-field-pk
+  @props label:string; name:string; required:boolean?; error:string?; hint:string?
+  @slots default
+  @layer molecules
+-->
+<template>
+  <div class="form-field">
+    <label class="form-field__label">
+      <span class="form-field__label-text">
+        <slot name="label">Label</slot>
+        <span class="form-field__required" aria-hidden="true">*</span>
+      </span>
+    </label>
+    <div class="form-field__control">
+      <slot></slot>
+    </div>
+    <p class="form-field__hint">
+      <slot name="hint"></slot>
+    </p>
+    <p class="form-field__error" role="alert">
+      <slot name="error"></slot>
+    </p>
+  </div>
+</template>
+
+<style>
+  @scope (.form-field) {
+    :scope {
+      display: flex;
+      flex-direction: column;
+      gap: .35rem;
+    }
+
+    .form-field__label {
+      display: block;
+    }
+
+    .form-field__label-text {
+      display: inline-flex;
+      align-items: center;
+      gap: .2rem;
+      font-size: var(--text-sm, .875rem);
+      font-weight: 500;
+      color: var(--color-text, #1a202c);
+    }
+
+    .form-field__required {
+      color: var(--color-danger, #ef4444);
+      font-size: .8em;
+    }
+
+    /* Hide required star when not required */
+    :scope:not([required]) .form-field__required { display: none; }
+
+    .form-field__control { display: block; }
+
+    .form-field__hint {
+      margin: 0;
+      font-size: var(--text-xs, .75rem);
+      color: var(--color-text-muted, #64748b);
+    }
+    .form-field__hint:empty { display: none; }
+
+    .form-field__error {
+      margin: 0;
+      font-size: var(--text-xs, .75rem);
+      color: var(--color-danger, #ef4444);
+    }
+    .form-field__error:empty { display: none; }
+  }
+</style>

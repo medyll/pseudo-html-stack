@@ -1,0 +1,50 @@
+<!--
+  @frame dashboard
+  @slots sidebar, topbar, main, widgets
+  @description Admin dashboard skeleton
+-->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — Frame</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #f8fafc; font-family: system-ui, sans-serif; min-height: 100dvh; }
+    .frame-dashboard { display: flex; min-height: 100dvh; }
+    .frame__sidebar  { width: 16rem; flex-shrink: 0; height: 100dvh; position: sticky; top: 0; overflow-y: auto; }
+    .frame__body     { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+    .frame__topbar   { position: sticky; top: 0; z-index: 10; }
+    .frame__main     { flex: 1; padding: 1.5rem; display: flex; flex-direction: column; gap: 1.5rem; }
+    .frame__widgets  { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+    .frame__content  { flex: 1; }
+    @media (max-width: 1024px) { .frame__widgets { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 768px)  { .frame__sidebar { display: none; } .frame__widgets { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 480px)  { .frame__widgets { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="frame-dashboard">
+
+    <div class="frame__sidebar">
+      <slot name="sidebar"></slot>
+    </div>
+
+    <div class="frame__body">
+      <div class="frame__topbar">
+        <slot name="topbar"></slot>
+      </div>
+      <div class="frame__main">
+        <div class="frame__widgets">
+          <slot name="widgets"></slot>
+        </div>
+        <div class="frame__content">
+          <slot name="main"></slot>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

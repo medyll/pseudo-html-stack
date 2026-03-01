@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shopping Cart — Pseudo-Amazon</title>
+  <link rel="stylesheet" href="tokens.css" />
+  <style>
+    body { background:#eaeded; }
+    .amz-nav { position:sticky;top:0;z-index:100;background:#131921;color:#fff;padding:.6rem 1rem;display:flex;align-items:center;gap:.75rem; }
+    .amz-logo { font-size:1.4rem;font-weight:700; }
+    .amz-logo span { color:#ff9900; }
+    .amz-search { flex:1;display:flex;max-width:700px; }
+    .amz-search-cat { background:#f0f2f2;color:#333;border:none;padding:0 .5rem;font-size:.8rem;border-radius:.3rem 0 0 .3rem; }
+    .amz-search-input { flex:1;border:none;padding:.5rem .75rem;font-size:.875rem; }
+    .amz-search-btn { background:#ff9900;border:none;padding:.5rem .75rem;border-radius:0 .3rem .3rem 0;cursor:pointer; }
+    .amz-nav-right { margin-left:auto;display:flex;gap:1rem;align-items:center;font-size:.875rem;color:#fff; }
+    .amz-nav-right a { color:#fff; }
+
+    /* Cart Layout */
+    .amz-cart-layout { max-width:1200px;margin:1.5rem auto;padding:0 1rem;display:grid;grid-template-columns:1fr 300px;gap:1.5rem;align-items:start; }
+    @media (max-width:768px) { .amz-cart-layout { grid-template-columns:1fr; } }
+
+    /* Cart Items Panel */
+    .amz-cart-panel { background:#fff;border-radius:.4rem;padding:1.5rem; }
+    .amz-cart-panel h1 { font-size:1.7rem;font-weight:400;margin-bottom:.5rem; }
+    .amz-cart-subtitle { font-size:.875rem;color:#565959;margin-bottom:1.5rem;border-bottom:1px solid #eee;padding-bottom:1rem; }
+    .amz-cart-item { display:grid;grid-template-columns:120px 1fr auto;gap:1rem;padding:1.25rem 0;border-bottom:1px solid #f0f0f0;align-items:start; }
+    .amz-item-img { height:120px;background:var(--bg,#f3f3f3);border-radius:.2rem;display:flex;align-items:center;justify-content:center;font-size:2.5rem; }
+    .amz-item-name { font-size:.875rem;color:#0066c0;margin-bottom:.4rem;line-height:1.4; }
+    .amz-item-stock { color:#007600;font-size:.8rem;font-weight:700;margin-bottom:.3rem; }
+    .amz-item-prime { color:#00a8e1;font-size:.75rem;font-weight:700;margin-bottom:.75rem; }
+    .amz-item-actions { display:flex;align-items:center;gap:.5rem;flex-wrap:wrap; }
+    .amz-item-qty { border:1px solid #888;border-radius:.3rem;padding:.25rem .5rem;font-size:.8rem; }
+    .amz-item-action-link { color:#0066c0;font-size:.8rem;cursor:pointer;border-left:1px solid #ddd;padding-left:.5rem; }
+    .amz-item-action-link:first-child { border-left:none;padding-left:0; }
+    .amz-item-price { font-size:1.1rem;font-weight:700;white-space:nowrap; }
+    .amz-item-was { font-size:.75rem;color:#565959;text-decoration:line-through; }
+    .amz-item-save { color:#c45500;font-size:.75rem;font-weight:700; }
+
+    /* Subtotal */
+    .amz-subtotal { background:#fff;border-radius:.4rem;padding:1.5rem;position:sticky;top:4rem; }
+    .amz-subtotal-line { font-size:.95rem;margin-bottom:.5rem; }
+    .amz-subtotal-line.total { font-size:1.1rem;font-weight:700;border-top:1px solid #eee;padding-top:.75rem;margin-top:.5rem; }
+    .amz-subtotal-price { color:#c45500;font-weight:700; }
+    .amz-subtotal-price.total { color:#0f1111;font-size:1.2rem; }
+    .amz-btn-proceed { width:100%;background:#ff9900;border:none;padding:.7rem;border-radius:9999px;font-size:.9rem;font-weight:700;cursor:pointer;color:#111;margin-top:1rem; }
+    .amz-btn-proceed:hover { background:#e68900; }
+
+    /* Recommendations */
+    .amz-reco { background:#fff;border-radius:.4rem;padding:1.5rem;margin-top:1rem; }
+    .amz-reco h2 { font-size:1.1rem;font-weight:700;margin-bottom:1rem; }
+    .amz-reco-scroll { display:flex;gap:.75rem;overflow-x:auto;padding-bottom:.5rem; }
+    .amz-reco-scroll::-webkit-scrollbar { display:none; }
+    .amz-reco-item { flex:0 0 140px;cursor:pointer; }
+    .amz-reco-img { height:140px;background:var(--bg,#f3f3f3);border-radius:.3rem;margin-bottom:.5rem; }
+    .amz-reco-name { font-size:.75rem;color:#0066c0;line-height:1.4; }
+    .amz-reco-price { font-size:.85rem;font-weight:700;margin-top:.2rem; }
+  </style>
+</head>
+<body>
+
+  <nav class="amz-nav">
+    <a href="index.html" class="amz-logo">pseudo<span>amazon</span></a>
+    <div class="amz-search">
+      <select class="amz-search-cat"><option>All</option></select>
+      <input class="amz-search-input" placeholder="Search" />
+      <button class="amz-search-btn">🔍</button>
+    </div>
+    <div class="amz-nav-right"><a href="#">Account</a></div>
+  </nav>
+
+  <div class="amz-cart-layout">
+
+    <!-- Cart Items -->
+    <div>
+      <div class="amz-cart-panel">
+        <h1>Shopping Cart</h1>
+        <div class="amz-cart-subtitle">
+          <label><input type="checkbox" /> Select all items</label>
+          <span style="float:right">Price</span>
+        </div>
+
+        <!-- Item 1 -->
+        <div class="amz-cart-item">
+          <div class="amz-item-img" style="--bg:linear-gradient(135deg,#212121,#424242)">🎧</div>
+          <div>
+            <div class="amz-item-name">Sony WH-1000XM5 Wireless Industry Leading Noise Cancelling Headphones — Midnight Black</div>
+            <div class="amz-item-stock">In Stock</div>
+            <div class="amz-item-prime">✓ FREE Delivery with Prime</div>
+            <div class="amz-item-actions">
+              <select class="amz-item-qty"><option>Qty: 1</option><option>Qty: 2</option></select>
+              <span class="amz-item-action-link">Delete</span>
+              <span class="amz-item-action-link">Save for later</span>
+              <span class="amz-item-action-link">See more like this</span>
+            </div>
+          </div>
+          <div style="text-align:right">
+            <div class="amz-item-price">€289,99</div>
+            <div class="amz-item-was">€379,00</div>
+            <div class="amz-item-save">Save €89,01</div>
+          </div>
+        </div>
+
+        <!-- Item 2 -->
+        <div class="amz-cart-item">
+          <div class="amz-item-img" style="--bg:linear-gradient(135deg,#1a1a2e,#16213e)">⌨️</div>
+          <div>
+            <div class="amz-item-name">Logitech MX Keys Advanced Wireless Illuminated Keyboard — Graphite</div>
+            <div class="amz-item-stock">In Stock</div>
+            <div class="amz-item-prime">✓ FREE Delivery with Prime</div>
+            <div class="amz-item-actions">
+              <select class="amz-item-qty"><option>Qty: 1</option><option>Qty: 2</option></select>
+              <span class="amz-item-action-link">Delete</span>
+              <span class="amz-item-action-link">Save for later</span>
+            </div>
+          </div>
+          <div style="text-align:right">
+            <div class="amz-item-price">€119,99</div>
+          </div>
+        </div>
+
+        <!-- Item 3 -->
+        <div class="amz-cart-item">
+          <div class="amz-item-img" style="--bg:linear-gradient(135deg,#e8f5e9,#81c784)">📱</div>
+          <div>
+            <div class="amz-item-name">Kindle Paperwhite 11th Generation — Waterproof 8GB — Black</div>
+            <div class="amz-item-stock">In Stock</div>
+            <div class="amz-item-prime">✓ FREE Delivery with Prime</div>
+            <div class="amz-item-actions">
+              <select class="amz-item-qty"><option>Qty: 1</option><option>Qty: 2</option></select>
+              <span class="amz-item-action-link">Delete</span>
+              <span class="amz-item-action-link">Save for later</span>
+            </div>
+          </div>
+          <div style="text-align:right">
+            <div class="amz-item-price">€149,99</div>
+            <div class="amz-item-was">€179,00</div>
+            <div class="amz-item-save">Save €29,01</div>
+          </div>
+        </div>
+
+        <div style="text-align:right;padding:.75rem 0;font-size:.875rem">
+          Subtotal (3 items): <strong style="font-size:1.1rem">€559,97</strong>
+        </div>
+      </div>
+
+      <!-- Saved for later -->
+      <div class="amz-cart-panel" style="margin-top:1rem">
+        <h2 style="font-size:1.1rem;font-weight:700;margin-bottom:1rem">Saved for later (1 item)</h2>
+        <div class="amz-cart-item">
+          <div class="amz-item-img" style="--bg:linear-gradient(135deg,#37474f,#546e7a)">🎵</div>
+          <div>
+            <div class="amz-item-name">Apple AirPods Pro 2nd Generation with MagSafe Case (USB-C)</div>
+            <div class="amz-item-stock" style="color:#565959">Usually dispatched within 1-2 days</div>
+            <div class="amz-item-prime">✓ FREE Delivery with Prime</div>
+            <div class="amz-item-actions">
+              <button style="background:#ff9900;border:none;padding:.3rem .8rem;border-radius:.2rem;font-size:.8rem;cursor:pointer;font-weight:700">Move to cart</button>
+              <span class="amz-item-action-link">Delete</span>
+            </div>
+          </div>
+          <div style="text-align:right">
+            <div class="amz-item-price">€249,00</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recommendations -->
+      <div class="amz-reco">
+        <h2>Customers who bought these items also bought</h2>
+        <div class="amz-reco-scroll">
+          <div class="amz-reco-item">
+            <div class="amz-reco-img" style="--bg:linear-gradient(135deg,#263238,#37474f)"></div>
+            <div class="amz-reco-name">Anker USB-C 10-in-1 Hub Docking Station</div>
+            <div class="amz-reco-price">€59,99</div>
+          </div>
+          <div class="amz-reco-item">
+            <div class="amz-reco-img" style="--bg:linear-gradient(135deg,#e8eaf6,#9fa8da)"></div>
+            <div class="amz-reco-name">Laptop Stand Adjustable Aluminium Ergonomic</div>
+            <div class="amz-reco-price">€39,99</div>
+          </div>
+          <div class="amz-reco-item">
+            <div class="amz-reco-img" style="--bg:linear-gradient(135deg,#fff3e0,#ffe0b2)"></div>
+            <div class="amz-reco-name">Cable Management Kit with Clips and Ties</div>
+            <div class="amz-reco-price">€14,99</div>
+          </div>
+          <div class="amz-reco-item">
+            <div class="amz-reco-img" style="--bg:linear-gradient(135deg,#e0f7fa,#80deea)"></div>
+            <div class="amz-reco-name">Monitor Light Bar LED USB-C Dimmable</div>
+            <div class="amz-reco-price">€29,99</div>
+          </div>
+          <div class="amz-reco-item">
+            <div class="amz-reco-img" style="--bg:linear-gradient(135deg,#f3e5f5,#ce93d8)"></div>
+            <div class="amz-reco-name">Headphone Stand with USB Charger Ports</div>
+            <div class="amz-reco-price">€24,99</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Order Summary -->
+    <div class="amz-subtotal">
+      <div class="amz-subtotal-line">
+        Subtotal (3 items): <span class="amz-subtotal-price">€559,97</span>
+      </div>
+      <div style="font-size:.8rem;color:#565959;margin-bottom:.5rem">Your order qualifies for FREE delivery.</div>
+      <div class="amz-subtotal-line">
+        Estimated tax: <span>€55,99</span>
+      </div>
+      <div class="amz-subtotal-line total">
+        Order total: <span class="amz-subtotal-price total">€615,96</span>
+      </div>
+      <button class="amz-btn-proceed">Proceed to checkout (3 items)</button>
+      <div style="margin-top:.75rem;text-align:center;font-size:.75rem;color:#565959">
+        🔒 Transactions secured with SSL
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!--
+  @component loader-pk
+  @props size:enum(sm|md|lg)?; label:string?; overlay:boolean?
+  @slots (none)
+  @layer atoms
+-->
+<template>
+  <div class="loader" role="status" aria-live="polite" aria-label="Loading">
+    <span class="loader__bar"></span>
+    <span class="loader__bar"></span>
+    <span class="loader__bar"></span>
+    <span class="loader__text sr-only"></span>
+  </div>
+</template>
+
+<style>
+  @scope (.loader) {
+    :scope {
+      display: inline-flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: .25rem;
+      height: var(--loader-size-md, 2rem);
+    }
+
+    :scope[size="sm"] { height: var(--loader-size-sm, 1.25rem); gap: .2rem; }
+    :scope[size="lg"] { height: var(--loader-size-lg, 3rem); gap: .375rem; }
+
+    /* Overlay mode */
+    :scope[overlay] {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.4);
+      z-index: var(--z-overlay, 900);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: auto;
+    }
+
+    .loader__bar {
+      display: block;
+      width: .25rem;
+      background-color: var(--color-primary, #3b82f6);
+      border-radius: var(--radius-full, 9999px);
+      animation: loader-bounce 1s ease-in-out infinite;
+    }
+    :scope[size="sm"] .loader__bar { width: .2rem; }
+    :scope[size="lg"] .loader__bar { width: .375rem; }
+
+    .loader__bar:nth-child(1) { height: 40%; animation-delay: 0s; }
+    .loader__bar:nth-child(2) { height: 70%; animation-delay: .15s; }
+    .loader__bar:nth-child(3) { height: 100%; animation-delay: .3s; }
+
+    .loader__text { display: none; }
+    :scope[label] .loader__text { display: block; }
+
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+    }
+
+    @keyframes loader-bounce {
+      0%, 100% { transform: scaleY(.4); }
+      50%       { transform: scaleY(1); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .loader__bar { animation: none; height: 60%; }
+    }
+  }
+</style>

@@ -1,0 +1,88 @@
+<!--
+  @component search-bar-pk
+  @props placeholder:string?; value:string?; loading:boolean?; size:enum(sm|md|lg)?
+  @slots prefix, suffix
+  @layer molecules
+-->
+<template>
+  <div class="search-bar" role="search">
+    <span class="search-bar__icon" aria-hidden="true">
+      <slot name="prefix">
+        <svg class="search-bar__svg" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <circle cx="8.5" cy="8.5" r="5.5" stroke="currentColor" stroke-width="1.6"/>
+          <path d="M13 13l3.5 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+      </slot>
+    </span>
+    <input
+      class="search-bar__input"
+      type="search"
+      placeholder="Search…"
+      aria-label="Search"
+      autocomplete="off"
+    />
+    <span class="search-bar__suffix">
+      <slot name="suffix"></slot>
+    </span>
+    <span class="search-bar__loader" aria-hidden="true"></span>
+  </div>
+</template>
+
+<style>
+  @scope (.search-bar) {
+    :scope {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .45rem .75rem;
+      background-color: var(--color-surface, #fff);
+      border: 1.5px solid var(--color-border, #e2e8f0);
+      border-radius: var(--radius-full, 9999px);
+      transition: border-color .15s, box-shadow .15s;
+    }
+    :scope:focus-within {
+      border-color: var(--color-primary, #3b82f6);
+      box-shadow: 0 0 0 3px var(--color-primary-alpha, rgba(59,130,246,.15));
+    }
+
+    :scope[size="sm"] { padding: .3rem .6rem; font-size: var(--text-xs, .75rem); }
+    :scope[size="lg"] { padding: .6rem 1rem;  font-size: var(--text-base, 1rem); }
+
+    .search-bar__icon {
+      flex-shrink: 0;
+      color: var(--color-text-muted, #64748b);
+      display: flex;
+    }
+    .search-bar__svg { width: 1em; height: 1em; }
+
+    .search-bar__input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      outline: none;
+      font-size: var(--text-sm, .875rem);
+      color: var(--color-text, #1a202c);
+      min-width: 0;
+    }
+    .search-bar__input::placeholder { color: var(--color-text-muted, #94a3b8); }
+    /* Remove native clear button */
+    .search-bar__input::-webkit-search-cancel-button { display: none; }
+
+    .search-bar__suffix:empty { display: none; }
+
+    /* Spinner while loading */
+    .search-bar__loader {
+      flex-shrink: 0;
+      display: none;
+      width: .9em;
+      height: .9em;
+      border: 2px solid var(--color-border, #e2e8f0);
+      border-top-color: var(--color-primary, #3b82f6);
+      border-radius: 50%;
+      animation: sb-spin .6s linear infinite;
+    }
+    :scope[loading] .search-bar__loader { display: block; }
+
+    @keyframes sb-spin { to { transform: rotate(360deg); } }
+  }
+</style>

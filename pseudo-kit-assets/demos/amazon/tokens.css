@@ -1,0 +1,53 @@
+/* tokens.css — Amazon demo theme */
+
+:root {
+  --color-primary:          #ff9900;
+  --color-primary-hover:    #e68900;
+  --color-primary-contrast: #111;
+  --color-primary-light:    #fff3e0;
+  --color-primary-alpha:    rgba(255,153,0,.2);
+
+  --color-surface:          #fff;
+  --color-surface-2:        #f3f3f3;
+  --color-border:           #ddd;
+  --color-text:             #111;
+  --color-text-muted:       #565959;
+
+  --color-danger:           #c45500;
+  --color-danger-light:     #fdf0e6;
+  --color-danger-dark:      #7a3500;
+
+  --color-success:          #067d62;
+  --color-success-light:    #e6f4f0;
+  --color-success-dark:     #044e3c;
+
+  --color-info:             #0066c0;
+  --color-info-light:       #e6f0f8;
+  --color-info-dark:        #003d73;
+
+  --font-sans:   'Amazon Ember', Arial, sans-serif;
+  --radius-sm:   .2rem;
+  --radius-md:   .3rem;
+  --radius-lg:   .4rem;
+  --radius-xl:   .4rem;
+  --radius-full: 9999px;
+
+  --page-x:      1.5rem;
+  --page-max:    1500px;
+
+  background: #eaeded;
+  color: #111;
+  font-family: var(--font-sans);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #eaeded; color: #111; min-height: 100dvh; }
+a { color: var(--color-info, #0066c0); text-decoration: none; }
+a:hover { text-decoration: underline; color: var(--color-danger, #c45500); }
+img { display: block; max-width: 100%; }
+
+/* Amazon-style button override */
+button[variant="primary"] { border-radius: 9999px !important; }
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-thumb { background: #aaa; border-radius: 3px; }

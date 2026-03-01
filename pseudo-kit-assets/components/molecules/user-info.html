@@ -1,0 +1,83 @@
+<!--
+  @component user-info-pk
+  @props name:string; role:string?; src:string?; size:enum(sm|md|lg)?
+  @slots actions, avatar
+  @layer molecules
+-->
+<template>
+  <div class="user-info">
+    <div class="user-info__avatar">
+      <slot name="avatar">
+        <span class="user-info__initials" aria-hidden="true"></span>
+      </slot>
+    </div>
+    <div class="user-info__text">
+      <span class="user-info__name">
+        <slot>User Name</slot>
+      </span>
+      <span class="user-info__role">
+        <slot name="role"></slot>
+      </span>
+    </div>
+    <div class="user-info__actions">
+      <slot name="actions"></slot>
+    </div>
+  </div>
+</template>
+
+<style>
+  @scope (.user-info) {
+    :scope {
+      display: inline-flex;
+      align-items: center;
+      gap: .625rem;
+    }
+
+    .user-info__avatar {
+      flex-shrink: 0;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      overflow: hidden;
+      background-color: var(--color-primary-light, #eff6ff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    :scope[size="sm"] .user-info__avatar { width: 2rem;   height: 2rem;   font-size: .7rem; }
+    :scope[size="lg"] .user-info__avatar { width: 3.25rem; height: 3.25rem; font-size: 1rem; }
+
+    .user-info__initials {
+      font-size: .8rem;
+      font-weight: 700;
+      color: var(--color-primary, #3b82f6);
+      text-transform: uppercase;
+    }
+
+    .user-info__text {
+      display: flex;
+      flex-direction: column;
+      gap: .1rem;
+      min-width: 0;
+    }
+
+    .user-info__name {
+      font-size: var(--text-sm, .875rem);
+      font-weight: 600;
+      color: var(--color-text, #1a202c);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .user-info__role {
+      font-size: var(--text-xs, .75rem);
+      color: var(--color-text-muted, #64748b);
+    }
+    .user-info__role:empty { display: none; }
+
+    .user-info__actions { flex-shrink: 0; }
+    .user-info__actions:empty { display: none; }
+  }
+</style>

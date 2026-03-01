@@ -1,0 +1,127 @@
+<!--
+  @component input-pk
+  @props type:enum(text|email|password|number|search|tel|url)?; name:string; id:string?; placeholder:string?; value:string?; disabled:boolean?; required:boolean?; error:string?; size:enum(sm|md|lg)?
+  @slots prefix, suffix
+  @layer atoms
+-->
+<template>
+  <div class="input">
+    <span class="input__prefix" aria-hidden="true">
+      <slot name="prefix"></slot>
+    </span>
+    <input class="input__field" type="text" />
+    <span class="input__suffix" aria-hidden="true">
+      <slot name="suffix"></slot>
+    </span>
+    <span class="input__error" role="alert" aria-live="polite"></span>
+  </div>
+</template>
+
+<style>
+  @scope (.input) {
+    :scope {
+      display: flex;
+      flex-direction: column;
+      gap: .25rem;
+      width: 100%;
+    }
+
+    /* Wrapper row (prefix + field + suffix) */
+    :scope {
+      --input-border: var(--color-border, #cbd5e0);
+      --input-bg: var(--color-surface-1, #fff);
+      --input-radius: var(--radius-md, .375rem);
+      --input-padding: .5rem .75rem;
+      --input-font: var(--text-sm, .875rem);
+    }
+
+    /* Row */
+    :scope::before {
+      content: none; /* no pseudo-element wrapper needed — flex handles layout */
+    }
+
+    .input__field {
+      flex: 1;
+      width: 100%;
+      padding: var(--input-padding);
+      border: 1.5px solid var(--input-border);
+      border-radius: var(--input-radius);
+      background-color: var(--input-bg);
+      color: var(--color-text, #1a202c);
+      font-family: var(--font-sans, system-ui, sans-serif);
+      font-size: var(--input-font);
+      line-height: 1.5;
+      outline: none;
+      transition: border-color .15s, box-shadow .15s;
+      min-width: 0;
+    }
+
+    .input__field::placeholder {
+      color: var(--color-text-muted, #a0aec0);
+    }
+
+    .input__field:focus {
+      border-color: var(--color-primary, #3b82f6);
+      box-shadow: 0 0 0 3px var(--color-primary-ring, rgba(59,130,246,.2));
+    }
+
+    .input__field:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+      background-color: var(--color-surface-2, #edf2f7);
+    }
+
+    /* Error state */
+    :scope[error] .input__field {
+      border-color: var(--color-danger, #ef4444);
+    }
+    :scope[error] .input__field:focus {
+      box-shadow: 0 0 0 3px var(--color-danger-ring, rgba(239,68,68,.2));
+    }
+
+    .input__error {
+      display: none;
+      font-size: var(--text-xs, .75rem);
+      color: var(--color-danger, #ef4444);
+    }
+    :scope[error] .input__error { display: block; }
+
+    /* Prefix / suffix decoration */
+    .input__prefix:not(:empty),
+    .input__suffix:not(:empty) {
+      display: flex;
+      align-items: center;
+      padding: .5rem .625rem;
+      background-color: var(--color-surface-2, #edf2f7);
+      border: 1.5px solid var(--input-border);
+      color: var(--color-text-muted, #718096);
+      font-size: var(--text-sm, .875rem);
+    }
+    .input__prefix:not(:empty) {
+      border-right: none;
+      border-radius: var(--input-radius) 0 0 var(--input-radius);
+    }
+    .input__suffix:not(:empty) {
+      border-left: none;
+      border-radius: 0 var(--input-radius) var(--input-radius) 0;
+    }
+    :scope:has(.input__prefix:not(:empty)) .input__field {
+      border-radius: 0 var(--input-radius) var(--input-radius) 0;
+    }
+    :scope:has(.input__suffix:not(:empty)) .input__field {
+      border-radius: var(--input-radius) 0 0 var(--input-radius);
+    }
+
+    /* Sizes */
+    :scope[size="sm"] { --input-padding: .25rem .625rem; --input-font: var(--text-xs, .75rem); }
+    :scope[size="lg"] { --input-padding: .75rem 1rem;    --input-font: var(--text-base, 1rem); }
+
+    /* Row layout */
+    :scope {
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: stretch;
+    }
+    .input__error { flex: 0 0 100%; }
+  }
+</style>

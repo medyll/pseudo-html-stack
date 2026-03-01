@@ -1,0 +1,48 @@
+<!--
+  @frame chat
+  @slots sidebar, thread, composer
+  @description Chat/messaging UI skeleton
+-->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chat — Frame</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #f8fafc; font-family: system-ui, sans-serif; height: 100dvh; overflow: hidden; }
+    .frame-chat     { display: flex; height: 100dvh; }
+    .frame__sidebar { width: 20rem; flex-shrink: 0; height: 100%; border-right: 1px solid #e2e8f0; background: #fff; display: flex; flex-direction: column; }
+    .frame__main    { flex: 1; display: flex; flex-direction: column; min-width: 0; background: #fff; }
+    .frame__header  { flex-shrink: 0; border-bottom: 1px solid #e2e8f0; }
+    .frame__thread  { flex: 1; overflow-y: auto; padding: 1rem; display: flex; flex-direction: column; gap: .75rem; }
+    .frame__composer{ flex-shrink: 0; border-top: 1px solid #e2e8f0; padding: .75rem 1rem; }
+    @media (max-width: 768px) {
+      .frame__sidebar { position: absolute; left: 0; top: 0; bottom: 0; z-index: 10; transform: translateX(-100%); transition: transform .25s; }
+      .frame-chat[sidebar-open] .frame__sidebar { transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="frame-chat">
+
+    <div class="frame__sidebar">
+      <slot name="sidebar"></slot>
+    </div>
+
+    <div class="frame__main">
+      <div class="frame__header">
+        <slot name="header"></slot>
+      </div>
+      <div class="frame__thread">
+        <slot name="thread"></slot>
+      </div>
+      <div class="frame__composer">
+        <slot name="composer"></slot>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

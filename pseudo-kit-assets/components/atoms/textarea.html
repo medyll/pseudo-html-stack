@@ -1,0 +1,75 @@
+<!--
+  @component textarea-pk
+  @props name:string; id:string?; placeholder:string?; rows:number?; disabled:boolean?; required:boolean?; error:string?; resize:enum(none|vertical|horizontal|both)?
+  @slots (none)
+  @layer atoms
+-->
+<template>
+  <div class="textarea">
+    <textarea class="textarea__field" rows="4"></textarea>
+    <span class="textarea__error" role="alert" aria-live="polite"></span>
+  </div>
+</template>
+
+<style>
+  @scope (.textarea) {
+    :scope {
+      display: flex;
+      flex-direction: column;
+      gap: .25rem;
+      width: 100%;
+    }
+
+    .textarea__field {
+      width: 100%;
+      padding: .5rem .75rem;
+      border: 1.5px solid var(--color-border, #cbd5e0);
+      border-radius: var(--radius-md, .375rem);
+      background-color: var(--color-surface-1, #fff);
+      color: var(--color-text, #1a202c);
+      font-family: var(--font-sans, system-ui, sans-serif);
+      font-size: var(--text-sm, .875rem);
+      line-height: 1.6;
+      resize: vertical;
+      outline: none;
+      transition: border-color .15s, box-shadow .15s;
+      box-sizing: border-box;
+    }
+
+    .textarea__field::placeholder {
+      color: var(--color-text-muted, #a0aec0);
+    }
+
+    .textarea__field:focus {
+      border-color: var(--color-primary, #3b82f6);
+      box-shadow: 0 0 0 3px var(--color-primary-ring, rgba(59,130,246,.2));
+    }
+
+    .textarea__field:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+      background-color: var(--color-surface-2, #edf2f7);
+      resize: none;
+    }
+
+    /* Resize variants */
+    :scope[resize="none"]       .textarea__field { resize: none; }
+    :scope[resize="horizontal"] .textarea__field { resize: horizontal; }
+    :scope[resize="both"]       .textarea__field { resize: both; }
+
+    /* Error state */
+    :scope[error] .textarea__field {
+      border-color: var(--color-danger, #ef4444);
+    }
+    :scope[error] .textarea__field:focus {
+      box-shadow: 0 0 0 3px var(--color-danger-ring, rgba(239,68,68,.2));
+    }
+
+    .textarea__error {
+      display: none;
+      font-size: var(--text-xs, .75rem);
+      color: var(--color-danger, #ef4444);
+    }
+    :scope[error] .textarea__error { display: block; }
+  }
+</style>

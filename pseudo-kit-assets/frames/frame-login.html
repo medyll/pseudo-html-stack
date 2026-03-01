@@ -1,0 +1,38 @@
+<!--
+  @frame login
+  @slots brand, form, footer
+  @description Login page skeleton
+-->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login — Frame</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #f8fafc; font-family: system-ui, sans-serif; min-height: 100dvh; display: flex; flex-direction: column; }
+    .frame-login   { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem 1rem; gap: 2rem; }
+    .frame__brand  { text-align: center; }
+    .frame__card   { width: 100%; max-width: 26rem; background: #fff; border: 1px solid #e2e8f0; border-radius: .75rem; padding: 2rem; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+    .frame__footer { text-align: center; font-size: .8rem; color: #64748b; padding: 1rem; }
+  </style>
+</head>
+<body>
+  <div class="frame-login">
+
+    <div class="frame__brand">
+      <slot name="brand"></slot>
+    </div>
+
+    <div class="frame__card">
+      <slot name="form"></slot>
+    </div>
+
+    <div class="frame__footer">
+      <slot name="footer"></slot>
+    </div>
+
+  </div>
+</body>
+</html>

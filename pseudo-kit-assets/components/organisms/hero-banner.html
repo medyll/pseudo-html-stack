@@ -1,0 +1,118 @@
+<!--
+  @component hero-banner-pk
+  @props title:string?; subtitle:string?; align:enum(left|center|right)?; overlay:boolean?; fullHeight:boolean?
+  @slots media, headline, cta, badge
+  @layer organisms
+-->
+<template>
+  <section class="hero-banner">
+    <div class="hero-banner__media">
+      <slot name="media"></slot>
+    </div>
+    <div class="hero-banner__content">
+      <div class="hero-banner__badge">
+        <slot name="badge"></slot>
+      </div>
+      <div class="hero-banner__headline">
+        <slot name="headline">
+          <h1 class="hero-banner__title">Hero Title</h1>
+          <p class="hero-banner__subtitle">Subtitle or tagline here.</p>
+        </slot>
+      </div>
+      <div class="hero-banner__cta">
+        <slot name="cta"></slot>
+      </div>
+    </div>
+  </section>
+</template>
+
+<style>
+  @scope (.hero-banner) {
+    :scope {
+      position: relative;
+      display: flex;
+      align-items: center;
+      min-height: 60vh;
+      overflow: hidden;
+      background-color: var(--color-surface-2, #0f172a);
+    }
+
+    :scope[fullHeight] { min-height: 100dvh; }
+
+    .hero-banner__media {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+    .hero-banner__media > * {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .hero-banner__media:empty { display: none; }
+
+    /* Gradient overlay */
+    :scope[overlay]::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to right,
+        rgba(0,0,0,.75) 0%,
+        rgba(0,0,0,.3) 60%,
+        transparent 100%
+      );
+      pointer-events: none;
+    }
+
+    .hero-banner__content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      padding: 3rem var(--page-x, 2rem);
+      width: 100%;
+      max-width: 48rem;
+    }
+
+    :scope[align="center"] .hero-banner__content {
+      align-items: center;
+      text-align: center;
+      margin: 0 auto;
+      max-width: 56rem;
+    }
+    :scope[align="right"] .hero-banner__content {
+      margin-left: auto;
+    }
+
+    .hero-banner__badge:empty { display: none; }
+
+    .hero-banner__title {
+      margin: 0;
+      font-size: clamp(1.75rem, 5vw, 3.5rem);
+      font-weight: 800;
+      line-height: 1.1;
+      color: #fff;
+    }
+
+    .hero-banner__subtitle {
+      margin: 0;
+      font-size: clamp(.95rem, 2vw, 1.25rem);
+      color: rgba(255,255,255,.8);
+      line-height: 1.5;
+    }
+
+    .hero-banner__cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .75rem;
+    }
+    :scope[align="center"] .hero-banner__cta { justify-content: center; }
+
+    @media (max-width: 768px) {
+      .hero-banner__content { padding: 2.5rem 1.25rem; }
+    }
+  }
+</style>

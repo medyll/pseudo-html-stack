@@ -1,0 +1,111 @@
+<!--
+  @component tab-bar-pk
+  @props active:string?; variant:enum(line|pill|boxed)?
+  @slots default
+  @layer molecules
+-->
+<template>
+  <div class="tab-bar" role="tablist">
+    <button class="tab-bar__tab tab-bar__tab--active" role="tab" aria-selected="true" type="button">
+      <slot name="tab-1">Tab 1</slot>
+    </button>
+    <button class="tab-bar__tab" role="tab" aria-selected="false" type="button">
+      <slot name="tab-2">Tab 2</slot>
+    </button>
+    <button class="tab-bar__tab" role="tab" aria-selected="false" type="button">
+      <slot name="tab-3">Tab 3</slot>
+    </button>
+  </div>
+</template>
+
+<style>
+  @scope (.tab-bar) {
+    :scope {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      border-bottom: 2px solid var(--color-border, #e2e8f0);
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    :scope::-webkit-scrollbar { display: none; }
+
+    /* Pill variant */
+    :scope[variant="pill"] {
+      gap: .25rem;
+      border-bottom: none;
+      background-color: var(--color-surface-2, #f1f5f9);
+      border-radius: var(--radius-full, 9999px);
+      padding: .25rem;
+    }
+
+    /* Boxed variant */
+    :scope[variant="boxed"] {
+      gap: .25rem;
+      border-bottom: none;
+      border: 1px solid var(--color-border, #e2e8f0);
+      border-radius: var(--radius-md, .375rem);
+      padding: .25rem;
+    }
+
+    .tab-bar__tab {
+      flex-shrink: 0;
+      padding: .6rem 1rem;
+      font-size: var(--text-sm, .875rem);
+      font-weight: 500;
+      color: var(--color-text-muted, #64748b);
+      background: none;
+      border: none;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: color .12s;
+      position: relative;
+    }
+    .tab-bar__tab:focus-visible {
+      outline: 2px solid var(--color-primary, #3b82f6);
+      outline-offset: -2px;
+      border-radius: var(--radius-sm, .25rem);
+    }
+    .tab-bar__tab:hover { color: var(--color-text, #1a202c); }
+
+    /* Line variant active indicator */
+    .tab-bar__tab::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background-color: transparent;
+      transition: background-color .12s;
+    }
+    .tab-bar__tab--active::after,
+    .tab-bar__tab[aria-selected="true"]::after {
+      background-color: var(--color-primary, #3b82f6);
+    }
+
+    .tab-bar__tab--active,
+    .tab-bar__tab[aria-selected="true"] {
+      color: var(--color-primary, #3b82f6);
+    }
+
+    /* Pill active */
+    :scope[variant="pill"] .tab-bar__tab--active,
+    :scope[variant="pill"] .tab-bar__tab[aria-selected="true"] {
+      background-color: var(--color-surface, #fff);
+      border-radius: var(--radius-full, 9999px);
+      box-shadow: 0 1px 3px rgba(0,0,0,.1);
+      color: var(--color-primary, #3b82f6);
+    }
+    :scope[variant="pill"] .tab-bar__tab::after { display: none; }
+
+    /* Boxed active */
+    :scope[variant="boxed"] .tab-bar__tab--active,
+    :scope[variant="boxed"] .tab-bar__tab[aria-selected="true"] {
+      background-color: var(--color-primary, #3b82f6);
+      color: #fff;
+      border-radius: calc(var(--radius-md, .375rem) - 2px);
+    }
+    :scope[variant="boxed"] .tab-bar__tab::after { display: none; }
+  }
+</style>

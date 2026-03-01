@@ -1,0 +1,72 @@
+<!--
+  @component card-pk
+  @props title:string?; subtitle:string?; href:string?; elevated:boolean?; padding:enum(none|sm|md|lg)?
+  @slots default, media, actions, header
+  @layer molecules
+-->
+<template>
+  <article class="card">
+    <div class="card__media">
+      <slot name="media"></slot>
+    </div>
+    <div class="card__header">
+      <slot name="header"></slot>
+    </div>
+    <div class="card__body">
+      <slot>Card content</slot>
+    </div>
+    <div class="card__actions">
+      <slot name="actions"></slot>
+    </div>
+  </article>
+</template>
+
+<style>
+  @scope (.card) {
+    :scope {
+      display: flex;
+      flex-direction: column;
+      background-color: var(--color-surface, #fff);
+      border: 1px solid var(--color-border, #e2e8f0);
+      border-radius: var(--radius-lg, .5rem);
+      overflow: hidden;
+      transition: box-shadow .2s;
+    }
+
+    :scope[elevated] {
+      border: none;
+      box-shadow: 0 2px 8px rgba(0,0,0,.1);
+    }
+    :scope[elevated]:hover {
+      box-shadow: 0 6px 24px rgba(0,0,0,.15);
+    }
+
+    .card__media:empty { display: none; }
+    .card__header:empty { display: none; }
+    .card__actions:empty { display: none; }
+
+    .card__media { flex-shrink: 0; }
+
+    .card__header {
+      padding: 1rem 1rem 0;
+    }
+
+    .card__body {
+      flex: 1;
+      padding: 1rem;
+    }
+
+    .card__actions {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .75rem 1rem;
+      border-top: 1px solid var(--color-border, #e2e8f0);
+    }
+
+    /* Padding modifiers */
+    :scope[padding="none"] .card__body { padding: 0; }
+    :scope[padding="sm"]   .card__body { padding: .5rem; }
+    :scope[padding="lg"]   .card__body { padding: 1.5rem; }
+  }
+</style>

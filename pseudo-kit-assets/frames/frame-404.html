@@ -1,0 +1,45 @@
+<!--
+  @frame 404
+  @slots navbar, body, cta
+  @description 404 error page skeleton
+-->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 Not Found — Frame</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #fff; font-family: system-ui, sans-serif; min-height: 100dvh; display: flex; flex-direction: column; }
+    .frame-404      { flex: 1; display: flex; flex-direction: column; min-height: 100dvh; }
+    .frame__navbar  { }
+    .frame__main    { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2rem; padding: 4rem 1.5rem; text-align: center; }
+    .frame__body    { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+    .frame__cta     { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+    .frame__footer  { }
+  </style>
+</head>
+<body>
+  <div class="frame-404">
+
+    <div class="frame__navbar">
+      <slot name="navbar"></slot>
+    </div>
+
+    <div class="frame__main">
+      <div class="frame__body">
+        <slot name="body"></slot>
+      </div>
+      <div class="frame__cta">
+        <slot name="cta"></slot>
+      </div>
+    </div>
+
+    <div class="frame__footer">
+      <slot name="footer"></slot>
+    </div>
+
+  </div>
+</body>
+</html>

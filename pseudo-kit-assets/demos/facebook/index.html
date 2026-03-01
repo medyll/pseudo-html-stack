@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pseudo-Facebook — Feed</title>
+  <link rel="stylesheet" href="tokens.css" />
+  <style>
+    body { background:#f0f2f5; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; }
+
+    /* ── Topbar ── */
+    .fb-topbar {
+      position:fixed; top:0; left:0; right:0; z-index:100;
+      background:#fff; border-bottom:1px solid #e4e6eb;
+      display:flex; align-items:center; padding:0 1rem; height:56px; gap:1rem;
+      box-shadow:0 2px 4px rgba(0,0,0,.1);
+    }
+    .fb-logo { font-size:2.2rem; color:#1877f2; flex-shrink:0; line-height:1; }
+    .fb-search { display:flex; align-items:center; background:#f0f2f5; border-radius:9999px; padding:.5rem .85rem; gap:.4rem; max-width:240px; flex:1; }
+    .fb-search input { background:none; border:none; outline:none; font-size:.875rem; width:100%; }
+    .fb-nav-center { display:flex; gap:.25rem; margin:0 auto; }
+    .fb-nav-btn { width:100px; height:56px; display:flex; align-items:center; justify-content:center; font-size:1.35rem; border:none; background:none; cursor:pointer; border-bottom:3px solid transparent; position:relative; color:#65676b; transition:color .15s; }
+    .fb-nav-btn.active { color:#1877f2; border-bottom-color:#1877f2; }
+    .fb-nav-btn:hover { background:#f0f2f5; border-radius:.5rem; }
+    .fb-nav-right { display:flex; align-items:center; gap:.5rem; margin-left:auto; }
+    .fb-nav-icon { width:36px; height:36px; background:#e4e6eb; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.1rem; position:relative; }
+    .fb-nav-icon:hover { background:#d8dadf; }
+    .fb-notif-dot { position:absolute; top:2px; right:2px; width:9px; height:9px; background:#e41e3f; border-radius:50%; border:2px solid #fff; }
+    .fb-avatar-sm { width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg,#1877f2,#42b883); display:flex; align-items:center; justify-content:center; font-size:.875rem; font-weight:700; color:#fff; cursor:pointer; }
+
+    /* ── 3-col Layout ── */
+    .fb-layout { display:grid; grid-template-columns:360px 1fr 360px; gap:0; max-width:1440px; margin:0 auto; padding-top:56px; }
+    @media (max-width:1250px) { .fb-layout { grid-template-columns:280px 1fr 280px; } }
+    @media (max-width:1000px) { .fb-layout { grid-template-columns:240px 1fr; } .fb-right { display:none; } }
+    @media (max-width:768px) { .fb-layout { grid-template-columns:1fr; } .fb-left { display:none; } }
+
+    /* ── Left Sidebar ── */
+    .fb-left { padding:1rem; position:sticky; top:56px; height:calc(100dvh - 56px); overflow-y:auto; }
+    .fb-left::-webkit-scrollbar { display:none; }
+    .fb-nav-item { display:flex; align-items:center; gap:.75rem; padding:.6rem .8rem; border-radius:.5rem; cursor:pointer; font-size:.9375rem; font-weight:500; margin-bottom:.15rem; }
+    .fb-nav-item:hover { background:#e4e6eb; }
+    .fb-nav-item.active { background:#e7f3ff; color:#1877f2; }
+    .fb-nav-item-icon { width:36px; height:36px; border-radius:50%; background:var(--c,#e4e6eb); display:flex; align-items:center; justify-content:center; font-size:1.1rem; flex-shrink:0; }
+    .fb-left-user { display:flex; align-items:center; gap:.75rem; padding:.6rem .8rem; border-radius:.5rem; cursor:pointer; margin-bottom:1rem; }
+    .fb-left-user:hover { background:#e4e6eb; }
+    .fb-left-user-avatar { width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg,#1877f2,#42b883); display:flex; align-items:center; justify-content:center; font-size:.875rem; font-weight:700; color:#fff; }
+    .fb-section-label { font-size:.875rem; font-weight:700; color:#65676b; padding:.4rem .8rem; text-transform:uppercase; letter-spacing:.04em; }
+
+    /* ── Center Feed ── */
+    .fb-center { padding:1.5rem .75rem; max-width:680px; margin:0 auto; width:100%; }
+
+    /* Create Post */
+    .fb-create { background:#fff; border-radius:.75rem; padding:.75rem 1rem; margin-bottom:1rem; box-shadow:0 1px 2px rgba(0,0,0,.1); }
+    .fb-create-top { display:flex; gap:.75rem; align-items:center; }
+    .fb-create-avatar { width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg,#1877f2,#42b883); display:flex; align-items:center; justify-content:center; font-size:.9rem; font-weight:700; color:#fff; flex-shrink:0; }
+    .fb-create-input { flex:1; background:#f0f2f5; border-radius:9999px; padding:.7rem 1rem; border:none; font-size:.9375rem; color:#65676b; cursor:pointer; }
+    .fb-create-input:focus { outline:none; }
+    .fb-create-divider { border:none; border-top:1px solid #e4e6eb; margin:.75rem 0; }
+    .fb-create-actions { display:flex; justify-content:space-around; }
+    .fb-create-btn { display:flex; align-items:center; gap:.4rem; padding:.5rem 1rem; border:none; background:none; border-radius:.5rem; cursor:pointer; font-size:.875rem; font-weight:600; color:#65676b; }
+    .fb-create-btn:hover { background:#f0f2f5; }
+
+    /* Stories Row */
+    .fb-stories { display:flex; gap:.75rem; padding:.5rem 0 1rem; overflow-x:auto; scrollbar-width:none; margin-bottom:.5rem; }
+    .fb-stories::-webkit-scrollbar { display:none; }
+    .fb-story { flex:0 0 115px; height:200px; border-radius:.75rem; overflow:hidden; cursor:pointer; position:relative; background:var(--bg,#e4e6eb); box-shadow:0 1px 2px rgba(0,0,0,.2); }
+    .fb-story:hover { transform:scale(1.03); transition:transform .2s; }
+    .fb-story-add { background:#fff; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; padding-bottom:1rem; }
+    .fb-story-add-circle { width:42px; height:42px; background:#1877f2; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; font-size:1.3rem; margin-bottom:.5rem; }
+    .fb-story-add span { font-size:.8rem; font-weight:700; color:#050505; }
+    .fb-story-overlay { position:absolute; bottom:0; left:0; right:0; background:linear-gradient(transparent,rgba(0,0,0,.6)); padding:.5rem; }
+    .fb-story-name { font-size:.75rem; font-weight:700; color:#fff; }
+    .fb-story-avatar { position:absolute; top:.4rem; left:.4rem; width:36px; height:36px; border-radius:50%; border:3px solid #1877f2; background:var(--av,#e4e6eb); display:flex; align-items:center; justify-content:center; font-size:.7rem; font-weight:700; color:#fff; }
+
+    /* Post Card */
+    .fb-post { background:#fff; border-radius:.75rem; margin-bottom:1rem; box-shadow:0 1px 2px rgba(0,0,0,.1); overflow:hidden; }
+    .fb-post-header { display:flex; align-items:center; gap:.75rem; padding:1rem; }
+    .fb-post-avatar { width:40px; height:40px; border-radius:50%; background:var(--av,#e4e6eb); display:flex; align-items:center; justify-content:center; font-size:.875rem; font-weight:700; color:#fff; flex-shrink:0; }
+    .fb-post-meta { flex:1; }
+    .fb-post-name { font-size:.9375rem; font-weight:700; cursor:pointer; }
+    .fb-post-name:hover { text-decoration:underline; }
+    .fb-post-info { font-size:.8rem; color:#65676b; }
+    .fb-post-menu { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.2rem; color:#65676b; }
+    .fb-post-menu:hover { background:#f0f2f5; }
+    .fb-post-body { padding:.25rem 1rem 1rem; font-size:.9375rem; line-height:1.5; }
+    .fb-post-img { width:100%; height:350px; background:var(--bg,#e4e6eb); display:flex; align-items:center; justify-content:center; font-size:4rem; }
+    .fb-post-map { width:100%; height:250px; background:linear-gradient(135deg,#e8f4ea,#c8e6c9); display:flex; align-items:center; justify-content:center; font-size:3rem; position:relative; }
+    .fb-post-map-label { position:absolute; bottom:.75rem; left:50%; transform:translateX(-50%); background:#fff; padding:.3rem .8rem; border-radius:9999px; font-size:.8rem; font-weight:700; box-shadow:0 2px 6px rgba(0,0,0,.2); }
+    .fb-post-reactions-count { display:flex; align-items:center; gap:.3rem; padding:.5rem 1rem; font-size:.875rem; color:#65676b; border-bottom:1px solid #e4e6eb; }
+    .fb-reaction-emojis { display:flex; }
+    .fb-reaction-emojis span { width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:.75rem; margin-right:-4px; border:1px solid #fff; }
+    .fb-post-actions { display:flex; }
+    .fb-action-btn { flex:1; display:flex; align-items:center; justify-content:center; gap:.4rem; padding:.75rem; border:none; background:none; cursor:pointer; font-size:.875rem; font-weight:600; color:#65676b; border-radius:.3rem; }
+    .fb-action-btn:hover { background:#f0f2f5; }
+    .fb-action-btn.liked { color:#1877f2; }
+    .fb-post-comments { padding:.5rem 1rem 1rem; }
+    .fb-comment { display:flex; gap:.5rem; margin-bottom:.6rem; }
+    .fb-comment-avatar { width:32px; height:32px; border-radius:50%; background:var(--av,#e4e6eb); display:flex; align-items:center; justify-content:center; font-size:.7rem; font-weight:700; color:#fff; flex-shrink:0; }
+    .fb-comment-bubble { background:#f0f2f5; border-radius:1rem; padding:.5rem .75rem; font-size:.8rem; }
+    .fb-comment-name { font-weight:700; font-size:.8rem; margin-bottom:.1rem; }
+    .fb-comment-actions { display:flex; gap:.75rem; padding:.2rem 0 0 .5rem; font-size:.75rem; color:#65676b; font-weight:600; }
+    .fb-comment-input { display:flex; gap:.5rem; align-items:center; margin-top:.5rem; }
+    .fb-comment-input input { flex:1; background:#f0f2f5; border:none; border-radius:9999px; padding:.5rem 1rem; font-size:.875rem; outline:none; }
+
+    /* ── Right Sidebar ── */
+    .fb-right { padding:1rem; position:sticky; top:56px; height:calc(100dvh - 56px); overflow-y:auto; }
+    .fb-right::-webkit-scrollbar { display:none; }
+    .fb-right-title { font-size:.875rem; font-weight:700; color:#65676b; margin-bottom:.75rem; }
+    .fb-contact { display:flex; align-items:center; gap:.75rem; padding:.4rem .4rem; border-radius:.5rem; cursor:pointer; margin-bottom:.15rem; }
+    .fb-contact:hover { background:#e4e6eb; }
+    .fb-contact-avatar { width:36px; height:36px; border-radius:50%; background:var(--av,#e4e6eb); display:flex; align-items:center; justify-content:center; font-size:.8rem; font-weight:700; color:#fff; position:relative; flex-shrink:0; }
+    .fb-contact-online { position:absolute; bottom:1px; right:1px; width:10px; height:10px; background:#31a24c; border-radius:50%; border:2px solid #fff; }
+    .fb-contact-name { font-size:.875rem; font-weight:500; }
+    .fb-birthday { display:flex; align-items:center; gap:.75rem; padding:.5rem; background:#fff; border-radius:.5rem; margin-bottom:1rem; font-size:.875rem; box-shadow:0 1px 2px rgba(0,0,0,.1); }
+    .fb-ad { background:#fff; border-radius:.5rem; overflow:hidden; margin-bottom:1rem; box-shadow:0 1px 2px rgba(0,0,0,.1); }
+    .fb-ad-img { height:140px; background:linear-gradient(135deg,#667eea,#764ba2); display:flex; align-items:center; justify-content:center; font-size:2rem; }
+    .fb-ad-body { padding:.75rem; }
+    .fb-ad-name { font-size:.8rem; font-weight:700; }
+    .fb-ad-sponsored { font-size:.7rem; color:#65676b; }
+    .fb-ad-cta { background:#e4e6eb; border:none; border-radius:.3rem; padding:.4rem .8rem; font-size:.8rem; font-weight:700; cursor:pointer; margin-top:.4rem; }
+  </style>
+</head>
+<body>
+
+  <!-- Topbar -->
+  <header class="fb-topbar">
+    <div class="fb-logo">f</div>
+    <div class="fb-search">
+      <span>🔍</span>
+      <input placeholder="Search Facebook" />
+    </div>
+    <nav class="fb-nav-center">
+      <button class="fb-nav-btn active" title="Home">🏠</button>
+      <button class="fb-nav-btn" title="Watch">📺</button>
+      <button class="fb-nav-btn" title="Marketplace">🛒</button>
+      <button class="fb-nav-btn" title="Groups">👥</button>
+      <button class="fb-nav-btn" title="Gaming">🎮</button>
+    </nav>
+    <div class="fb-nav-right">
+      <div class="fb-avatar-sm">J</div>
+      <div class="fb-nav-icon">⋯</div>
+      <div class="fb-nav-icon">💬</div>
+      <div class="fb-nav-icon">🔔<div class="fb-notif-dot"></div></div>
+    </div>
+  </header>
+
+  <!-- 3-col Layout -->
+  <div class="fb-layout">
+
+    <!-- Left Sidebar -->
+    <aside class="fb-left">
+      <div class="fb-left-user">
+        <div class="fb-left-user-avatar">J</div>
+        <span style="font-weight:700;font-size:.9375rem">Jean Dupont</span>
+      </div>
+      <div class="fb-nav-item active"><div class="fb-nav-item-icon" style="--c:#1877f2;color:#fff">🏠</div> Home</div>
+      <div class="fb-nav-item"><div class="fb-nav-item-icon" style="--c:#e4e6eb">👥</div> Friends</div>
+      <div class="fb-nav-item"><div class="fb-nav-item-icon" style="--c:#e4e6eb">📺</div> Watch</div>
+      <div class="fb-nav-item"><div class="fb-nav-item-icon" style="--c:#e4e6eb">🗓️</div> Events</div>
+      <div class="fb-nav-item"><div class="fb-nav-item-icon" style="--c:#e4e6eb">💬</div> Messenger</div>
+      <div class="fb-nav-item"><div class="fb-nav-item-icon" style="--c:#e4e6eb">🔔</div> Notifications</div>
+      <hr style="border:none;border-top:1px solid #e4e6eb;margin:.5rem 0" />
+      <div class="fb-section-label">Your shortcuts</div>
+      <div class="fb-nav-item"><div class="fb-nav-item-icon" style="--c:#e4e6eb">📷</div> Photos</div>
+      <div class="fb-nav-item"><div class="fb-nav-item-icon" style="--c:#e4e6eb">🛒</div> Marketplace</div>
+      <div class="fb-nav-item"><div class="fb-nav-item-icon" style="--c:#e4e6eb">🎮</div> Gaming</div>
+      <div class="fb-nav-item"><div class="fb-nav-item-icon" style="--c:#e4e6eb">❤️</div> Fundraisers</div>
+    </aside>
+
+    <!-- Center Feed -->
+    <main class="fb-center">
+
+      <!-- Stories -->
+      <div class="fb-stories">
+        <div class="fb-story fb-story-add">
+          <div style="height:60%"></div>
+          <div class="fb-story-add-circle">+</div>
+          <span>Create Story</span>
+        </div>
+        <div class="fb-story" style="--bg:linear-gradient(135deg,#1877f2,#42b72a)">
+          <div class="fb-story-avatar" style="--av:#e91e63">M</div>
+          <div class="fb-story-overlay"><div class="fb-story-name">Marie D.</div></div>
+        </div>
+        <div class="fb-story" style="--bg:linear-gradient(135deg,#f44336,#e91e63)">
+          <div class="fb-story-avatar" style="--av:#9c27b0">P</div>
+          <div class="fb-story-overlay"><div class="fb-story-name">Pierre M.</div></div>
+        </div>
+        <div class="fb-story" style="--bg:linear-gradient(135deg,#ff9800,#ffc107)">
+          <div class="fb-story-avatar" style="--av:#2196f3">S</div>
+          <div class="fb-story-overlay"><div class="fb-story-name">Sophie L.</div></div>
+        </div>
+        <div class="fb-story" style="--bg:linear-gradient(135deg,#4caf50,#8bc34a)">
+          <div class="fb-story-avatar" style="--av:#ff5722">A</div>
+          <div class="fb-story-overlay"><div class="fb-story-name">Antoine R.</div></div>
+        </div>
+        <div class="fb-story" style="--bg:linear-gradient(135deg,#9c27b0,#673ab7)">
+          <div class="fb-story-avatar" style="--av:#00bcd4">C</div>
+          <div class="fb-story-overlay"><div class="fb-story-name">Claire B.</div></div>
+        </div>
+      </div>
+
+      <!-- Create Post -->
+      <div class="fb-create">
+        <div class="fb-create-top">
+          <div class="fb-create-avatar">J</div>
+          <div class="fb-create-input">What's on your mind, Jean?</div>
+        </div>
+        <hr class="fb-create-divider" />
+        <div class="fb-create-actions">
+          <button class="fb-create-btn">🎥 Live Video</button>
+          <button class="fb-create-btn">📷 Photo/Video</button>
+          <button class="fb-create-btn">😊 Feeling</button>
+        </div>
+      </div>
+
+      <!-- Post 1 — Photo Post -->
+      <article class="fb-post">
+        <div class="fb-post-header">
+          <div class="fb-post-avatar" style="--av:linear-gradient(135deg,#e91e63,#9c27b0)">M</div>
+          <div class="fb-post-meta">
+            <div class="fb-post-name">Marie Dupont</div>
+            <div class="fb-post-info">2h · 🌍 Public</div>
+          </div>
+          <div class="fb-post-menu">···</div>
+        </div>
+        <div class="fb-post-body">
+          Absolutely breathtaking sunset from our balcony last night 🌅✨ Some moments are just too beautiful not to share. #Grateful #ParisLife
+        </div>
+        <div class="fb-post-img" style="--bg:linear-gradient(135deg,#ff9800,#e91e63,#673ab7)">🌅</div>
+        <div class="fb-post-reactions-count">
+          <div class="fb-reaction-emojis">
+            <span style="background:#2196f3">👍</span>
+            <span style="background:#e91e63">❤️</span>
+            <span style="background:#ff9800">😂</span>
+          </div>
+          <span>847</span>
+          <span style="margin-left:auto">234 comments · 56 shares</span>
+        </div>
+        <div class="fb-post-actions">
+          <button class="fb-action-btn liked">👍 Like</button>
+          <button class="fb-action-btn">💬 Comment</button>
+          <button class="fb-action-btn">↗ Share</button>
+        </div>
+        <div class="fb-post-comments">
+          <div class="fb-comment">
+            <div class="fb-comment-avatar" style="--av:linear-gradient(135deg,#9c27b0,#673ab7)">P</div>
+            <div>
+              <div class="fb-comment-bubble"><div class="fb-comment-name">Pierre Martin</div>Magnifique ! 😍 Which arrondissement?</div>
+              <div class="fb-comment-actions"><span>Like</span><span>Reply</span><span>1h</span></div>
+            </div>
+          </div>
+          <div class="fb-comment">
+            <div class="fb-comment-avatar" style="--av:linear-gradient(135deg,#2196f3,#00bcd4)">S</div>
+            <div>
+              <div class="fb-comment-bubble"><div class="fb-comment-name">Sophie Lambert</div>The colors are unreal! 🎨</div>
+              <div class="fb-comment-actions"><span>Like</span><span>Reply</span><span>45m</span></div>
+            </div>
+          </div>
+          <div class="fb-comment-input">
+            <div class="fb-create-avatar" style="width:32px;height:32px;font-size:.75rem">J</div>
+            <input placeholder="Write a comment..." />
+          </div>
+        </div>
+      </article>
+
+      <!-- Post 2 — Status + Map -->
+      <article class="fb-post">
+        <div class="fb-post-header">
+          <div class="fb-post-avatar" style="--av:linear-gradient(135deg,#ff5722,#ff9800)">A</div>
+          <div class="fb-post-meta">
+            <div class="fb-post-name">Antoine Rousseau</div>
+            <div class="fb-post-info">5h · 🌍 Public</div>
+          </div>
+          <div class="fb-post-menu">···</div>
+        </div>
+        <div class="fb-post-body">
+          📍 Just arrived in Lyon for the weekend! Anyone have restaurant recommendations? The food scene here is incredible 🍽️ #Lyon #Foodie
+        </div>
+        <div class="fb-post-map">
+          🗺️
+          <div class="fb-post-map-label">📍 Lyon, France</div>
+        </div>
+        <div class="fb-post-reactions-count">
+          <div class="fb-reaction-emojis">
+            <span style="background:#2196f3">👍</span>
+            <span style="background:#e91e63">❤️</span>
+          </div>
+          <span>312</span>
+          <span style="margin-left:auto">87 comments · 12 shares</span>
+        </div>
+        <div class="fb-post-actions">
+          <button class="fb-action-btn">👍 Like</button>
+          <button class="fb-action-btn">💬 Comment</button>
+          <button class="fb-action-btn">↗ Share</button>
+        </div>
+      </article>
+
+      <!-- Post 3 — Video Post -->
+      <article class="fb-post">
+        <div class="fb-post-header">
+          <div class="fb-post-avatar" style="--av:linear-gradient(135deg,#4caf50,#8bc34a)">G</div>
+          <div class="fb-post-meta">
+            <div class="fb-post-name">Groupe Amis Paris</div>
+            <div class="fb-post-info">Claire Blanc · 8h · 👥 Group</div>
+          </div>
+          <div class="fb-post-menu">···</div>
+        </div>
+        <div class="fb-post-body">
+          Recap video from last Saturday's rooftop BBQ 🎉 What an amazing group of people! Can't wait for the next one. Tag yourselves!
+        </div>
+        <div class="fb-post-img" style="--bg:linear-gradient(135deg,#4caf50,#1877f2);position:relative">
+          <div style="position:absolute;width:60px;height:60px;background:rgba(0,0,0,.6);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.5rem">▶</div>
+          🎬
+        </div>
+        <div class="fb-post-reactions-count">
+          <div class="fb-reaction-emojis">
+            <span style="background:#2196f3">👍</span>
+            <span style="background:#e91e63">❤️</span>
+            <span style="background:#ffeb3b">😮</span>
+          </div>
+          <span>1.2K</span>
+          <span style="margin-left:auto">456 comments · 201 shares</span>
+        </div>
+        <div class="fb-post-actions">
+          <button class="fb-action-btn">👍 Like</button>
+          <button class="fb-action-btn">💬 Comment</button>
+          <button class="fb-action-btn">↗ Share</button>
+        </div>
+      </article>
+
+    </main>
+
+    <!-- Right Sidebar -->
+    <aside class="fb-right">
+      <!-- Birthday widget -->
+      <div class="fb-birthday">
+        <span style="font-size:1.2rem">🎂</span>
+        <div><strong>Sophie Lambert</strong> and <strong>2 others</strong> have birthdays today.</div>
+      </div>
+
+      <!-- Sponsored -->
+      <div class="fb-right-title">Sponsored</div>
+      <div class="fb-ad">
+        <div class="fb-ad-img">🚀</div>
+        <div class="fb-ad-body">
+          <div class="fb-ad-name">pseudo-html-kit — Build UI without frameworks</div>
+          <div class="fb-ad-sponsored">pseudohtmlkit.dev · Sponsored</div>
+          <button class="fb-ad-cta">Learn more</button>
+        </div>
+      </div>
+
+      <!-- Contacts -->
+      <div class="fb-right-title">Contacts</div>
+      <div class="fb-contact"><div class="fb-contact-avatar" style="--av:linear-gradient(135deg,#e91e63,#9c27b0)">M<div class="fb-contact-online"></div></div><span class="fb-contact-name">Marie Dupont</span></div>
+      <div class="fb-contact"><div class="fb-contact-avatar" style="--av:linear-gradient(135deg,#ff5722,#ff9800)">A<div class="fb-contact-online"></div></div><span class="fb-contact-name">Antoine Rousseau</span></div>
+      <div class="fb-contact"><div class="fb-contact-avatar" style="--av:linear-gradient(135deg,#2196f3,#00bcd4)">S</div><span class="fb-contact-name">Sophie Lambert</span></div>
+      <div class="fb-contact"><div class="fb-contact-avatar" style="--av:linear-gradient(135deg,#9c27b0,#673ab7)">P</div><span class="fb-contact-name">Pierre Martin</span></div>
+      <div class="fb-contact"><div class="fb-contact-avatar" style="--av:linear-gradient(135deg,#4caf50,#8bc34a)">C</div><span class="fb-contact-name">Claire Blanc</span></div>
+      <div class="fb-contact"><div class="fb-contact-avatar" style="--av:linear-gradient(135deg,#f44336,#e91e63)">L<div class="fb-contact-online"></div></div><span class="fb-contact-name">Lucas Bernard</span></div>
+      <div class="fb-contact"><div class="fb-contact-avatar" style="--av:linear-gradient(135deg,#607d8b,#546e7a)">E</div><span class="fb-contact-name">Emma Moreau</span></div>
+    </aside>
+
+  </div>
+
+</body>
+</html>

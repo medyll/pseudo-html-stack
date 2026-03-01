@@ -1,0 +1,62 @@
+<!--
+  @component spinner-pk
+  @props size:enum(sm|md|lg)?; label:string?; variant:enum(default|primary|white)?
+  @slots (none)
+  @layer atoms
+-->
+<template>
+  <span class="spinner" role="status" aria-live="polite">
+    <svg class="spinner__svg" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <circle class="spinner__track" cx="12" cy="12" r="10" stroke-width="3" />
+      <path class="spinner__arc"  d="M12 2a10 10 0 0 1 10 10" stroke-width="3" stroke-linecap="round" />
+    </svg>
+    <span class="sr-only"></span>
+  </span>
+</template>
+
+<style>
+  @scope (.spinner) {
+    :scope {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      --spinner-size: var(--spinner-size-md, 1.5rem);
+      --spinner-color: var(--color-primary, #3b82f6);
+    }
+
+    :scope[size="sm"] { --spinner-size: var(--spinner-size-sm, 1rem); }
+    :scope[size="lg"] { --spinner-size: var(--spinner-size-lg, 2.5rem); }
+    :scope[variant="white"] { --spinner-color: #fff; }
+
+    .spinner__svg {
+      width: var(--spinner-size);
+      height: var(--spinner-size);
+      animation: spinner-rotate .7s linear infinite;
+    }
+
+    .spinner__track {
+      stroke: currentColor;
+      opacity: .2;
+    }
+
+    .spinner__arc {
+      stroke: var(--spinner-color);
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+    }
+
+    @keyframes spinner-rotate {
+      to { transform: rotate(360deg); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .spinner__svg { animation: none; }
+    }
+  }
+</style>

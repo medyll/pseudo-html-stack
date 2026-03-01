@@ -1,0 +1,45 @@
+<!--
+  @frame settings
+  @slots sidebar, header, sections
+  @description Settings page skeleton
+-->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Settings — Frame</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #f8fafc; font-family: system-ui, sans-serif; min-height: 100dvh; }
+    .frame-settings  { display: flex; flex-direction: column; min-height: 100dvh; }
+    .frame__navbar   { position: sticky; top: 0; z-index: 100; }
+    .frame__layout   { flex: 1; max-width: 1100px; margin: 0 auto; width: 100%; padding: 2rem 1.5rem; display: grid; grid-template-columns: 14rem 1fr; gap: 2rem; align-items: flex-start; }
+    .frame__sidenav  { position: sticky; top: 5rem; }
+    .frame__content  { display: flex; flex-direction: column; gap: 2rem; }
+    .frame__section-header { padding-bottom: 1.5rem; border-bottom: 1px solid #e2e8f0; margin-bottom: 1.5rem; }
+    @media (max-width: 768px) { .frame__layout { grid-template-columns: 1fr; } .frame__sidenav { display: none; } }
+  </style>
+</head>
+<body>
+  <div class="frame-settings">
+
+    <div class="frame__navbar">
+      <slot name="navbar"></slot>
+    </div>
+
+    <div class="frame__layout">
+      <div class="frame__sidenav">
+        <slot name="sidebar"></slot>
+      </div>
+      <div class="frame__content">
+        <div class="frame__section-header">
+          <slot name="header"></slot>
+        </div>
+        <slot name="sections"></slot>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

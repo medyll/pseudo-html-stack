@@ -1,0 +1,46 @@
+<!--
+  @frame netflix-home
+  @slots hero, row-1, row-2, row-3
+  @description Streaming home layout skeleton
+-->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Netflix Home — Frame</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #141414; color: #fff; font-family: system-ui, sans-serif; min-height: 100dvh; }
+    .frame-netflix-home { display: flex; flex-direction: column; min-height: 100dvh; }
+    .frame__navbar  { position: absolute; top: 0; left: 0; right: 0; z-index: 10; }
+    .frame__hero    { position: relative; width: 100%; min-height: 85vh; }
+    .frame__rows    { display: flex; flex-direction: column; gap: 2rem; padding: 2rem; margin-top: -6rem; position: relative; z-index: 2; }
+    .frame__row     { display: flex; flex-direction: column; gap: .75rem; }
+    .frame__footer  { margin-top: auto; padding: 2rem; }
+  </style>
+</head>
+<body>
+  <div class="frame-netflix-home">
+
+    <div class="frame__navbar">
+      <slot name="navbar"></slot>
+    </div>
+
+    <div class="frame__hero">
+      <slot name="hero"></slot>
+    </div>
+
+    <div class="frame__rows">
+      <div class="frame__row"><slot name="row-1"></slot></div>
+      <div class="frame__row"><slot name="row-2"></slot></div>
+      <div class="frame__row"><slot name="row-3"></slot></div>
+    </div>
+
+    <div class="frame__footer">
+      <slot name="footer"></slot>
+    </div>
+
+  </div>
+</body>
+</html>

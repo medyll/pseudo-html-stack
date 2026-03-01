@@ -1,0 +1,67 @@
+<!--
+  @frame amazon-product
+  @slots breadcrumb, media, info, actions, reviews
+  @description Product detail page skeleton
+-->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Amazon Product — Frame</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #fff; font-family: system-ui, sans-serif; min-height: 100dvh; }
+    .frame-amazon-product { display: flex; flex-direction: column; min-height: 100dvh; }
+    .frame__navbar      { position: sticky; top: 0; z-index: 100; }
+    .frame__breadcrumb  { padding: .5rem 1.5rem; }
+    .frame__main        { flex: 1; max-width: 1500px; margin: 0 auto; width: 100%; padding: 1.5rem; display: grid; grid-template-columns: 5fr 4fr 3fr; gap: 2rem; align-items: flex-start; }
+    .frame__media       { position: sticky; top: 5rem; }
+    .frame__info        { display: flex; flex-direction: column; gap: 1rem; }
+    .frame__actions     { display: flex; flex-direction: column; gap: .75rem; padding: 1rem; border: 1px solid #d5d9d9; border-radius: .5rem; }
+    .frame__reviews     { grid-column: 1 / -1; padding-top: 1.5rem; border-top: 1px solid #e7e7e7; }
+    .frame__footer      { }
+    @media (max-width: 1024px) {
+      .frame__main { grid-template-columns: 1fr 1fr; }
+      .frame__actions { grid-column: 1 / -1; }
+      .frame__reviews { grid-column: 1 / -1; }
+    }
+    @media (max-width: 640px) {
+      .frame__main { grid-template-columns: 1fr; }
+      .frame__media { position: static; }
+    }
+  </style>
+</head>
+<body>
+  <div class="frame-amazon-product">
+
+    <div class="frame__navbar">
+      <slot name="navbar"></slot>
+    </div>
+
+    <div class="frame__breadcrumb">
+      <slot name="breadcrumb"></slot>
+    </div>
+
+    <div class="frame__main">
+      <div class="frame__media">
+        <slot name="media"></slot>
+      </div>
+      <div class="frame__info">
+        <slot name="info"></slot>
+      </div>
+      <div class="frame__actions">
+        <slot name="actions"></slot>
+      </div>
+      <div class="frame__reviews">
+        <slot name="reviews"></slot>
+      </div>
+    </div>
+
+    <div class="frame__footer">
+      <slot name="footer"></slot>
+    </div>
+
+  </div>
+</body>
+</html>

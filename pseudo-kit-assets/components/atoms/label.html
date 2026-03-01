@@ -1,0 +1,36 @@
+<!--
+  @component label-pk
+  @props for:string?; required:boolean?; text:string?
+  @slots default
+  @layer atoms
+-->
+<template>
+  <label class="label">
+    <slot>Label</slot>
+    <span class="label__required" aria-hidden="true"> *</span>
+  </label>
+</template>
+
+<style>
+  @scope (.label) {
+    :scope {
+      display: inline-flex;
+      align-items: baseline;
+      gap: .125rem;
+      font-family: var(--font-sans, system-ui, sans-serif);
+      font-size: var(--text-sm, .875rem);
+      font-weight: 500;
+      color: var(--color-text, #1a202c);
+      line-height: 1.5;
+      cursor: default;
+    }
+
+    .label__required {
+      display: none;
+      color: var(--color-danger, #ef4444);
+      font-weight: 600;
+    }
+
+    :scope[required] .label__required { display: inline; }
+  }
+</style>

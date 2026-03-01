@@ -1,0 +1,68 @@
+<!--
+  @component image-pk
+  @props src:string; alt:string; ratio:enum(square|16x9|4x3|3x2|auto)?; loading:enum(lazy|eager)?; fit:enum(cover|contain|fill)?; rounded:boolean?
+  @slots fallback
+  @layer atoms
+-->
+<template>
+  <figure class="image">
+    <img class="image__img" src="" alt="" loading="lazy" />
+    <span class="image__fallback" aria-hidden="true">
+      <slot name="fallback">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <rect width="32" height="32" rx="4" fill="currentColor" opacity=".1"/>
+          <path d="M8 22l6-8 4 5 3-3 5 6H8z" fill="currentColor" opacity=".3"/>
+          <circle cx="22" cy="11" r="3" fill="currentColor" opacity=".3"/>
+        </svg>
+      </slot>
+    </span>
+  </figure>
+</template>
+
+<style>
+  @scope (.image) {
+    :scope {
+      display: block;
+      margin: 0;
+      overflow: hidden;
+      background-color: var(--color-surface-2, #e2e8f0);
+      border-radius: var(--radius-sm, .25rem);
+      position: relative;
+      width: 100%;
+    }
+
+    :scope[rounded] { border-radius: var(--radius-lg, .75rem); }
+
+    /* Aspect ratios */
+    :scope[ratio="square"]  { aspect-ratio: 1 / 1; }
+    :scope[ratio="16x9"]    { aspect-ratio: 16 / 9; }
+    :scope[ratio="4x3"]     { aspect-ratio: 4 / 3; }
+    :scope[ratio="3x2"]     { aspect-ratio: 3 / 2; }
+
+    .image__img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: var(--image-fit, cover);
+      transition: opacity .2s;
+    }
+
+    :scope[fit="contain"] .image__img { object-fit: contain; }
+    :scope[fit="fill"]    .image__img { object-fit: fill; }
+
+    .image__fallback {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      inset: 0;
+      color: var(--color-text-muted, #a0aec0);
+      pointer-events: none;
+    }
+
+    /* Hide fallback once image is loaded */
+    :scope:has(.image__img[src]:not([src=""])) .image__fallback {
+      opacity: 0;
+    }
+  }
+</style>

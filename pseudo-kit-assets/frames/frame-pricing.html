@@ -1,0 +1,63 @@
+<!--
+  @frame pricing
+  @slots navbar, hero, plans, faq, cta, footer
+  @description Pricing page skeleton
+-->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pricing — Frame</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #fff; font-family: system-ui, sans-serif; min-height: 100dvh; }
+    .frame-pricing  { display: flex; flex-direction: column; min-height: 100dvh; }
+    .frame__navbar  { position: sticky; top: 0; z-index: 100; }
+    .frame__section { padding: 5rem 1.5rem; max-width: 1200px; margin: 0 auto; width: 100%; }
+    .frame__hero    { text-align: center; }
+    .frame__plans   { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    .frame__faq     { max-width: 720px; margin: 0 auto; display: flex; flex-direction: column; gap: 1rem; }
+    .frame__cta-wrap { background: #f8fafc; width: 100%; }
+    .frame__cta     { padding: 5rem 1.5rem; text-align: center; max-width: 1200px; margin: 0 auto; }
+    .frame__footer  { margin-top: auto; }
+    @media (max-width: 900px) { .frame__plans { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 600px) { .frame__plans { grid-template-columns: 1fr; } .frame__section { padding: 3rem 1rem; } }
+  </style>
+</head>
+<body>
+  <div class="frame-pricing">
+
+    <div class="frame__navbar">
+      <slot name="navbar"></slot>
+    </div>
+
+    <div class="frame__section frame__hero">
+      <slot name="hero"></slot>
+    </div>
+
+    <div class="frame__section">
+      <div class="frame__plans">
+        <slot name="plans"></slot>
+      </div>
+    </div>
+
+    <div class="frame__section">
+      <div class="frame__faq">
+        <slot name="faq"></slot>
+      </div>
+    </div>
+
+    <div class="frame__cta-wrap">
+      <div class="frame__cta">
+        <slot name="cta"></slot>
+      </div>
+    </div>
+
+    <div class="frame__footer">
+      <slot name="footer"></slot>
+    </div>
+
+  </div>
+</body>
+</html>

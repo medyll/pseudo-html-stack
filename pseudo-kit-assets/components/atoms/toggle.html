@@ -1,0 +1,102 @@
+<!--
+  @component toggle-pk
+  @props name:string; id:string?; checked:boolean?; disabled:boolean?; size:enum(sm|md|lg)?
+  @slots label
+  @layer atoms
+-->
+<template>
+  <label class="toggle">
+    <input class="toggle__input sr-only" type="checkbox" role="switch" />
+    <span class="toggle__track" aria-hidden="true">
+      <span class="toggle__thumb"></span>
+    </span>
+    <span class="toggle__label">
+      <slot name="label"></slot>
+    </span>
+  </label>
+</template>
+
+<style>
+  @scope (.toggle) {
+    :scope {
+      display: inline-flex;
+      align-items: center;
+      gap: .625rem;
+      cursor: pointer;
+      user-select: none;
+      font-family: var(--font-sans, system-ui, sans-serif);
+      font-size: var(--text-sm, .875rem);
+      color: var(--color-text, #1a202c);
+    }
+
+    :scope:has(.toggle__input:disabled) {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+    }
+
+    /* Track */
+    .toggle__track {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      width: 2.75rem;
+      height: 1.5rem;
+      border-radius: var(--radius-full, 9999px);
+      background-color: var(--color-surface-3, #cbd5e0);
+      transition: background-color .2s;
+      flex-shrink: 0;
+    }
+
+    :scope[size="sm"] .toggle__track { width: 2rem;   height: 1.125rem; }
+    :scope[size="lg"] .toggle__track { width: 3.5rem;  height: 2rem; }
+
+    /* Thumb */
+    .toggle__thumb {
+      position: absolute;
+      left: .2rem;
+      width: 1.125rem;
+      height: 1.125rem;
+      border-radius: 50%;
+      background-color: #fff;
+      box-shadow: 0 1px 3px rgba(0,0,0,.2);
+      transition: transform .2s, left .2s;
+    }
+
+    :scope[size="sm"] .toggle__thumb { width: .8rem; height: .8rem; }
+    :scope[size="lg"] .toggle__thumb { width: 1.625rem; height: 1.625rem; }
+
+    /* Checked state */
+    :scope:has(.toggle__input:checked) .toggle__track {
+      background-color: var(--color-primary, #3b82f6);
+    }
+    :scope:has(.toggle__input:checked) .toggle__thumb {
+      transform: translateX(1.25rem);
+    }
+    :scope[size="sm"]:has(.toggle__input:checked) .toggle__thumb {
+      transform: translateX(.875rem);
+    }
+    :scope[size="lg"]:has(.toggle__input:checked) .toggle__thumb {
+      transform: translateX(1.5rem);
+    }
+
+    /* Focus ring */
+    :scope:has(.toggle__input:focus-visible) .toggle__track {
+      outline: 2px solid var(--color-primary, #3b82f6);
+      outline-offset: 2px;
+    }
+
+    .toggle__label:empty { display: none; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .toggle__track, .toggle__thumb { transition: none; }
+    }
+  }
+</style>

@@ -1,21 +1,27 @@
 {
   "name": "pseudo-kit-assets",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Pre-built components, frames, demos and viewer for pseudo-html-kit. Zero dependencies.",
   "type": "module",
   "license": "MIT",
   "exports": {
-    ".": "./index.js"
+    ".":          "./index.js",
+    "./viewer":   "./viewer/pseudo-canvas-viewer.html",
+    "./demos/*":  "./demos/*"
   },
   "files": [
     "components/",
     "frames/",
+    "demos/",
     "viewer/",
     "index.js",
     "README.md"
   ],
   "peerDependencies": {
     "pseudo-html-kit": ">=0.1.0"
+  },
+  "devDependencies": {
+    "pseudo-html-kit": "workspace:*"
   },
   "keywords": [
     "pseudo-html-kit",

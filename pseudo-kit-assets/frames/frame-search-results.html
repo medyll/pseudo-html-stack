@@ -1,0 +1,55 @@
+<!--
+  @frame search-results
+  @slots navbar, filters, results, pagination, footer
+  @description Search results page skeleton
+-->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Search Results — Frame</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #fff; font-family: system-ui, sans-serif; min-height: 100dvh; }
+    .frame-search-results { display: flex; flex-direction: column; min-height: 100dvh; }
+    .frame__navbar   { position: sticky; top: 0; z-index: 100; }
+    .frame__layout   { flex: 1; max-width: 1300px; margin: 0 auto; width: 100%; padding: 1.5rem; display: grid; grid-template-columns: 16rem 1fr; gap: 2rem; align-items: flex-start; }
+    .frame__filters  { position: sticky; top: 5rem; display: flex; flex-direction: column; gap: 1.5rem; }
+    .frame__content  { display: flex; flex-direction: column; gap: 1.5rem; }
+    .frame__results  { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+    .frame__pagination { display: flex; justify-content: center; padding: 1rem 0; }
+    .frame__footer   { }
+    @media (max-width: 1024px) { .frame__results { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 768px)  { .frame__layout { grid-template-columns: 1fr; } .frame__filters { display: none; } .frame__results { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 480px)  { .frame__results { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="frame-search-results">
+
+    <div class="frame__navbar">
+      <slot name="navbar"></slot>
+    </div>
+
+    <div class="frame__layout">
+      <div class="frame__filters">
+        <slot name="filters"></slot>
+      </div>
+      <div class="frame__content">
+        <div class="frame__results">
+          <slot name="results"></slot>
+        </div>
+        <div class="frame__pagination">
+          <slot name="pagination"></slot>
+        </div>
+      </div>
+    </div>
+
+    <div class="frame__footer">
+      <slot name="footer"></slot>
+    </div>
+
+  </div>
+</body>
+</html>

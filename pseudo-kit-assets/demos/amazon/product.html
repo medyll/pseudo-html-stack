@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sony WH-1000XM5 — Pseudo-Amazon</title>
+  <link rel="stylesheet" href="tokens.css" />
+  <style>
+    body { background:#eaeded; }
+    .amz-nav {
+      position:sticky; top:0; z-index:100; background:#131921; color:#fff; padding:.6rem 1rem;
+      display:flex; align-items:center; gap:.75rem;
+    }
+    .amz-logo { font-size:1.4rem; font-weight:700; color:#fff; }
+    .amz-logo span { color:#ff9900; }
+    .amz-search { flex:1; display:flex; max-width:700px; }
+    .amz-search-cat { background:#f0f2f2; color:#333; border:none; padding:0 .5rem; font-size:.8rem; border-radius:.3rem 0 0 .3rem; }
+    .amz-search-input { flex:1; border:none; padding:.5rem .75rem; font-size:.875rem; }
+    .amz-search-btn { background:#ff9900; border:none; padding:.5rem .75rem; border-radius:0 .3rem .3rem 0; cursor:pointer; }
+    .amz-nav-right { margin-left:auto; display:flex; gap:1rem; align-items:center; font-size:.8rem; color:#fff; }
+    .amz-nav-right a { color:#fff; }
+
+    .amz-subnav { background:#232f3e; color:#fff; padding:.4rem 1rem; display:flex; gap:1.5rem; font-size:.8rem; overflow-x:auto; }
+    .amz-subnav a { color:#fff; white-space:nowrap; }
+
+    /* Breadcrumb */
+    .amz-breadcrumb { background:#fff; padding:.5rem 1.5rem; font-size:.8rem; color:#555; border-bottom:1px solid #e7e7e7; }
+    .amz-breadcrumb a { color:#0066c0; }
+    .amz-breadcrumb span { margin:0 .3rem; }
+
+    /* Product Layout */
+    .amz-product-page { max-width:1400px; margin:0 auto; padding:1.5rem 1rem; display:grid; grid-template-columns:420px 1fr 280px; gap:1.5rem; }
+    @media (max-width:1200px) { .amz-product-page { grid-template-columns:350px 1fr; } .amz-buy-box { display:none; } }
+    @media (max-width:768px) { .amz-product-page { grid-template-columns:1fr; } }
+
+    /* Gallery */
+    .amz-gallery { display:flex; gap:.75rem; }
+    .amz-gallery-thumbs { display:flex; flex-direction:column; gap:.4rem; }
+    .amz-gallery-thumb { width:50px; height:50px; border-radius:.2rem; background:var(--bg,#f3f3f3); border:1px solid #ddd; cursor:pointer; flex-shrink:0; }
+    .amz-gallery-thumb.active { border-color:#c45500; }
+    .amz-gallery-main { flex:1; height:380px; background:linear-gradient(135deg,#f5f5f5,#fff); border-radius:.3rem; display:flex; align-items:center; justify-content:center; font-size:4rem; }
+
+    /* Product Info */
+    .amz-prod-info { }
+    .amz-prod-badge { background:#ff9900; color:#111; font-size:.7rem; font-weight:700; padding:.2rem .5rem; border-radius:.15rem; display:inline-block; margin-bottom:.5rem; }
+    .amz-prod-brand { color:#0066c0; font-size:.875rem; margin-bottom:.3rem; }
+    .amz-prod-title { font-size:1.4rem; font-weight:400; line-height:1.4; margin-bottom:.75rem; }
+    .amz-prod-rating { display:flex; align-items:center; gap:.5rem; font-size:.875rem; margin-bottom:.75rem; padding-bottom:.75rem; border-bottom:1px solid #eee; }
+    .amz-stars { color:#ff9900; }
+    .amz-rating-link { color:#0066c0; }
+    .amz-prod-price-row { margin-bottom:1rem; }
+    .amz-price-label { font-size:.875rem; color:#565959; }
+    .amz-price-main { font-size:1.8rem; font-weight:400; }
+    .amz-price-main sup { font-size:.875rem; vertical-align:super; }
+    .amz-price-was { font-size:.875rem; color:#565959; text-decoration:line-through; }
+    .amz-price-save { color:#c45500; font-size:.875rem; font-weight:700; }
+    .amz-prime-badge { color:#00a8e1; font-weight:700; font-size:.875rem; }
+
+    /* Features */
+    .amz-feature-list { list-style:none; margin:.75rem 0; }
+    .amz-feature-list li { font-size:.875rem; padding:.25rem 0; padding-left:1rem; position:relative; }
+    .amz-feature-list li::before { content:'•'; position:absolute; left:0; color:#333; }
+
+    /* Buy Box */
+    .amz-buy-box { background:#fff; border:1px solid #ddd; border-radius:.4rem; padding:1.2rem; }
+    .amz-buy-price { font-size:1.5rem; font-weight:400; margin-bottom:.3rem; }
+    .amz-buy-price sup { font-size:.875rem; vertical-align:super; }
+    .amz-prime-line { display:flex; align-items:center; gap:.3rem; font-size:.8rem; color:#0066c0; margin-bottom.5rem; }
+    .amz-delivery { font-size:.8rem; margin:.5rem 0; }
+    .amz-delivery strong { color:#007600; }
+    .amz-in-stock { color:#007600; font-size:.9rem; font-weight:700; margin-bottom:.75rem; }
+    .amz-qty { display:flex; align-items:center; gap:.5rem; margin-bottom:.75rem; font-size:.875rem; }
+    .amz-qty select { border:1px solid #888; border-radius:.3rem; padding:.3rem .6rem; }
+    .amz-btn-cart { width:100%; background:#ff9900; border:none; padding:.7rem; border-radius:9999px; font-size:.9rem; font-weight:700; cursor:pointer; margin-bottom:.5rem; color:#111; }
+    .amz-btn-buy { width:100%; background:#ff6a00; border:none; padding:.7rem; border-radius:9999px; font-size:.9rem; font-weight:700; cursor:pointer; color:#fff; }
+    .amz-secure { display:flex; align-items:center; justify-content:center; gap:.3rem; font-size:.75rem; color:#555; margin-top:.75rem; }
+
+    /* Tabs */
+    .amz-tabs { border-bottom:1px solid #ddd; display:flex; gap:0; margin-bottom:1.5rem; margin-top:.5rem; }
+    .amz-tab { padding:.7rem 1.2rem; font-size:.875rem; cursor:pointer; border-bottom:3px solid transparent; }
+    .amz-tab.active { border-bottom-color:#c45500; color:#c45500; font-weight:700; }
+
+    /* Reviews */
+    .amz-review-summary { display:flex; align-items:flex-start; gap:2rem; margin-bottom:1.5rem; padding-bottom:1.5rem; border-bottom:1px solid #eee; flex-wrap:wrap; }
+    .amz-avg { text-align:center; }
+    .amz-avg-score { font-size:3.5rem; font-weight:300; line-height:1; }
+    .amz-bars { flex:1; min-width:200px; }
+    .amz-bar-row { display:flex; align-items:center; gap:.5rem; font-size:.8rem; color:#0066c0; margin-bottom:.3rem; cursor:pointer; }
+    .amz-bar-track { flex:1; height:14px; background:#ddd; border-radius:2px; overflow:hidden; }
+    .amz-bar-fill { height:100%; background:#ff9900; border-radius:2px; }
+    .amz-review { padding:1rem 0; border-bottom:1px solid #f0f0f0; }
+    .amz-review-header { display:flex; align-items:center; gap:.75rem; margin-bottom:.4rem; }
+    .amz-review-avatar { width:28px; height:28px; border-radius:50%; background:#ff9900; display:flex; align-items:center; justify-content:center; font-size:.7rem; font-weight:700; color:#111; }
+    .amz-review-title { font-size:.9rem; font-weight:700; margin-bottom:.3rem; }
+    .amz-review-body { font-size:.875rem; color:#333; line-height:1.6; }
+    .amz-review-date { font-size:.75rem; color:#565959; margin-top:.3rem; }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav class="amz-nav">
+    <a href="index.html" class="amz-logo">pseudo<span>amazon</span></a>
+    <div class="amz-search">
+      <select class="amz-search-cat"><option>All</option></select>
+      <input class="amz-search-input" value="sony headphones" />
+      <button class="amz-search-btn">🔍</button>
+    </div>
+    <div class="amz-nav-right">
+      <a href="#">Returns &amp; Orders</a>
+      <a href="#">Account ▾</a>
+      <a href="cart.html">🛒 3</a>
+    </div>
+  </nav>
+  <nav class="amz-subnav"><a href="#">☰ All</a><a href="#">Today's Deals</a><a href="#">Electronics</a><a href="#">Books</a><a href="#">Home & Kitchen</a></nav>
+
+  <!-- Breadcrumb -->
+  <div class="amz-breadcrumb">
+    <a href="index.html">Pseudo-Amazon</a><span>›</span>
+    <a href="#">Electronics</a><span>›</span>
+    <a href="#">Headphones</a><span>›</span>
+    Sony WH-1000XM5
+  </div>
+
+  <!-- Product Page -->
+  <div class="amz-product-page">
+
+    <!-- Gallery -->
+    <div>
+      <div class="amz-gallery">
+        <div class="amz-gallery-thumbs">
+          <div class="amz-gallery-thumb active" style="--bg:linear-gradient(135deg,#212121,#424242)"></div>
+          <div class="amz-gallery-thumb" style="--bg:linear-gradient(135deg,#37474f,#607d8b)"></div>
+          <div class="amz-gallery-thumb" style="--bg:linear-gradient(135deg,#4e342e,#6d4c41)"></div>
+          <div class="amz-gallery-thumb" style="--bg:#f5f5f5"></div>
+          <div class="amz-gallery-thumb" style="--bg:#f0f0f0"></div>
+        </div>
+        <div class="amz-gallery-main">🎧</div>
+      </div>
+      <!-- Mobile Buy CTA -->
+      <div style="background:#fff;border:1px solid #ddd;border-radius:.4rem;padding:1rem;margin-top:1rem;display:none" class="amz-mobile-buy">
+        <div class="amz-price-main"><sup>€</sup>289<span style="font-size:.9rem">,99</span></div>
+        <button class="amz-btn-cart" style="margin-top:.75rem">Add to Cart</button>
+      </div>
+    </div>
+
+    <!-- Product Info -->
+    <div class="amz-prod-info">
+      <div class="amz-prod-badge">Amazon's Choice</div>
+      <div class="amz-prod-brand">Visit the <a href="#" style="color:#0066c0">Sony Store</a></div>
+      <h1 class="amz-prod-title">Sony WH-1000XM5 Wireless Industry Leading Noise Cancelling Headphones with Auto Noise Cancelling Optimizer, Crystal Clear Hands-Free Calling, and Alexa Voice Control</h1>
+      <div class="amz-prod-rating">
+        <span class="amz-stars">★★★★★</span>
+        <a href="#reviews" class="amz-rating-link">4.7 out of 5</a>
+        <a href="#reviews" class="amz-rating-link">28,494 ratings</a>
+        <span style="color:#0066c0;cursor:pointer">500+ bought in past month</span>
+      </div>
+
+      <div class="amz-prod-price-row">
+        <div class="amz-price-label">Price:</div>
+        <div class="amz-price-main"><sup>€</sup>289<span style="font-size:.9rem">,99</span></div>
+        <div><span class="amz-price-was">Was: €379,00</span> &nbsp;<span class="amz-price-save">Save €89,01 (23%)</span></div>
+        <div class="amz-prime-badge">✓ FREE delivery — Prime</div>
+      </div>
+
+      <div style="background:#f7f8f8;border-radius:.3rem;padding:.75rem;margin-bottom:1rem;font-size:.875rem">
+        <strong>Color:</strong> Midnight Black &nbsp;|&nbsp;
+        <span style="display:inline-flex;gap:.4rem;margin-left:.3rem">
+          <span style="width:24px;height:24px;background:#111;border-radius:50%;border:2px solid #ff9900;display:inline-block"></span>
+          <span style="width:24px;height:24px;background:#b0bec5;border-radius:50%;border:1px solid #ddd;display:inline-block;cursor:pointer"></span>
+          <span style="width:24px;height:24px;background:#6d4c41;border-radius:50%;border:1px solid #ddd;display:inline-block;cursor:pointer"></span>
+        </span>
+      </div>
+
+      <div class="amz-tabs" style="margin-top:1rem">
+        <div class="amz-tab active">About this item</div>
+        <div class="amz-tab">From the brand</div>
+        <div class="amz-tab">Specifications</div>
+      </div>
+
+      <ul class="amz-feature-list">
+        <li><strong>Industry-leading noise cancellation</strong> — Precisely built for optimal noise cancellation performance, even in tough environments</li>
+        <li><strong>Crystal clear hands-free calling</strong> — 4 beamforming microphones and advanced audio signal processing reduce wind noise</li>
+        <li><strong>Exceptional sound quality</strong> — Integrated Processor V1 optimizes wireless sound quality</li>
+        <li><strong>Comfortable all-day fit</strong> — Redesigned two-piece cushion structure cradles the ear with a completely new and refined look</li>
+        <li><strong>Up to 30-hour battery life</strong> — Quick charging — 3 min charge for 3 hours of playback</li>
+        <li><strong>Multipoint connection</strong> — Pair with two devices simultaneously</li>
+        <li><strong>Speak-to-chat technology</strong> — Automatically reduces volume when you start talking</li>
+      </ul>
+
+      <!-- Reviews Section -->
+      <div id="reviews" style="margin-top:2rem">
+        <h2 style="font-size:1.2rem;font-weight:700;margin-bottom:1rem">Customer Reviews</h2>
+
+        <div class="amz-review-summary">
+          <div class="amz-avg">
+            <div class="amz-avg-score">4.7</div>
+            <div style="color:#ff9900">★★★★★</div>
+            <div style="font-size:.75rem;color:#565959">28,494 global ratings</div>
+          </div>
+          <div class="amz-bars">
+            <div class="amz-bar-row"><span>5 star</span><div class="amz-bar-track"><div class="amz-bar-fill" style="width:75%"></div></div><span>75%</span></div>
+            <div class="amz-bar-row"><span>4 star</span><div class="amz-bar-track"><div class="amz-bar-fill" style="width:14%"></div></div><span>14%</span></div>
+            <div class="amz-bar-row"><span>3 star</span><div class="amz-bar-track"><div class="amz-bar-fill" style="width:5%"></div></div><span>5%</span></div>
+            <div class="amz-bar-row"><span>2 star</span><div class="amz-bar-track"><div class="amz-bar-fill" style="width:3%"></div></div><span>3%</span></div>
+            <div class="amz-bar-row"><span>1 star</span><div class="amz-bar-track"><div class="amz-bar-fill" style="width:3%"></div></div><span>3%</span></div>
+          </div>
+        </div>
+
+        <div class="amz-review">
+          <div class="amz-review-header">
+            <div class="amz-review-avatar">M</div>
+            <span style="font-size:.875rem">Marie Dupont</span>
+          </div>
+          <div style="color:#ff9900;font-size:.8rem">★★★★★</div>
+          <div class="amz-review-title">Best headphones I've ever owned — truly outstanding</div>
+          <div class="amz-review-body">The noise cancellation is absolutely incredible. I commute by train every day and these headphones completely transform the experience. The sound quality is rich and detailed. Worth every penny.</div>
+          <div class="amz-review-date">Reviewed on 15 November 2024 · Verified Purchase</div>
+        </div>
+        <div class="amz-review">
+          <div class="amz-review-header">
+            <div class="amz-review-avatar" style="background:#0066c0;color:#fff">P</div>
+            <span style="font-size:.875rem">Pierre Martin</span>
+          </div>
+          <div style="color:#ff9900;font-size:.8rem">★★★★☆</div>
+          <div class="amz-review-title">Excellent but mic quality could be better</div>
+          <div class="amz-review-body">Sound quality and noise cancellation are second to none. Comfortable for hours of use. The only minor complaint is the microphone during calls is slightly muffled compared to competitors at this price point.</div>
+          <div class="amz-review-date">Reviewed on 3 December 2024 · Verified Purchase</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Buy Box -->
+    <div class="amz-buy-box">
+      <div style="color:#c45500;font-size:.875rem;font-weight:700;margin-bottom:.3rem">⚡ Only 8 left in stock</div>
+      <div class="amz-buy-price"><sup>€</sup>289<span style="font-size:.9rem">,99</span></div>
+      <div style="font-size:.75rem;color:#0066c0;margin-bottom:.3rem">✓ FREE Prime Delivery</div>
+      <div style="font-size:.75rem;color:#007600;margin-bottom:.75rem"><strong>Estimated delivery:</strong> Tomorrow</div>
+      <div class="amz-in-stock">In Stock</div>
+      <div class="amz-qty">
+        <label for="qty">Qty:</label>
+        <select id="qty"><option>1</option><option>2</option><option>3</option></select>
+      </div>
+      <button class="amz-btn-cart">Add to Cart</button>
+      <button class="amz-btn-buy">Buy Now</button>
+      <div style="border-top:1px solid #eee;margin:.75rem 0;font-size:.8rem;padding-top:.75rem">
+        <div><strong>Ships from:</strong> Amazon EU SARL</div>
+        <div><strong>Sold by:</strong> Amazon EU SARL</div>
+        <div><strong>Returns:</strong> Eligible for Return</div>
+      </div>
+      <div class="amz-secure">🔒 Secure transaction</div>
+    </div>
+
+  </div>
+
+</body>
+</html>

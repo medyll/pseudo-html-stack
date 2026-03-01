@@ -1,0 +1,45 @@
+<!--
+  @frame signup
+  @slots brand, form, footer
+  @description Sign-up page skeleton
+-->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up — Frame</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #f8fafc; font-family: system-ui, sans-serif; min-height: 100dvh; display: flex; flex-direction: column; }
+    .frame-signup  { flex: 1; display: flex; min-height: 100dvh; }
+    .frame__media  { flex: 1; display: none; background: linear-gradient(135deg, #3b82f6, #2563eb); }
+    .frame__panel  { width: 100%; max-width: 32rem; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; gap: 1.5rem; background: #fff; }
+    .frame__brand  { text-align: center; }
+    .frame__form   { width: 100%; }
+    .frame__footer { text-align: center; font-size: .8rem; color: #64748b; }
+    @media (min-width: 1024px) { .frame__media { display: block; } }
+  </style>
+</head>
+<body>
+  <div class="frame-signup">
+
+    <div class="frame__media">
+      <slot name="media"></slot>
+    </div>
+
+    <div class="frame__panel">
+      <div class="frame__brand">
+        <slot name="brand"></slot>
+      </div>
+      <div class="frame__form">
+        <slot name="form"></slot>
+      </div>
+      <div class="frame__footer">
+        <slot name="footer"></slot>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
