@@ -1,0 +1,31 @@
+project:
+  name: pseudo-html-kit
+  version: "0.1.0"
+  description: >
+    Vanilla HTML component system for pseudo-HTML layout descriptors —
+    no build step, no framework. Supports SSR (Node.js), client-side
+    rendering, slot injection, reactive state, and CSS generation.
+  license: MIT
+
+team:
+  size: "4+"
+  timeline: "Active development (ongoing)"
+
+stack:
+  runtime: Node.js >= 22 (ESM)
+  client: Vanilla JS (browser, no framework)
+  test_server: node:test
+  test_client: vitest + happy-dom
+  no_build: true
+
+exports:
+  - "." → src/client/pseudo-kit-client.js
+  - "./client" → src/client/pseudo-kit-client.js
+  - "./server" → src/server/pseudo-kit-server.js
+  - "./validator" → src/server/canvas-validator.js
+  - "./normalizer" → src/server/canvas-normalize.js
+  - "./shared" → src/shared/index.js
+
+bmad:
+  version: "3.1.0"
+  initialized: "2026-03-01"

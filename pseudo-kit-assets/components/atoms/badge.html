@@ -1,0 +1,64 @@
+<!--
+  @component badge
+  @props label:string; variant:enum(default|primary|success|warning|danger)?; dot:boolean?; size:enum(sm|md)?
+  @slots (none)
+  @layer atoms
+-->
+<template>
+  <span class="badge" role="status">
+    <span class="badge__dot" aria-hidden="true"></span>
+    <span class="badge__label"></span>
+  </span>
+</template>
+
+<style>
+  @scope (.badge) {
+    :scope {
+      display: inline-flex;
+      align-items: center;
+      gap: .375rem;
+      padding: .2em .6em;
+      border-radius: var(--radius-full, 9999px);
+      font-family: var(--font-sans, system-ui, sans-serif);
+      font-size: var(--text-xs, .75rem);
+      font-weight: 600;
+      line-height: 1;
+      white-space: nowrap;
+      background-color: var(--color-badge-bg, #e2e8f0);
+      color: var(--color-badge-text, #2d3748);
+    }
+
+    :scope[size="sm"] { font-size: .625rem; padding: .15em .45em; }
+
+    /* Variants */
+    :scope[variant="primary"] {
+      background-color: var(--color-primary, #3b82f6);
+      color: var(--color-primary-contrast, #fff);
+    }
+    :scope[variant="success"] {
+      background-color: var(--color-success-bg, #d1fae5);
+      color: var(--color-success-text, #065f46);
+    }
+    :scope[variant="warning"] {
+      background-color: var(--color-warning-bg, #fef3c7);
+      color: var(--color-warning-text, #92400e);
+    }
+    :scope[variant="danger"] {
+      background-color: var(--color-danger-bg, #fee2e2);
+      color: var(--color-danger-text, #991b1b);
+    }
+
+    /* Dot */
+    .badge__dot {
+      display: none;
+      width: .5rem;
+      height: .5rem;
+      border-radius: 50%;
+      background-color: currentColor;
+      flex-shrink: 0;
+    }
+    :scope[dot] .badge__dot { display: inline-block; }
+    :scope[dot]:not([label]) .badge__label,
+    :scope[dot]:not([label]) { padding: .4em; }
+  }
+</style>

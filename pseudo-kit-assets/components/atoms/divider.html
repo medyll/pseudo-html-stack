@@ -1,0 +1,60 @@
+<!--
+  @component divider
+  @props orientation:enum(horizontal|vertical)?; label:string?
+  @slots default
+  @layer atoms
+-->
+<template>
+  <div class="divider" role="separator" aria-orientation="horizontal">
+    <span class="divider__label">
+      <slot></slot>
+    </span>
+  </div>
+</template>
+
+<style>
+  @scope (.divider) {
+    :scope {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      color: var(--color-text-muted, #718096);
+      font-family: var(--font-sans, system-ui, sans-serif);
+      font-size: var(--text-xs, .75rem);
+    }
+
+    /* Horizontal (default) */
+    :scope::before,
+    :scope::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background-color: var(--color-border, #e2e8f0);
+    }
+
+    .divider__label:empty {
+      display: none;
+    }
+    /* No pseudo-lines when label is empty — full width line */
+    :scope:not(:has(.divider__label:not(:empty)))::before {
+      flex: 1;
+    }
+    :scope:not(:has(.divider__label:not(:empty)))::after {
+      display: none;
+    }
+
+    /* Vertical */
+    :scope[orientation="vertical"] {
+      flex-direction: column;
+      width: 1px;
+      height: 100%;
+      gap: .5rem;
+    }
+    :scope[orientation="vertical"]::before,
+    :scope[orientation="vertical"]::after {
+      width: 1px;
+      height: auto;
+      flex: 1;
+    }
+  }
+</style>

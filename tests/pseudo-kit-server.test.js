@@ -8,16 +8,18 @@
 import { describe, it, before, after, beforeEach } from 'node:test';
 import assert                         from 'node:assert/strict';
 import { writeFile, mkdir, rm }       from 'node:fs/promises';
-import { join }                       from 'node:path';
+import { join, isAbsolute }           from 'node:path';
+import { tmpdir }                     from 'node:os';
+import { pathToFileURL }              from 'node:url';
 
-import PseudoKitServer                from '../server/pseudo-kit-server.js';
-import { reset_shared }               from '../shared/registry-shared.js';
+import PseudoKitServer                from '../src/server/pseudo-kit-server.js';
+import { reset_shared }               from '../src/shared/registry-shared.js';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // FIXTURES
 // ─────────────────────────────────────────────────────────────────────────────
 
-const TMP = '/tmp/pseudo-kit-server-test';
+const TMP = join(tmpdir(), 'pseudo-kit-server-test');
 
 const FIXTURES = {
 
@@ -117,16 +119,15 @@ describe('pseudo-kit-server', () => {
   describe('resolvePath', () => {
 
     it('resolves file:// URL to filesystem path', () => {
-      assert.equal(
-        PseudoKitServer.resolvePath(`file://${TMP}/chat-bubble.html`),
-        `${TMP}/chat-bubble.html`
-      );
+      const filePath = join(TMP, 'chat-bubble.html');
+      const fileUrl = pathToFileURL(filePath).href;
+      assert.equal(PseudoKitServer.resolvePath(fileUrl), filePath);
     });
 
     it('resolves relative path with explicit base', () => {
       assert.equal(
         PseudoKitServer.resolvePath('chat-bubble.html', TMP),
-        `${TMP}/chat-bubble.html`
+        join(TMP, 'chat-bubble.html')
       );
     });
 
@@ -137,8 +138,8 @@ describe('pseudo-kit-server', () => {
 
     it('falls back to process.cwd() when no base provided', () => {
       const result = PseudoKitServer.resolvePath('components/panel.html');
-      assert.ok(result.startsWith('/'));
-      assert.ok(result.endsWith('components/panel.html'));
+      assert.ok(isAbsolute(result));
+      assert.ok(result.endsWith(join('components', 'panel.html')));
     });
 
   });

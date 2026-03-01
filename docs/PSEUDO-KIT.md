@@ -4,11 +4,11 @@
 
 ---
 
-## What is pseudo-kit?
+## What is pseudo-html-kit?
 
 Pseudo-kit is the native rendering layer of pseudo-HTML. It requires **no build step, no loader, no framework**. Custom tag names (`<panel>`, `<toolbar>`, `<chat-bubble>`…) are unknown elements to the browser — the browser renders them anyway, as inline boxes by default. The `<style>` block in `@layer components` targets them by tag name and gives them their layout and appearance.
 
-The pseudo-HTML layout file **is** the pseudo-kit app. It renders directly in the browser as a functional wireframe.
+The pseudo-HTML layout file **is** the pseudo-html-kit app. It renders directly in the browser as a functional wireframe.
 
 ---
 
@@ -74,7 +74,7 @@ Each component lives in its own `.html` file. Three optional sections, always in
 
 ```js
 // components/chat-bubble.js  (mode B)
-import PseudoKit from '../pseudo-kit-client.js';
+import PseudoKit from '../pseudo-html-kit-client.js';
 
 // self-registration — name derived from filename: chat-bubble.js → 'chat-bubble'
 PseudoKit.register(import.meta);
@@ -181,7 +181,7 @@ Every component declared in `<template>` with no `element="*"` gets a CSS block 
 <!-- pseudo-HTML -->
 <panel id="editor-panel" default-width="55%" resizable>
 
-<!-- renders as-is in pseudo-kit — no transformation needed -->
+<!-- renders as-is in pseudo-html-kit — no transformation needed -->
 <panel id="editor-panel" default-width="55%" resizable>
 ```
 
@@ -283,7 +283,7 @@ Le même comportement est reproduit côté serveur dans `renderComponent_server(
 ```
 
 ```js
-// pseudo-kit loop pattern
+// pseudo-html-kit loop pattern
 function renderLoop(containerId, data) {
   const container = document.getElementById(containerId)
   const template  = container.querySelector('[loop]')
@@ -404,7 +404,7 @@ card-*       Autonomous content unit
 - No ambiguity: `panel-ai.html` and `panel-editor.html` are clearly siblings, not children.
 - A file that could fit two prefixes needs to be split or promoted.
 
-The full prefix library will be defined in the pseudo-kit component library (out of scope here).
+The full prefix library will be defined in the pseudo-html-kit component library (out of scope here).
 
 ---
 

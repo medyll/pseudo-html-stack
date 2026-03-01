@@ -1,15 +1,15 @@
-# pseudo-kit
+# pseudo-html-kit
 
 > Vanilla HTML component system. No build step. No framework. No dependencies.
 
-pseudo-kit is a runtime for **pseudo-HTML** — a language-agnostic interface descriptor that bridges UI specification and working code. Write your UI as annotated HTML, render it in the browser as-is, generate real components for any framework, or serve it via SSR from Node.js.
+pseudo-html-kit is a runtime for **pseudo-HTML** — a language-agnostic interface descriptor that bridges UI specification and working code. Write your UI as annotated HTML, render it in the browser as-is, generate real components for any framework, or serve it via SSR from Node.js.
 
 ---
 
 ## Table of contents
 
 - [What is pseudo-HTML?](#what-is-pseudo-html)
-- [What is pseudo-kit?](#what-is-pseudo-kit)
+- [What is pseudo-html-kit?](#what-is-pseudo-html-kit)
 - [How it works](#how-it-works)
 - [Installation](#installation)
 - [Quick start](#quick-start)
@@ -32,6 +32,13 @@ pseudo-kit is a runtime for **pseudo-HTML** — a language-agnostic interface de
   - [CSSStyleSheet — no DOM injection](#cssstylesheet--no-dom-injection)
 - [Layout elements](#layout-elements)
 - [File naming conventions](#file-naming-conventions)
+- [Canvas → components workflow](#canvas--components-workflow)
+  - [Running the normalizer](#running-the-normalizer)
+  - [Running the validator](#running-the-validator)
+- [Guidelines](#guidelines)
+  - [Taxonomy](#taxonomy)
+  - [File naming](#file-naming)
+  - [IDs and attributes](#ids-and-attributes)
 - [Server-side rendering (SSR)](#server-side-rendering-ssr)
   - [Rendering a component](#rendering-a-component)
   - [State hydration](#state-hydration)
@@ -55,7 +62,7 @@ Pseudo-HTML is a language-agnostic interface descriptor. It describes a UI — i
 It is **not** valid HTML. It borrows HTML syntax for readability, but its semantics are its own. It is consumed by:
 - AI code generators (LLM reads the file and generates real components)
 - Human developers (as a single source of truth for the UI)
-- pseudo-kit (renders it directly in the browser as a functional wireframe)
+- pseudo-html-kit (renders it directly in the browser as a functional wireframe)
 
 A pseudo-HTML file has this structure:
 
@@ -89,9 +96,9 @@ See `docs/SPEC.md` for the full attribute model and type grammar.
 
 ---
 
-## What is pseudo-kit?
+## What is pseudo-html-kit?
 
-pseudo-kit is the runtime layer that makes pseudo-HTML functional:
+pseudo-html-kit is the runtime layer that makes pseudo-HTML functional:
 
 - **Browser**: observes the DOM, loads `.html` component files, stamps templates, manages CSS without DOM injection, handles slots, loops, state, and events.
 - **Server (Node.js)**: renders components to HTML strings, generates CSS, serializes state for hydration, validates layout files.
@@ -103,8 +110,8 @@ pseudo-kit is the runtime layer that makes pseudo-HTML functional:
 
 1. Custom tags (`<panel>`, `<chat-bubble>`, `<toolbar>`…) are unknown to the browser — it renders them as inline elements by default.
 2. A `MutationObserver` watches the DOM for registered component names.
-3. When a component appears, pseudo-kit fetches its `.html` file, parses the `<template>`, `<style>`, and `<script>` blocks, stamps the template into the element, and injects CSS into the document's adopted stylesheet — **no `<style>` tags added to the DOM**.
-4. `when-*` conditions are expressed as CSS `:has()` + `data-*` attributes on `:root` — minimal JS, maximum CSS.
+3. When a component appears, pseudo-html-kit fetches its `.html` file, parses the `<template>`, `<style>`, and `<script>` blocks, stamps the template into the element, and injects CSS into the document's adopted stylesheet — **no `<style>` tags added to the DOM**.
+4. Conditional visibility is expressed as CSS `:has()` reading `data-*` attributes on `:root` — set by `PseudoKit.state`, no JS conditionals needed.
 5. On the server, components render to HTML strings with `<pk-slot>` wrappers. The client detects these and skips re-stamping.
 
 ---
@@ -112,7 +119,7 @@ pseudo-kit is the runtime layer that makes pseudo-HTML functional:
 ## Installation
 
 ```bash
-npm install pseudo-kit
+npm install pseudo-html-kit
 ```
 
 Requires Node.js 22+ for the server runtime.
@@ -145,7 +152,7 @@ Requires Node.js 22+ for the server runtime.
 </column>
 
 <script type="module">
-  import PseudoKit from 'pseudo-kit';
+  import PseudoKit from 'pseudo-html-kit';
 
   PseudoKit
     .register({ name: 'toolbar',      src: 'components/toolbar.html' })
@@ -232,7 +239,7 @@ A component can register itself without any bootstrap configuration:
 
 ```js
 // components/chat-bubble.js
-import PseudoKit from 'pseudo-kit';
+import PseudoKit from 'pseudo-html-kit';
 
 // Name is derived from the filename: chat-bubble.js → 'chat-bubble'
 PseudoKit.register(import.meta);
@@ -243,7 +250,7 @@ document.querySelectorAll('chat-bubble').forEach(el => {
 });
 ```
 
-Manual registration still works and takes priority:
+Manual registration works the same way — **first registration wins**, duplicates are ignored with a warning. Register before `init()` to ensure the component is known before DOM observation starts:
 
 ```js
 PseudoKit
@@ -355,13 +362,13 @@ PseudoKit.renderLoop('coherence-alerts', [
 ]);
 ```
 
-Each item's fields are bound as `data-*` attributes on the clone. Newly created elements are resolved as pseudo-kit components automatically.
+Each item's fields are bound as `data-*` attributes on the clone. Newly created elements are resolved as pseudo-html-kit components automatically.
 
 ---
 
 ## Reactive state
 
-pseudo-kit provides a reactive state proxy backed by `data-*` attributes on `:root`. Writing a value updates the DOM attribute; CSS `:has()` reacts immediately.
+pseudo-html-kit provides a reactive state proxy backed by `data-*` attributes on `:root`. Writing a value updates the DOM attribute; CSS `:has()` reacts immediately.
 
 ```js
 // Write
@@ -529,10 +536,230 @@ Dual selectors (`.row, row`) allow the pseudo-HTML file to render directly in th
 
 ## File naming conventions
 
-Pseudo-kit uses a **hierarchical prefix** as a visual namespace. The file name reads left to right from most general to most specific.
+See [Guidelines → File naming](#file-naming).
+
+---
+
+## Canvas → components workflow
+
+The canvas is the single source of truth. Components are derived from it — never written from scratch without a canvas.
 
 ```
-components/          ← reusable components
+pseudo-canvas-demo.html
+  │
+  ▼
+canvas-validator (programmatic)        ← deterministic, no LLM
+  ├── validates spec conformity
+  │     props/data/on follow type grammar
+  │     layer values are valid
+  ├── checks component-registry completeness
+  │     every tag used in frames is declared
+  │     every declared component is actually used
+  └── detects inter-frame inconsistencies
+        undeclared props used on instances
+        loop="" without data declaration
+        missing role on instances
+  │
+  ▼ ValidationResult
+    ├── errors[]       ← must fix before generating
+    ├── warnings[]     ← review before generating
+    ├── manifest[]     ← structured component list (JSON)
+    └── manifestText   ← human/LLM-readable summary (Markdown)
+  │
+  ▼
+LLM generation pass
+  receives: manifest + canvas + target framework skill
+  produces: component files (chat-bubble.html, panel.html…)
+```
+
+### Running the normalizer
+
+Before validating, run the normalizer to auto-fix simple issues:
+
+```bash
+# Writes pseudo-canvas-demo.normalized.html alongside the original
+npm run normalize pseudo-canvas-demo.html
+
+# Overwrites the original in place
+npm run normalize:write pseudo-canvas-demo.html
+
+# Node API
+import { normalizeCanvas } from 'pseudo-html-kit/normalizer';
+
+const result = await normalizeCanvas('./pseudo-canvas-demo.html');
+// or: await normalizeCanvas('./pseudo-canvas-demo.html', { inPlace: true });
+
+console.log(result.changes);
+// → ['Renamed 2× `fields` → `data`', 'Added `component-role=""` to `<button>`', ...]
+
+console.log(result.writtenTo); // path of the output file
+```
+
+The normalizer is **idempotent** — running it twice produces no further changes.
+
+### What the normalizer fixes
+
+| Fix | Description |
+|---|---|
+| `fields` → `data` | Obsolete attribute rename |
+| `visible-when` → `when-visible` | Obsolete attribute rename |
+| `hidden-when` → `when-hidden` | Obsolete attribute rename |
+| Add `component-role=""` | Missing on registry declarations — value left empty to fill in |
+| Add `role=""` | Missing on frame instances — value left empty to fill in |
+
+### Recommended workflow
+
+```
+normalize   →   validate   →   LLM generation
+```
+
+Normalize first to fix mechanical errors, then validate to confirm the canvas is generation-ready, then pass `manifestText` to the LLM.
+
+
+
+```bash
+# Text output (Markdown manifest — pass to LLM)
+npm run validate pseudo-canvas-demo.html
+
+# JSON output (structured manifest — for programmatic use)
+npm run validate:json pseudo-canvas-demo.html
+
+# Node API
+import { validateCanvas } from 'pseudo-html-kit/validator';
+
+const result = await validateCanvas('./pseudo-canvas-demo.html');
+
+if (!result.valid) {
+  result.errors.forEach(e => console.error('ERROR:', e));
+  process.exit(1);
+}
+
+result.warnings.forEach(w => console.warn('WARN:', w));
+
+// Pass to LLM
+console.log(result.manifestText);
+
+// Or use the structured manifest
+result.manifest.forEach(entry => {
+  console.log(entry.name, entry.instances.length, 'instances');
+});
+```
+
+### Manifest format
+
+The `manifestText` is a Markdown document designed to be injected directly into an LLM prompt. It includes for each component:
+
+- `component-role` — what the component does
+- `props`, `data`, `on` — typed contracts
+- `layer` — CSS layer
+- `instances` — where and how it's used, per frame, with roles
+
+The `manifest` JSON array follows `ManifestEntry[]`:
+
+```ts
+interface ManifestEntry {
+  name:           string
+  isLayoutElement: boolean
+  props:          string | null   // raw: "id:string; label:string?"
+  data:           string | null
+  on:             string | null
+  layer:          string | null
+  componentRole:  string | null
+  note:           string | null
+  typesReference: string | null
+  instances: Array<{
+    name:    string
+    frameId: string              // which <frame> the instance is in
+    role:    string | null
+    attrs:   Record<string, string | boolean>
+    loop:    boolean
+  }>
+}
+```
+
+### What the validator checks
+
+| Check | Type | Description |
+|---|---|---|
+| Type grammar | Error | `props`/`data`/`on` fields follow `name:type` format |
+| Valid layers | Error | `layer` is one of `base`, `layout`, `components`, `utils` |
+| Undeclared tags | Error | Tags used in frames but missing from `<component-registry>` |
+| Unused declarations | Warning | Declared but never used in any frame |
+| Missing `component-role` | Warning | Recommended for LLM context |
+| Missing instance `role` | Warning | Every instance should have a contextual role |
+| `loop=""` without `data` | Warning | Loop elements need a data contract |
+| Undeclared props on instances | Warning | Instance uses a prop not in the registry declaration |
+| Layout elements with props | Warning | `element="*"` components should not declare props |
+
+---
+
+
+
+These guidelines apply to both **developers** using pseudo-html-kit and **LLMs** generating code from a canvas. They define the shared vocabulary of the system.
+
+---
+
+### Taxonomy
+
+The system has three distinct file types. Never mix their roles.
+
+| Type | File | Purpose |
+|---|---|---|
+| **Canvas** | `pseudo-canvas-*.html` | Declarative source of truth. Contains `<component-registry>` + `<frame>` screens. Consumed by LLMs and developers. Never executed directly. |
+| **Component** | `components/*.html` | Single component runtime file. Contains `<template>` (markup) + `<style>` + `<script>`. Loaded and stamped by pseudo-html-kit at runtime. |
+| **Layout element** | CSS only | Native HTML primitives (`row`, `column`, `grid`…). No `.html` file. Declared in `<component-registry>` with `element="*"`. |
+
+**Canvas structure:**
+
+```
+pseudo-canvas-demo.html
+  ├── [spec:*] header comments     ← rules, conventions, state refs
+  ├── <component-registry>         ← declares every component and layout element
+  │     <chat-bubble props="..." data="..." on="..." />
+  │     <panel props="..." />
+  │     …
+  └── <frame id="main-screen">    ← one frame per screen
+  └── <frame id="review-screen">
+```
+
+**Component file structure:**
+
+```
+components/chat-bubble.html
+  ├── <template>    ← internal markup, stamped into the DOM at runtime
+  ├── <style>       ← @layer components { @scope (chat-bubble) { … } }
+  └── <script>      ← inline or module, runs after stamp
+```
+
+**Key distinction — `<component-registry>` vs `<template>`:**
+
+- `<component-registry>` is a canvas-level declaration zone. It describes what a component *is* — its props, data contract, events. It is read by LLMs, never by the browser runtime.
+- `<template>` inside a component file is a standard `HTMLTemplateElement`. It defines what a component *renders* — its internal DOM structure. It is read and stamped by pseudo-html-kit at runtime.
+
+**Frames:**
+
+Each screen in a canvas is a `<frame>`. The name comes from Figma — a frame is a root-level view container. One canvas can contain multiple frames; each frame is an independent screen.
+
+```html
+<frame id="main-screen" role="Main writing screen">
+  …
+</frame>
+
+<frame id="review-screen" role="Review mode screen">
+  …
+</frame>
+```
+
+---
+
+### File naming
+
+File names use a **hierarchical prefix** as a visual namespace. Read left to right: most general → most specific. The filesystem becomes self-documenting — all `screen-*` together, all `panel-*` together.
+
+```
+pseudo-canvas-demo.html        ← canvas at repo root
+
+components/                    ← reusable runtime components
   panel.html
   toolbar.html
   chat-bubble.html
@@ -548,9 +775,8 @@ components/          ← reusable components
   button-theme.html
   resize-handle.html
 
-layouts/             ← screens and major layout containers
+layouts/                       ← decomposed screens and panels (optional)
   screen-main.html
-  screen-onboarding.html
   screen-review.html
   panel-editor.html
   panel-ai.html
@@ -559,19 +785,102 @@ layouts/             ← screens and major layout containers
   card-harden-point.html
 ```
 
-| Prefix | Scope |
-|---|---|
-| `screen-*` | Full screen, app root level |
-| `panel-*` | Major container within a screen |
-| `section-*` | Semantic zone within a panel |
-| `card-*` | Autonomous content unit |
+| Prefix | Scope | Example |
+|---|---|---|
+| `pseudo-canvas-*` | Full app canvas | `pseudo-canvas-demo.html` |
+| `screen-*` | Full screen / root frame | `screen-main.html` |
+| `panel-*` | Major container within a screen | `panel-editor.html` |
+| `section-*` | Semantic zone within a panel | `section-coherence-alerts.html` |
+| `card-*` | Autonomous content unit | `card-harden-point.html` |
+
+Rules:
+- **kebab-case always** — no camelCase, no underscores in filenames
+- **No generic names** — `panel.html` is fine for the reusable component; `panel-editor.html` is the specific instance
+- **Prefix determines location** — `screen-*` files belong in `layouts/`, components without prefix belong in `components/`
+
+---
+
+### IDs and attributes
+
+**Element IDs** — kebab-case, descriptive, unique within the canvas:
+
+```html
+<!-- ✅ -->
+<panel id="editor-panel" />
+<toolbar id="main-toolbar" />
+<panel id="tab-content-suggestions" />
+
+<!-- ❌ -->
+<panel id="panel1" />
+<panel id="editorPanel" />
+<panel id="p" />
+```
+
+**`role` attribute** — mandatory on every instance, describes purpose in context:
+
+```html
+<!-- ✅ — contextual purpose -->
+<chat-bubble role="coherence-alert" />
+<button role="Exit review mode" />
+<text role="Section header" />
+
+<!-- ❌ — too generic, same as component-role -->
+<chat-bubble role="bubble" />
+<button role="button" />
+```
+
+**`props` vs `data`** — the most important distinction in the system:
+
+| | `props` | `data` |
+|---|---|---|
+| Set by | Parent at render time | App state at runtime |
+| Changes at runtime? | No | Yes |
+| Example | `label`, `action`, `position` | `value`, `confidence`, `entity` |
+| Rule | If a parent configures it → `props` | If the app reads/writes it → `data` |
+
+**`when-*` attributes** — always on instances, never in `<component-registry>`:
+
+```html
+<!-- ✅ -->
+<panel id="ai-panel" when-hidden="focus-mode is active" />
+<spinner when-visible="ai-running" />
+
+<!-- ❌ — when-* belongs on instances, not declarations -->
+<panel props="..." when-hidden="..." />  <!-- in component-registry -->
+```
+
+**`id` on layout elements** — layout elements (`row`, `column`, `spacer`…) only get an `id` when they are a named structural zone:
+
+```html
+<!-- ✅ — named structural zone -->
+<row id="main-body" role="Main body: editor + AI panel">
+
+<!-- ✅ — anonymous layout, no id needed -->
+<row>
+  <button action="accept-all" />
+</row>
+```
+
+**Actions** — `action` values on `<button>` use kebab-case verbs:
+
+```html
+<!-- ✅ -->
+<button action="launch-review" />
+<button action="exit-review" />
+<button action="accept-all" />
+
+<!-- ❌ -->
+<button action="launchReview" />
+<button action="launch_review" />
+<button action="Launch Review" />
+```
 
 ---
 
 ## Server-side rendering (SSR)
 
 ```js
-import PseudoKitServer from 'pseudo-kit/server';
+import PseudoKitServer from 'pseudo-html-kit/server';
 ```
 
 ### Rendering a component
@@ -642,7 +951,7 @@ await writeFile('dist/components.css', css, 'utf-8');
 Validates a pseudo-HTML layout file against the registered component registry:
 
 ```js
-const result = await PseudoKitServer.validate('./sive-layout.html');
+const result = await PseudoKitServer.validate('./pseudo-canvas-demo.html');
 
 if (!result.valid) {
   result.errors.forEach(e => console.error('ERROR:', e));
@@ -744,8 +1053,8 @@ Validates a pseudo-HTML layout file. See [Layout validation](#layout-validation)
 ## Shared API
 
 ```js
-import { register_shared, lookup_shared, all_shared, isRegistered_shared, reset_shared } from 'pseudo-kit/shared';
-import { serialize_shared, serializeToTag_shared, deserialize_shared, deserializeFromTag_shared, merge_shared, defaultState_shared } from 'pseudo-kit/shared';
+import { register_shared, lookup_shared, all_shared, isRegistered_shared, reset_shared } from 'pseudo-html-kit/shared';
+import { serialize_shared, serializeToTag_shared, deserialize_shared, deserializeFromTag_shared, merge_shared, defaultState_shared } from 'pseudo-html-kit/shared';
 ```
 
 ### Registry
@@ -774,27 +1083,31 @@ import { serialize_shared, serializeToTag_shared, deserialize_shared, deserializ
 ## Project structure
 
 ```
-pseudo-kit/
+pseudo-html-kit/
   src/
     shared/
-      registry-shared.js      ← component registry (client + server)
-      state-shared.js          ← state model + serialization
-      index.js                 ← shared exports
+      registry-shared.js           ← component registry (client + server)
+      state-shared.js              ← state model + serialization
+      index.js                     ← shared exports
     client/
-      pseudo-kit-client.js     ← browser runtime
+      pseudo-kit-client.js         ← browser runtime
     server/
-      pseudo-kit-server.js     ← Node.js runtime
+      pseudo-kit-server.js         ← Node.js SSR runtime
+      canvas-validator.js          ← canvas parser + manifest generator
+      canvas-normalize.js          ← canvas auto-corrector
   tests/
-    registry-shared.test.js              ← node:test
-    state-shared.test.js                 ← node:test
-    pseudo-kit-server.test.js            ← node:test
-    pseudo-kit-client.client.test.js     ← vitest + happy-dom
+    registry-shared.test.js        ← node:test
+    state-shared.test.js           ← node:test
+    pseudo-kit-server.test.js      ← node:test
+    pseudo-kit-client.client.test.js  ← vitest + happy-dom
   docs/
-    SPEC.md                     ← pseudo-HTML full specification
-    PSEUDO-KIT.md               ← component system reference
-    REACT.md                    ← pseudo-HTML → React mapping
-    SVELTE.md                   ← pseudo-HTML → Svelte 5 mapping
-    pseudo-svelte-5-reference.md ← Svelte 5 non-regression log
+    SPEC.md                        ← pseudo-HTML full specification
+    PSEUDO-KIT.md                  ← component system reference
+    REACT.md                       ← pseudo-HTML → React mapping
+    SVELTE.md                      ← pseudo-HTML → Svelte 5 mapping
+    pseudo-svelte-5-reference.md   ← Svelte 5 non-regression log
+  pseudo-canvas-demo.html          ← demo canvas (Sive app)
+  SKILL.md                         ← LLM skill entry point
   vitest.config.js
   package.json
   README.md
@@ -824,8 +1137,8 @@ Test coverage targets: **100%** lines, functions, branches, statements on all mo
 
 | File | Runner | Tests |
 |---|---|---|
-| `registry-shared.js` | `node:test` | 28 |
-| `state-shared.js` | `node:test` | 35 |
+| `registry-shared.js` | `node:test` | 30 |
+| `state-shared.js` | `node:test` | 33 |
 | `pseudo-kit-server.js` | `node:test` | 37 |
 | `pseudo-kit-client.js` | Vitest + happy-dom | ~50 |
 
@@ -846,7 +1159,7 @@ Test coverage targets: **100%** lines, functions, branches, statements on all mo
 The `docs/` directory contains mapping references for generating real code from pseudo-HTML:
 
 - `docs/SPEC.md` — Full pseudo-HTML attribute model, type grammar, conventions
-- `docs/PSEUDO-KIT.md` — pseudo-kit component system reference
+- `docs/PSEUDO-KIT.md` — pseudo-html-kit component system reference
 - `docs/REACT.md` — pseudo-HTML → React mapping
 - `docs/SVELTE.md` — pseudo-HTML → Svelte 5 mapping
 - `docs/pseudo-svelte-5-reference.md` — Svelte 5 non-regression guide (LLMs regress often)

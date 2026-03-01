@@ -17,7 +17,7 @@ import {
   deserializeFromTag_shared,
   merge_shared,
   defaultState_shared,
-} from '../shared/state-shared.js';
+} from '../src/shared/state-shared.js';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // SUITE

@@ -10,7 +10,7 @@
     Consumers: AI code generators, human developers, documentation tools.
 
   [spec:attribute-model]
-    props="*"            Structural/functional props. Declared in <template> as defaults.
+    props="*"            Structural/functional props. Declared in <component-registry> as defaults.
                          Instances can override any prop without special syntax.
     data="*"             Business data fields bound to component state.
     on="*"               Events emitted by the component. Format: eventName:payloadType
@@ -30,7 +30,7 @@
     role="*"             Purpose of the instance in its specific context (body only).
 
   [spec:inner-content]
-    Components in <template> can declare their own inner structure.
+    Components in <component-registry> can declare their own inner structure.
     Inner content = functional parts that belong to the component itself.
     Instance content = contextual content injected at the screen level.
     Both coexist: template declares the fixed structure, instances add their content.
@@ -55,7 +55,7 @@
     Component styles use @scope to prevent style leaking between components.
 
   [spec:conventions]
-    - <template> declares components: props, data shape, events, triggers, and inner structure.
+    - <component-registry> declares components: props, data shape, events, triggers, and inner structure.
     - Layout elements (element="*") are native — no props declared, LLM infers attributes.
     - Body instances reference declared components with role="" and contextual overrides.
     - Component IDs use kebab-case. Actions use kebab-case verbs.
@@ -86,14 +86,14 @@
     - Routing logic → see types/routes/
     - Business logic → see bmad/references/PROJECT.md
 
-  Location: bmad/references/sive-layout.html
+  Location: pseudo-canvas-demo.html
 -->
 
 
 <!-- ═══════════════════════════════════════════════════
      COMPONENT DECLARATIONS
 ════════════════════════════════════════════════════ -->
-<template>
+<component-registry>
 
   <!-- ── Layout elements (native, not components to create) ── -->
 
@@ -240,7 +240,7 @@
     component-role="Chart for visualizing data"
   />
 
-</template>
+</component-registry>
 
 
 <!-- ═══════════════════════════════════════════════════
@@ -251,6 +251,7 @@
 <!-- theme-toggle checkbox: referenced by button-theme, no JS required -->
 <input type="checkbox" id="theme-toggle" hidden />
 
+<frame id="main-screen" role="Main writing screen">
 <column id="app-root" element="column.full-height" role="Main application container">
 
   <!-- [main-toolbar] -->
@@ -401,8 +402,121 @@
 
 </column>
 
+</frame>
+
 
 <!-- ═══════════════════════════════════════════════════
+     [review-screen] REVIEW MODE SCREEN
+     Full narrative audit. Triggered from main toolbar.
+     Layout: read-only text (left) + structured report (right).
+════════════════════════════════════════════════════ -->
+
+<frame id="review-screen" role="Review mode screen">
+
+  <!-- [review-toolbar] -->
+  <toolbar id="review-toolbar" position="top" role="Review toolbar">
+    <text label="Review Mode" role="Screen title" />
+    <select
+      id="scope-selector"
+      options="[selected passage, current chapter, entire volume]"
+      role="Scope selector for analysis"
+    />
+    <button action="launch-review" label="Run analysis"       role="Trigger review analysis" />
+    <button action="exit-review"   label="← Back to writing" role="Exit review mode" />
+    <button action="export-report" label="Export report"      role="Export report (.md / .pdf)"
+      behavior="Exports the current report as .md or .pdf depending on user preference."
+    />
+  </toolbar>
+
+  <!-- [review-body] -->
+  <row id="review-body" role="Review body: text + report">
+
+    <!-- [review-text] Read-only narrative with highlights -->
+    <panel id="review-text" default-width="55%" role="Read-only text panel"
+      note="Flagged passages are highlighted. Clicking a highlight scrolls to the corresponding report item."
+    >
+      <text-zone
+        id="text-readonly"
+        readonly
+        role="Narrative text in read-only mode"
+      />
+    </panel>
+
+    <!-- [review-report] Structured audit report -->
+    <panel id="review-report" default-width="45%" role="Structured audit report">
+      <column id="report-sections" role="Report sections">
+
+        <panel id="report-inconsistencies" role="Inconsistencies section">
+          <text label="Inconsistencies" role="Section header" />
+          <chat-bubble
+            role="report-item"
+            data="entity:string; description:string; confidence:number"
+            loop=""
+          />
+        </panel>
+
+        <panel id="report-pov" role="Point of View section">
+          <text label="Point of View" role="Section header" />
+          <chat-bubble
+            role="report-item"
+            data="location:string; detected_deviation:string"
+            loop=""
+          />
+        </panel>
+
+        <panel id="report-threads" role="Narrative Threads section">
+          <text label="Narrative Threads" role="Section header" />
+          <chat-bubble
+            role="report-item"
+            data="thread_id:string; status:string; note:string"
+            loop=""
+          />
+        </panel>
+
+        <panel id="report-tension" role="Tension Curve section">
+          <text label="Tension Curve" role="Section header" />
+          <chart
+            type="line"
+            series="[actual_tension, target_tension]"
+            role="Tension curve over narrative"
+          />
+        </panel>
+
+        <panel id="report-themes" role="Themes & Motifs section">
+          <text label="Themes & Motifs" role="Section header" />
+          <chat-bubble
+            role="report-item"
+            data="motif_id:string; presence:string; consistency:string"
+            loop=""
+          />
+        </panel>
+
+        <panel id="report-voices" role="Character Voices section">
+          <text label="Character Voices" role="Section header" />
+          <chat-bubble
+            role="report-item"
+            data="character_id:string; register_deviation:string; example:string"
+            loop=""
+          />
+        </panel>
+
+        <panel id="report-style" role="Style & Rhythm section">
+          <text label="Style & Rhythm" role="Section header" />
+          <chat-bubble
+            role="report-item"
+            data="signal_type:string; location:string; suggestion:string"
+            loop=""
+          />
+        </panel>
+
+      </column>
+    </panel>
+
+  </row>
+
+</frame>
+
+
      BASE STYLES
 ════════════════════════════════════════════════════ -->
 <style>

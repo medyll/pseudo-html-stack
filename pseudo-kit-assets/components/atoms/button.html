@@ -1,0 +1,97 @@
+<!--
+  @component button
+  @props label:string?; variant:enum(primary|secondary|ghost|danger)?; size:enum(sm|md|lg)?; disabled:boolean?; type:enum(button|submit|reset)?
+  @slots default, icon-left, icon-right
+  @layer atoms
+-->
+<template>
+  <button class="button" type="button">
+    <span class="button__icon-left" aria-hidden="true">
+      <slot name="icon-left"></slot>
+    </span>
+    <span class="button__label">
+      <slot>Button</slot>
+    </span>
+    <span class="button__icon-right" aria-hidden="true">
+      <slot name="icon-right"></slot>
+    </span>
+  </button>
+</template>
+
+<style>
+  @scope (.button) {
+    :scope {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      padding: .5rem 1rem;
+      border: 1.5px solid transparent;
+      border-radius: var(--radius-md, .375rem);
+      font-family: var(--font-sans, system-ui, sans-serif);
+      font-size: var(--text-sm, .875rem);
+      font-weight: 500;
+      line-height: 1.25;
+      white-space: nowrap;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color .15s, border-color .15s, color .15s, opacity .15s;
+      background-color: var(--color-surface-2, #e2e8f0);
+      color: var(--color-text, #1a202c);
+    }
+
+    :scope:focus-visible {
+      outline: 2px solid var(--color-primary, #3b82f6);
+      outline-offset: 2px;
+    }
+
+    :scope[disabled], :scope:disabled {
+      opacity: .45;
+      pointer-events: none;
+      cursor: not-allowed;
+    }
+
+    /* Sizes */
+    :scope[size="sm"] { padding: .25rem .75rem; font-size: var(--text-xs, .75rem); }
+    :scope[size="lg"] { padding: .75rem 1.5rem;  font-size: var(--text-base, 1rem); }
+
+    /* Variants */
+    :scope[variant="primary"] {
+      background-color: var(--color-primary, #3b82f6);
+      color: var(--color-primary-contrast, #fff);
+      border-color: var(--color-primary, #3b82f6);
+    }
+    :scope[variant="primary"]:hover:not([disabled]) {
+      background-color: var(--color-primary-hover, #2563eb);
+      border-color: var(--color-primary-hover, #2563eb);
+    }
+    :scope[variant="secondary"] {
+      background-color: transparent;
+      border-color: var(--color-border, #cbd5e0);
+      color: var(--color-text, #1a202c);
+    }
+    :scope[variant="secondary"]:hover:not([disabled]) {
+      background-color: var(--color-surface-2, #e2e8f0);
+    }
+    :scope[variant="ghost"] {
+      background-color: transparent;
+      border-color: transparent;
+      color: var(--color-text, #1a202c);
+    }
+    :scope[variant="ghost"]:hover:not([disabled]) {
+      background-color: var(--color-surface-2, #e2e8f0);
+    }
+    :scope[variant="danger"] {
+      background-color: var(--color-danger, #ef4444);
+      color: #fff;
+      border-color: var(--color-danger, #ef4444);
+    }
+    :scope[variant="danger"]:hover:not([disabled]) {
+      background-color: var(--color-danger-hover, #dc2626);
+    }
+
+    /* Icon slots: hide wrapper when empty */
+    .button__icon-left:empty,
+    .button__icon-right:empty { display: none; }
+  }
+</style>

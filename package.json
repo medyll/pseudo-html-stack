@@ -1,21 +1,27 @@
 {
-  "name": "pseudo-kit",
+  "name": "pseudo-html-kit",
   "version": "0.1.0",
   "description": "Vanilla HTML component system for pseudo-HTML layout descriptors. No build step. No framework.",
   "type": "module",
   "license": "MIT",
   "exports": {
-    ".":          "./src/client/pseudo-kit-client.js",
-    "./client":   "./src/client/pseudo-kit-client.js",
-    "./server":   "./src/server/pseudo-kit-server.js",
-    "./shared":   "./src/shared/index.js"
+    ".":             "./src/client/pseudo-kit-client.js",
+    "./client":      "./src/client/pseudo-kit-client.js",
+    "./server":      "./src/server/pseudo-kit-server.js",
+    "./validator":   "./src/server/canvas-validator.js",
+    "./normalizer":  "./src/server/canvas-normalize.js",
+    "./shared":      "./src/shared/index.js"
   },
   "files": [
     "src/",
     "README.md"
   ],
   "scripts": {
-    "test":         "node --test src/tests/registry-shared.test.js src/tests/state-shared.test.js src/tests/pseudo-kit-server.test.js",
+    "validate":        "node src/server/canvas-validator.js",
+    "validate:json":   "node src/server/canvas-validator.js --json",
+    "normalize":       "node src/server/canvas-normalize.js",
+    "normalize:write": "node src/server/canvas-normalize.js --in-place",
+    "test":         "node --test tests/registry-shared.test.js tests/state-shared.test.js tests/pseudo-kit-server.test.js",
     "test:client":  "vitest run tests/pseudo-kit-client.client.test.js",
     "test:all":     "npm test && npm run test:client",
     "test:coverage":"vitest run --coverage"
@@ -28,7 +34,7 @@
     "node": ">=22.0.0"
   },
   "keywords": [
-    "pseudo-kit",
+    "pseudo-html-kit",
     "pseudo-html",
     "web-components",
     "vanilla",

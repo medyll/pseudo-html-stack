@@ -18,7 +18,7 @@ This skill is split into focused reference documents:
 | `references/REACT.md` | Generating React components from pseudo-HTML |
 | `references/SVELTE.md` | Pseudo-HTML → Svelte 5 mapping |
 | `references/pseudo-svelte-5-reference.md` | Svelte 5 syntax rules and non-regression log |
-| `references/PSEUDO-KIT.md` | Generating vanilla HTML with the pseudo-kit component system |
+| `references/PSEUDO-KIT.md` | Generating vanilla HTML with the pseudo-html-kit component system |
 
 **Always read SPEC.md first**, then the target framework reference.
 
@@ -35,7 +35,7 @@ This skill is split into focused reference documents:
 
 - Read a pseudo-HTML file and generate an implementation (screen, component, or both)
 - Write or extend a pseudo-HTML descriptor from a natural language description
-- Translate a pseudo-HTML descriptor into React, Svelte, or pseudo-kit (vanilla HTML5)
+- Translate a pseudo-HTML descriptor into React, Svelte, or pseudo-html-kit (vanilla HTML5)
 
 ---
 
@@ -44,7 +44,7 @@ This skill is split into focused reference documents:
 ### Step 1 — Read the file header
 Read `[spec:attribute-model]`, `[spec:type-grammar]`, `[spec:conventions]`, and `[spec:state-refs]`. These define the rules for this specific project.
 
-### Step 2 — Read the `<template>`
+### Step 2 — Read the `<component-registry>`
 Build a component registry:
 - `element="*"` → native element, no component to create
 - no `element` → real component to implement
@@ -52,7 +52,7 @@ Build a component registry:
 
 ### Step 3 — Identify the target
 - **Screen** → find the matching screen section and implement the full tree
-- **Component** → find its declaration in `<template>` and all its instances for context
+- **Component** → find its declaration in `<component-registry>` and all its instances for context
 
 ### Step 4 — Generate
 Follow the appropriate reference document for the target framework.
@@ -61,7 +61,7 @@ Follow the appropriate reference document for the target framework.
 
 ## Writing a pseudo-HTML descriptor
 
-1. Start with `<template>` — declare every component before using it.
+1. Start with `<component-registry>` — declare every component before using it.
 2. Declare layout elements first, components after.
 3. For each component: decide `props` (config) vs `data` (state) vs `on` (events).
 4. Declare inner content inside the component tag when it is functionally part of the component.

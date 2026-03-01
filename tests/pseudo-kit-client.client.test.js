@@ -2,7 +2,7 @@
  * @fileoverview pseudo-kit-client.client.test.js
  * Tests for client/pseudo-kit-client.js
  *
- * Run: npx vitest run src/tests/pseudo-kit-client.client.test.js
+ * Run: npx vitest run tests/pseudo-kit-client.client.test.js
  * Requires: vitest, happy-dom
  * Install: npm install --save-dev vitest happy-dom
  */
@@ -20,8 +20,8 @@ if (!document.adoptedStyleSheets) {
   });
 }
 
-import PseudoKit from '../client/pseudo-kit-client.js';
-import { reset_shared, register_shared } from '../shared/registry-shared.js';
+import PseudoKit from '../src/client/pseudo-kit-client.js';
+import { reset_shared, register_shared } from '../src/shared/registry-shared.js';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // HELPERS

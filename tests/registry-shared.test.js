@@ -2,7 +2,7 @@
  * @fileoverview registry-shared.test.js
  * Tests for shared/registry-shared.js
  *
- * Run: node --test src/tests/registry-shared.test.js
+ * Run: node --test tests/registry-shared.test.js
  */
 
 import { describe, it, before, beforeEach, after } from 'node:test';
@@ -14,7 +14,7 @@ import {
   all_shared,
   isRegistered_shared,
   reset_shared,
-} from '../shared/registry-shared.js';
+} from '../src/shared/registry-shared.js';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // HELPERS
