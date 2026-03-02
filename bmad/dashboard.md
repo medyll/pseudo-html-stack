@@ -1,6 +1,6 @@
 # 📋 BMAD Dashboard — pseudo-html-kit
 
-> **Sync:** 2026-03-02 | **Phase:** Implementation | **Progress:** 100% — QA in progress | **Team:** 3 devs | **Timeline:** 7 sprints × 1 semaine
+> **Sync:** 2026-03-02 | **Phase:** Implementation (Complete) | **Progress:** 100% — QA Done | **Team:** 3 devs | **Timeline:** 7 sprints × 1 semaine
 
 ---
 
@@ -83,39 +83,38 @@ pseudo-kit-assets/ (new npm package)
 
 ---
 
-## 🧪 QA
+## 🧪 QA — DONE ✅
 
 | Metric | Value |
 |:-------|:------|
-| Test plan | 🔵 In Progress |
+| Test plan | ✅ Done |
 | Last run | 2026-03-02 |
-| Coverage | ~ (pending fix) |
-| Open bugs | 1 |
+| Coverage | 259 tests — 208 node:test + 51 vitest |
+| Open bugs | 0 |
 
 ### 🐛 Bugs
 
 | ID | Title | Status |
 |:---|:------|:------:|
-| HAPPY-DOM-01 | happy-dom nests script/style inside template content for self-closing tags | 🔍 Root cause found |
+| HAPPY-DOM-01 | happy-dom nests script/style inside template content for self-closing tags | ✅ Fixed |
 
-> **Fix:** strip `script`/`style` from `def.template` after `importNode` in `_loadComponent`
+> **Fix applied:** strip `script`/`style` from `def.template` after `importNode` in `_loadComponent` (line 284-288)
 
 ---
 
-## 👉 Recommended Next Step
+## 👉 Next Step — Release v0.2.0
 
 ```
-1. Apply template strip fix in _loadComponent  (plan.md has exact code)
-2. canvas-normalize.test.js
+1. git commit -m "feat: QA complete — 259 tests green, HAPPY-DOM-01 fixed"
+2. Bump version → v0.2.0 in package.json (pseudo-html-kit + pseudo-kit-assets)
+3. git tag v0.2.0
+4. npm publish --dry-run  (verify package contents)
+5. npm publish            (on approval)
 ```
-
-> ⚠️ Publishing is handled by CI — never run `npm publish` manually.
 
 ---
 
 ## 🛠️ Actions
 
-- `/dev-story HAPPY-DOM-01` — Apply fix in `_loadComponent`
-- `/test-plan` — Update test plan after fix
-- `/update-dashboard` — Refresh
-- `/next` — Orchestrator suggests next step
+- `/next` — Orchestrator chains next step
+- `/update-dashboard` — Refresh dashboard

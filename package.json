@@ -1,6 +1,6 @@
 {
   "name": "pseudo-kit",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Vanilla HTML component system for pseudo-HTML layout descriptors. No build step. No framework.",
   "type": "module",
   "license": "MIT",

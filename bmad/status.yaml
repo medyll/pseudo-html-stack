@@ -1,5 +1,5 @@
-current_phase: "Phase 3 – Solutioning (Restructure)"
-progress: 15
+current_phase: "Phase 4 – Implementation (Complete)"
+progress: 100
 
 phases:
   - id: phase-1
@@ -105,14 +105,14 @@ pseudo_assets:
       status: done
 
 qa:
-  test_plan: in_progress
-  coverage: ~
+  test_plan: done
+  coverage: "259 tests — 208 node:test + 51 vitest (0 failures)"
   last_run: "2026-03-02"
   bugs:
     - id: HAPPY-DOM-01
       title: "happy-dom nests script/style inside template content for self-closing tags"
-      status: root_cause_found
-      fix: "strip script/style from def.template after importNode in _loadComponent"
+      status: fixed
+      fix: "strip script/style from def.template after importNode in _loadComponent (line 284-288)"
 
 decisions:
   - pkg_structure: "pseudo-kit-assets as separate npm package"
@@ -127,4 +127,4 @@ decisions:
   - barrel_meta: "index.js: components + frames URLs + componentsMeta + framesMeta"
   - ssr_marker: "data-pk-hydrated on each SSR-rendered component root"
 
-recommendation: "Restructuring PRD + Architecture docs created. Ready to implement Phase 2: Create pseudo-canvas package and move files. Run `/next` to execute implementation sprints."
+recommendation: "QA complete — 259 tests, 0 failures, HAPPY-DOM-01 fixed. Ready for release: bump version to v0.2.0, git commit + tag, npm publish --dry-run. Run /dev-story for any final packaging stories or proceed directly."
