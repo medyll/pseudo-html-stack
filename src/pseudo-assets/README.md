@@ -1,6 +1,6 @@
-# pseudo-kit-assets
+# pseudo-assets
 
-Pre-built component library and demo pages for [pseudo-html-kit](https://github.com/your-org/pseudo-html-kit) — zero dependencies, no build step, pure ESM.
+Pre-built component library and demo pages for [pseudo-kit](https://github.com/your-org/pseudo-kit) — zero dependencies, no build step, pure ESM.
 
 ## What's inside
 
@@ -22,9 +22,9 @@ Pre-built component library and demo pages for [pseudo-html-kit](https://github.
 ### 1. Install
 
 ```bash
-npm install pseudo-html-kit pseudo-kit-assets
+npm install pseudo-kit pseudo-assets
 # or
-pnpm add pseudo-html-kit pseudo-kit-assets
+pnpm add pseudo-kit pseudo-assets
 ```
 
 ### 2. Use in HTML
@@ -46,8 +46,8 @@ pnpm add pseudo-html-kit pseudo-kit-assets
   </hero-banner-pk>
 
   <script type="module">
-    import PseudoKit from 'pseudo-html-kit';
-    import { components, componentNames } from 'pseudo-kit-assets';
+    import PseudoKit from 'pseudo-kit';
+    import { components, componentNames } from 'pseudo-assets';
 
     PseudoKit
       .register({ name: componentNames.navbar,     src: components.navbar })
@@ -64,7 +64,7 @@ pnpm add pseudo-html-kit pseudo-kit-assets
 Each demo includes a ready-to-use `tokens.css`. You can use these directly or create your own:
 
 ```html
-<link rel="stylesheet" href="node_modules/pseudo-kit-assets/demos/netflix/tokens.css" />
+<link rel="stylesheet" href="node_modules/pseudo-assets/demos/netflix/tokens.css" />
 ```
 
 ---
@@ -196,11 +196,11 @@ Three fully working demo apps showing real-world usage. Open them directly in a 
 
 ```bash
 # Using npx serve
-npx serve pseudo-kit-assets/demos/netflix/
+npx serve pseudo-assets/demos/netflix/
 open http://localhost:3000
 
 # Using Python
-cd pseudo-kit-assets/demos/netflix && python -m http.server 8080
+cd pseudo-assets/demos/netflix && python -m http.server 8080
 ```
 
 ---
@@ -211,7 +211,7 @@ The included viewer lets you browse, preview, and inspect all components in a Fi
 
 ```bash
 # Serve the viewer
-npx serve pseudo-kit-assets/viewer/
+npx serve pseudo-assets/viewer/
 open http://localhost:3000/pseudo-canvas-viewer.html?assets=auto
 ```
 
@@ -256,7 +256,7 @@ Override any component's design by setting CSS custom properties in your `tokens
 ## Barrel API
 
 ```js
-import { components, componentNames, frames, componentsMeta, framesMeta } from 'pseudo-kit-assets';
+import { components, componentNames, frames, componentsMeta, framesMeta } from 'pseudo-assets';
 
 // URL strings — pass to PseudoKit.register()
 components.button       // → "...atoms/button.html"

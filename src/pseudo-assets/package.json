@@ -1,7 +1,7 @@
 {
-  "name": "pseudo-kit-assets",
+  "name": "pseudo-assets",
   "version": "0.2.0",
-  "description": "Pre-built components, frames, demos and viewer for pseudo-html-kit. Zero dependencies.",
+  "description": "Pre-built components, frames, demos and viewer for pseudo-kit. Zero dependencies.",
   "type": "module",
   "license": "MIT",
   "exports": {
@@ -18,13 +18,14 @@
     "README.md"
   ],
   "peerDependencies": {
-    "pseudo-html-kit": ">=0.1.0"
+    "pseudo-kit": ">=0.1.0"
   },
   "devDependencies": {
-    "pseudo-html-kit": "workspace:*"
+    "pseudo-kit": "workspace:*"
   },
   "keywords": [
-    "pseudo-html-kit",
+    "pseudo-kit",
+    "pseudo-assets",
     "pseudo-html",
     "vanilla",
     "components",

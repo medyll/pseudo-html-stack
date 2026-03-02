@@ -1,5 +1,5 @@
 /**
- * @fileoverview pseudo-kit-assets — barrel export
+ * @fileoverview pseudo-assets — barrel export
  *
  * Exports:
  *   components     — URL map for all component .html files (use with register())
@@ -8,12 +8,12 @@
  *   framesMeta     — slots/description metadata for frames
  *
  * Usage:
- *   import { components, componentNames } from 'pseudo-kit-assets';
+ *   import { components, componentNames } from 'pseudo-assets';
  *   PseudoKit.register({ name: componentNames.card, src: components.card });
  *   // → registers <card-pk>
  *
  *   // Or auto-register all at once:
- *   import { components, componentNames } from 'pseudo-kit-assets';
+ *   import { components, componentNames } from 'pseudo-assets';
  *   Object.entries(components).forEach(([key, src]) =>
  *     PseudoKit.register({ name: componentNames[key], src })
  *   );

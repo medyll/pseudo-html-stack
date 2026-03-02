@@ -324,7 +324,7 @@ function _findInstances(framesHtml, name, fullHtml) {
 function _generateManifestText(manifest, errors, warnings) {
   const lines = [];
 
-  lines.push('# pseudo-html-kit — Component Manifest');
+  lines.push('# pseudo-kit — Component Manifest');
   lines.push(`Generated: ${new Date().toISOString()}`);
   lines.push('');
 

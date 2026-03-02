@@ -1,5 +1,5 @@
 {
-  "name": "pseudo-html-kit",
+  "name": "pseudo-kit",
   "version": "0.1.0",
   "description": "Vanilla HTML component system for pseudo-HTML layout descriptors. No build step. No framework.",
   "type": "module",
@@ -34,7 +34,7 @@
     "node": ">=22.0.0"
   },
   "keywords": [
-    "pseudo-html-kit",
+    "pseudo-kit",
     "pseudo-html",
     "web-components",
     "vanilla",

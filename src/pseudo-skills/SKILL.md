@@ -14,18 +14,18 @@ This skill is split into focused reference documents:
 
 | File | Purpose |
 |---|---|
-| `docs/SPEC.md` | Full attribute model, type grammar, conventions |
-| `docs/REACT.md` | Generating React components from pseudo-HTML |
-| `docs/SVELTE.md` | Pseudo-HTML → Svelte 5 mapping |
-| `docs/pseudo-svelte-5-reference.md` | Svelte 5 syntax rules and non-regression log |
-| `docs/PSEUDO-KIT.md` | Generating vanilla HTML with the pseudo-html-kit component system |
+| `src/pseudo-html/SPEC.md` | Full attribute model, type grammar, conventions |
+| `src/pseudo-skills/REACT.md` | Generating React components from pseudo-HTML |
+| `src/pseudo-skills/SVELTE.md` | Pseudo-HTML → Svelte 5 mapping |
+| `src/pseudo-skills/pseudo-svelte-5-reference.md` | Svelte 5 syntax rules and non-regression log |
+| `src/pseudo-skills/PSEUDO-KIT.md` | Generating vanilla HTML with the pseudo-kit component system |
 
 **Always read SPEC.md first**, then the target framework reference.
 
 **For Svelte targets specifically:**
-1. Read `docs/SPEC.md`
-2. Read `docs/pseudo-svelte-5-reference.md` — mandatory before writing any Svelte code
-3. Read `docs/SVELTE.md`
+1. Read `src/pseudo-html/SPEC.md`
+2. Read `src/pseudo-skills/pseudo-svelte-5-reference.md` — mandatory before writing any Svelte code
+3. Read `src/pseudo-skills/SVELTE.md`
 
 ⚠️ If a Svelte 4 pattern is used and then corrected during generation, append the regression to the `[Non-regression log]` section of `pseudo-svelte-5-reference.md`.
 
@@ -35,7 +35,7 @@ This skill is split into focused reference documents:
 
 - Read a pseudo-HTML file and generate an implementation (screen, component, or both)
 - Write or extend a pseudo-HTML descriptor from a natural language description
-- Translate a pseudo-HTML descriptor into React, Svelte, or pseudo-html-kit (vanilla HTML5)
+- Translate a pseudo-HTML descriptor into React, Svelte, or pseudo-kit (vanilla HTML5)
 
 ---
 
