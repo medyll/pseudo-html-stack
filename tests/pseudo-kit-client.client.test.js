@@ -156,11 +156,16 @@ describe('component loading (_loadComponent)', () => {
   it('throws if fetch returns non-ok response', async () => {
     mockFetch({ 'components/ghost.html': undefined });
     PseudoKit.register({ name: 'ghost', src: 'components/ghost.html' });
-    document.body.innerHTML = '<ghost></ghost>';
 
-    await expect(
-      (async () => { PseudoKit.init(document.body); await flush(); })()
-    ).rejects.toThrow(/Failed to load/i);
+    const errors = [];
+    vi.spyOn(console, 'error').mockImplementation((...a) => errors.push(a.join(' ')));
+
+    document.body.innerHTML = '<ghost></ghost>';
+    const obs = PseudoKit.init(document.body);
+    await flush();
+
+    expect(errors.some(e => /Failed to load/i.test(e))).toBe(true);
+    obs.disconnect();
   });
 
   it('handles component with no template block', async () => {
@@ -354,7 +359,7 @@ describe('_stampTemplate — named slots', () => {
 
   it('routes slot="header" children to the named slot', async () => {
     const html = makeComponentHtml({
-      template: '<div><slot name="header"/><slot/></div>',
+      template: '<div><slot name="header"></slot><slot></slot></div>',
     });
     mockFetch({ 'components/toolbar.html': html });
     PseudoKit.register({ name: 'toolbar', src: 'components/toolbar.html' });
@@ -390,7 +395,7 @@ describe('_stampTemplate — named slots', () => {
 
   it('unassigned children go to default slot when named slots exist', async () => {
     const html = makeComponentHtml({
-      template: '<div><slot name="header"/><slot/></div>',
+      template: '<div><slot name="header"></slot><slot></slot></div>',
     });
     mockFetch({ 'components/toolbar.html': html });
     PseudoKit.register({ name: 'toolbar', src: 'components/toolbar.html' });
@@ -489,6 +494,37 @@ describe('CSS — _upsertComponentStyle', () => {
 // ─────────────────────────────────────────────────────────────────────────────
 
 describe('script evaluation (_evalScript)', () => {
+
+  it('debug — new Function with el param', () => {
+    // Baseline: does new Function with el param work in this env?
+    const obj = {};
+    const fn = new Function('el', 'el.dataset = el.dataset || {}; el.dataset.x = "ok";');
+    fn.call(obj, obj);
+    expect(obj.dataset?.x).toBe('ok');
+  });
+
+  it('debug — def.script is set from raw HTML', async () => {
+    const html = makeComponentHtml({
+      template: '<div/>',
+      script: 'el.dataset.scriptRan = "true";',
+    });
+    // Verify regex extracts script from raw HTML
+    const match = html.match(/<script([^>]*)>([\s\S]*?)<\/script>/i);
+    expect(match).not.toBeNull();
+    expect(match?.[2]?.trim()).toBe('el.dataset.scriptRan = "true";');
+
+    // Now test actual component loading
+    mockFetch({ 'components/badge.html': html });
+    PseudoKit.register({ name: 'badge', src: 'components/badge.html' });
+
+    const def = { name: 'badge', src: 'components/badge.html', loaded: false, template: null, style: null, script: null };
+    // Manually invoke the fetch + parse path
+    const res = await fetch('components/badge.html');
+    const rawHtml = await res.text();
+    const rawMatch = rawHtml.match(/<script([^>]*)>([\s\S]*?)<\/script>/i);
+    expect(rawMatch).not.toBeNull();
+    expect(rawMatch?.[2]?.trim()).toBe('el.dataset.scriptRan = "true";');
+  });
 
   it('executes inline script with el in scope', async () => {
     const html = makeComponentHtml({

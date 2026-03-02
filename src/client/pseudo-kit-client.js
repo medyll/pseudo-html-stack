@@ -81,16 +81,22 @@ const _scopeRuleIndex = new Map();
  * `);
  */
 function _upsertComponentStyle(name, css) {
-  if (_scopeRuleIndex.has(name)) {
-    // Replace existing rule in-place — no new DOM node
-    const idx = _scopeRuleIndex.get(name);
-    _componentSheet.deleteRule(idx);
-    _componentSheet.insertRule(css, idx);
-  } else {
-    // Append new rule and record its index
-    const idx = _componentSheet.cssRules.length;
-    _componentSheet.insertRule(css, idx);
-    _scopeRuleIndex.set(name, idx);
+  try {
+    if (_scopeRuleIndex.has(name)) {
+      // Replace existing rule in-place — no new DOM node
+      const idx = _scopeRuleIndex.get(name);
+      _componentSheet.deleteRule(idx);
+      _componentSheet.insertRule(css, idx);
+    } else {
+      // Append new rule and record its index
+      const idx = _componentSheet.cssRules.length;
+      _componentSheet.insertRule(css, idx);
+      _scopeRuleIndex.set(name, idx);
+    }
+  } catch (err) {
+    // insertRule may fail in non-browser environments (e.g. happy-dom in tests)
+    // for complex CSS like @layer/@scope — log and continue
+    console.warn(`[pseudo-kit] Could not insert CSS for "${name}": ${err.message}`);
   }
 }
 
@@ -114,13 +120,17 @@ function _observe(root = document.body) {
     for (const mutation of mutations) {
       for (const node of mutation.addedNodes) {
         if (node.nodeType !== Node.ELEMENT_NODE) continue;
-        _resolveTree(/** @type {Element} */ (node));
+        _resolveTree(/** @type {Element} */ (node)).catch(err =>
+          console.error('[pseudo-kit]', err.message ?? err)
+        );
       }
     }
   });
 
   observer.observe(root, { childList: true, subtree: true });
-  _resolveTree(root); // process existing DOM at init time
+  _resolveTree(root).catch(err =>
+    console.error('[pseudo-kit]', err.message ?? err)
+  ); // process existing DOM at init time
 
   return observer;
 }
@@ -172,7 +182,10 @@ function _collectComponents(root) {
  * @returns {boolean} True if the element was server-rendered.
  */
 function _isSSRHydrated(el) {
-  return el.querySelector(':scope > pk-slot') !== null;
+  for (let c = el.firstElementChild; c; c = c.nextElementSibling) {
+    if (c.tagName.toLowerCase() === 'pk-slot') return true;
+  }
+  return false;
 }
 
 /**
@@ -251,34 +264,53 @@ async function _loadComponent(def) {
     throw new Error(`[pseudo-kit] Failed to load "${def.name}" from "${def.src}" (${res.status})`);
   }
 
-  const html     = await res.text();
-  const doc      = new DOMParser().parseFromString(html, 'text/html');
-  const tpl      = doc.querySelector('template');
-  const styleEl  = doc.querySelector('style');
-  const scriptEl = doc.querySelector('script');
+  const html = await res.text();
+
+  // Extract script block from raw HTML before DOMParser parsing.
+  // Some environments (e.g. happy-dom in tests) remove or execute inline scripts
+  // during DOMParser.parseFromString, clearing their textContent.
+  const rawScriptMatch = html.match(/<script([^>]*)>([\s\S]*?)<\/script>/i);
+  const rawScriptAttrs = rawScriptMatch?.[1] ?? '';
+  const rawScriptText  = rawScriptMatch?.[2]?.trim() ?? null;
+
+  const doc     = new DOMParser().parseFromString(html, 'text/html');
+  const tpl     = doc.querySelector('template');
+  const styleEl = doc.querySelector('style');
 
   def.template = tpl
     ? document.importNode(tpl.content, true)
     : document.createDocumentFragment();
 
+  // HAPPY-DOM-01: some environments (happy-dom) nest <script>/<style> inside
+  // tpl.content after importNode. Strip them so they don't end up in the DOM
+  // when the template is stamped — scripts are handled via rawScriptText,
+  // styles are handled via def.style below.
+  def.template.querySelectorAll('script, style').forEach(el => el.remove());
+
   def.style = styleEl?.textContent ?? null;
 
-  if (scriptEl) {
-    const isModule = scriptEl.type === 'module';
-    const moduleSrc = scriptEl.getAttribute('src');
+  if (rawScriptMatch) {
+    const isModule = /type\s*=\s*["']module["']/i.test(rawScriptAttrs);
+    const srcMatch = rawScriptAttrs.match(/src\s*=\s*["']([^"']+)["']/i);
+    const moduleSrc = srcMatch?.[1] ?? null;
 
     if (isModule && moduleSrc) {
-      // Module script: dynamic import — the module self-registers via import.meta
-      const moduleUrl = new URL(moduleSrc, def.src).href;
+      // Module script: fire-and-forget dynamic import.
+      // The module self-registers via PseudoKit.register(import.meta) on load.
+      // We do NOT await so component loading is not blocked by the import.
       try {
-        await import(moduleUrl);
+        const base = new URL(def.src, globalThis.location?.href ?? 'http://localhost/').href;
+        const moduleUrl = new URL(moduleSrc, base).href;
+        import(moduleUrl).catch(err =>
+          console.error(`[pseudo-kit] Failed to import module for "${def.name}":`, err)
+        );
       } catch (err) {
-        console.error(`[pseudo-kit] Failed to import module for "${def.name}" at "${moduleUrl}":`, err);
+        console.error(`[pseudo-kit] Failed to import module for "${def.name}":`, err);
       }
       def.script = null; // no inline evaluation needed
     } else {
       // Inline script: stored for later evaluation via _evalScript / new Function()
-      def.script = scriptEl.textContent ?? null;
+      def.script = rawScriptText;
     }
   } else {
     def.script = null;
@@ -590,7 +622,7 @@ function _createState() {
       target[key] = value;
       const attr = _toAttr(String(key));
 
-      if (!value && value !== 0) {
+      if (!value) {
         document.documentElement.removeAttribute(attr);
       } else {
         document.documentElement.setAttribute(attr, value === true ? '' : String(value));

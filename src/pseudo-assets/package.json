@@ -1,5 +1,5 @@
 {
-  "name": "pseudo-assets",
+  "name": "pseudo-stack-assets",
   "version": "0.2.0",
   "description": "Pre-built components, frames, demos and viewer for pseudo-kit. Zero dependencies.",
   "type": "module",
@@ -25,7 +25,7 @@
   },
   "keywords": [
     "pseudo-kit",
-    "pseudo-assets",
+    "pseudo-stack-assets",
     "pseudo-html",
     "vanilla",
     "components",

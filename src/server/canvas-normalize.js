@@ -147,9 +147,10 @@ function _renameObsoleteAttrs(html, changes) {
   let result = html;
 
   for (const [oldAttr, newAttr] of ATTR_RENAMES) {
-    // Match the attribute name as a word boundary in a tag context
-    // e.g.  fields="..."  or  fields='...'  or  bare fields
-    const re = new RegExp(`\\b${oldAttr}(?=\\s*=|\\s|\\/>|>)`, 'g');
+    // Match the attribute name only when preceded by whitespace (start of attr)
+    // and followed by = (all obsolete attrs are value-bearing).
+    // Lookbehind \s prevents matching the attr name inside attribute values.
+    const re = new RegExp(`(?<=\\s)${oldAttr}(?=\\s*=)`, 'g');
     const count = (result.match(re) ?? []).length;
 
     if (count > 0) {

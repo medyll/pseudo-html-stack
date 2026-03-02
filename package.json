@@ -21,7 +21,7 @@
     "validate:json":   "node src/server/canvas-validator.js --json",
     "normalize":       "node src/server/canvas-normalize.js",
     "normalize:write": "node src/server/canvas-normalize.js --in-place",
-    "test":         "node --test tests/registry-shared.test.js tests/state-shared.test.js tests/pseudo-kit-server.test.js",
+    "test":         "node --test tests/registry-shared.test.js tests/state-shared.test.js tests/pseudo-kit-server.test.js tests/canvas-validator.test.js tests/canvas-normalize.test.js tests/pseudo-assets-index.test.js",
     "test:client":  "vitest run tests/pseudo-kit-client.client.test.js",
     "test:all":     "pnpm test && pnpm run test:client",
     "test:coverage":"vitest run --coverage"

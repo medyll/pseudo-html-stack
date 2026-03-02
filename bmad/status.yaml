@@ -105,10 +105,14 @@ pseudo_assets:
       status: done
 
 qa:
-  test_plan: pending
+  test_plan: in_progress
   coverage: ~
-  last_run: ~
-  bugs: []
+  last_run: "2026-03-02"
+  bugs:
+    - id: HAPPY-DOM-01
+      title: "happy-dom nests script/style inside template content for self-closing tags"
+      status: root_cause_found
+      fix: "strip script/style from def.template after importNode in _loadComponent"
 
 decisions:
   - pkg_structure: "pseudo-kit-assets as separate npm package"
@@ -123,4 +127,4 @@ decisions:
   - barrel_meta: "index.js: components + frames URLs + componentsMeta + framesMeta"
   - ssr_marker: "data-pk-hydrated on each SSR-rendered component root"
 
-recommendation: "Post-audit (2026-03-02): all 20 fixes applied, 100 tests green. Next → /test-plan to cover BUG-02 (_findInstances) and NOM-06 (renamed assets), then npm publish v0.1.0"
+recommendation: "QA in progress. Root cause found for failing script tests. Next → apply template strip fix in _loadComponent (plan.md has exact code), then canvas-normalize.test.js. Publishing handled by CI — never run npm publish manually."
