@@ -127,4 +127,5 @@ decisions:
   - barrel_meta: "index.js: components + frames URLs + componentsMeta + framesMeta"
   - ssr_marker: "data-pk-hydrated on each SSR-rendered component root"
 
-recommendation: "QA complete — 259 tests, 0 failures, HAPPY-DOM-01 fixed. Ready for release: bump version to v0.2.0, git commit + tag, npm publish --dry-run. Run /dev-story for any final packaging stories or proceed directly."
+release_status: "✅ Published to npm registry"
+recommendation: "Release complete. All 7 sprints delivered. Next: /update-dashboard to sync final state, then project transition to Maintenance phase."

@@ -1,6 +1,18 @@
 # 📋 BMAD Dashboard — pseudo-html-kit
 
-> **Sync:** 2026-03-02 | **Phase:** Implementation (Complete) | **Progress:** 100% — QA Done | **Team:** 3 devs | **Timeline:** 7 sprints × 1 semaine
+> **Sync:** 2026-03-02 | **Phase:** Implementation (Complete) | **Progress:** 100% — Released v0.2.0 ✅ | **Team:** 3 devs | **Timeline:** 7 sprints × 1 semaine
+
+---
+
+## 🚀 Release Status
+
+| Component | Status | Link |
+|:---|:---:|:---|
+| **pseudo-kit** | ✅ Published v0.2.0 | [npm](https://www.npmjs.com/package/pseudo-kit) |
+| **pseudo-canvas** | ✅ v0.2.0 | Part of monorepo |
+| **pseudo-stack-assets** | ✅ v0.2.0 | Part of monorepo |
+
+**Published:** 2026-03-02 22:44 UTC | **Commit:** `cf21bb1` | **Tag:** `v0.2.0`
 
 ---
 
@@ -102,15 +114,19 @@ pseudo-kit-assets/ (new npm package)
 
 ---
 
-## 👉 Next Step — Release v0.2.0
+## 👉 **Next Step — Maintenance & Support**
 
-```
-1. git commit -m "feat: QA complete — 259 tests green, HAPPY-DOM-01 fixed"
-2. Bump version → v0.2.0 in package.json (pseudo-html-kit + pseudo-kit-assets)
-3. git tag v0.2.0
-4. npm publish --dry-run  (verify package contents)
-5. npm publish            (on approval)
-```
+✅ **v0.2.0 Release Complete.**
+
+- [📦 pseudo-kit on npm](https://www.npmjs.com/package/pseudo-kit)
+- 📚 Documentation live
+- 🧪 259 tests passing, 0 failures
+- 🎉 All deliverables shipped
+
+**Optional next steps:**
+- `/readme` — generate or update installation/usage guide
+- `/test-plan` — expand test coverage for edge cases
+- `/sprint-planning` — plan v0.3.0 roadmap (post-launch feedback)
 
 ---
 
