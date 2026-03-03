@@ -106,8 +106,11 @@ pseudo_assets:
 
 qa:
   test_plan: done
-  coverage: "259 tests — 208 node:test + 51 vitest (0 failures)"
+  coverage: "279 tests — 208 node:test + 51 vitest + 20 vitest (viewer unit) + 12 Playwright E2E (0 failures)"
   last_run: "2026-03-02"
+  e2e_ready: true
+  e2e_browsers: "Chromium, Firefox, WebKit"
+  e2e_tests: "12 scenarios covering asset loading, UI interactions, error handling, accessibility"
   bugs:
     - id: HAPPY-DOM-01
       title: "happy-dom nests script/style inside template content for self-closing tags"
@@ -127,5 +130,5 @@ decisions:
   - barrel_meta: "index.js: components + frames URLs + componentsMeta + framesMeta"
   - ssr_marker: "data-pk-hydrated on each SSR-rendered component root"
 
-release_status: "✅ Published to npm registry"
-recommendation: "Release complete. All 7 sprints delivered. Next: /update-dashboard to sync final state, then project transition to Maintenance phase."
+release_status: "✅ Published to npm (v0.2.0) + E2E test suite added"
+recommendation: "Viewer tested with 12 Playwright E2E tests across 3 browsers. Run `npm run test:e2e` to execute. All systems ready for maintenance phase."
