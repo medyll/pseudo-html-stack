@@ -197,5 +197,26 @@ migration_v040:
           title: "Cross-browser fallback validation"
           points: 2
           status: done
+    - id: sprint-10
+      file: artifacts/sprints/sprint-10.md
+      status: pending
+      progress: 0
+      stories:
+        - id: S10-01
+          title: "Input: HTML5 constraint validation + Popover hints"
+          points: 5
+          status: pending
+        - id: S10-03
+          title: "Checkbox/Radio: :checked/:invalid + indeterminate"
+          points: 3
+          status: pending
+        - id: S10-05
+          title: "Grid: CSS Grid Lanes + Container Queries"
+          points: 5
+          status: pending
+        - id: S10-07
+          title: "E2E + Unit tests (form/layout components)"
+          points: 4
+          status: pending
 
-recommendation: "✅ Sprint 09 Complete (7/7 stories done = 100% functionality). All 4 components migrated to 2026 HTML/CSS APIs (Modal/<dialog>, Dropdown/Popover, Tooltip/Anchor Positioning, Notification/Interest Invokers). Unit tests: 51/51 pass. E2E fixtures created with cross-browser fallback validation. Ready for v0.4.0-alpha release."
+recommendation: "✅ Sprint 09 Complete (7/7 stories done = 100% functionality). v0.4.0-alpha release candidate ready. Sprint 10 drafted: form controls (Input, Checkbox/Radio) + layout (Grid Lanes) + testing phase. Estimated 16 pts achievable in 2 weeks. Next: Confirm Sprint 10 scope and begin component migrations."
