@@ -207,9 +207,9 @@ migration_v040:
            points: 5
            status: done
         - id: S10-03
-          title: "Checkbox/Radio: :checked/:invalid + indeterminate"
-          points: 3
-          status: pending
+           title: "Checkbox/Radio: :checked/:invalid + indeterminate"
+           points: 3
+           status: done
         - id: S10-05
           title: "Grid: CSS Grid Lanes + Container Queries"
           points: 5
@@ -220,6 +220,7 @@ migration_v040:
           status: pending
 
 recommendation: "✅ Sprint 10 IN_PROGRESS (20%). S10-01 (Input validation) started. Estimated 17 pts over 2 weeks (Tier 1: S10-01/S10-03/S10-05 = 13 pts + S10-07 testing = 4 pts). Current: Migrating input-pk.html to HTML5 constraint validation API + Popover API for error hints."
+
 
 
 
