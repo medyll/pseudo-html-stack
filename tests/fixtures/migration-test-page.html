@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Migration E2E Test Page</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f5f5f5;
+      padding: 2rem;
+    }
+    .test-section {
+      background: white;
+      border-radius: 8px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .test-section h2 {
+      margin-bottom: 1rem;
+      font-size: 1.25rem;
+      color: #333;
+    }
+    .test-section p {
+      margin-bottom: 1rem;
+      color: #666;
+      font-size: 0.875rem;
+    }
+
+    /* Modal demo */
+    .modal-demo {
+      display: flex;
+      gap: 1rem;
+    }
+    .modal-trigger-btn {
+      padding: 0.5rem 1rem;
+      background: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.875rem;
+    }
+    .modal-trigger-btn:hover {
+      background: #2563eb;
+    }
+
+    /* Dropdown demo */
+    .dropdown-demo {
+      display: inline-block;
+    }
+
+    /* Tooltip demo */
+    .tooltip-demo {
+      display: flex;
+      gap: 2rem;
+      margin-top: 1rem;
+    }
+
+    /* Notification demo */
+    .notification-demo {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .notif-trigger-btn {
+      padding: 0.5rem 1rem;
+      background: #22c55e;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.875rem;
+      width: fit-content;
+    }
+    .notif-container {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    /* Import component styles */
+    @layer base, layout, components, utils;
+  </style>
+</head>
+<body>
+  <!-- Modal Section -->
+  <div class="test-section">
+    <h2>Modal Component (S9-01)</h2>
+    <p>Click the button to open the modal. Test: focus trap, Escape key, backdrop click.</p>
+    <div class="modal-demo">
+      <button class="modal-trigger-btn" data-testid="modal-trigger">Open Modal</button>
+      <modal-pk data-testid="modal-component">
+        <span slot="header">Modal Title</span>
+        <p>This is a modal using the native &lt;dialog&gt; element.</p>
+        <button slot="footer">Action</button>
+      </modal-pk>
+    </div>
+  </div>
+
+  <!-- Dropdown Section -->
+  <div class="test-section">
+    <h2>Dropdown Component (S9-02)</h2>
+    <p>Click the button to toggle the dropdown. Test: Popover API, light-dismiss (click outside).</p>
+    <div class="dropdown-demo">
+      <dropdown-pk label="Choose" data-testid="dropdown-component">
+        <li slot="items" role="option">Option 1</li>
+        <li slot="items" role="option">Option 2</li>
+        <li slot="items" role="option">Option 3</li>
+      </dropdown-pk>
+    </div>
+  </div>
+
+  <!-- Tooltip Section -->
+  <div class="test-section">
+    <h2>Tooltip Component (S9-03)</h2>
+    <p>Hover over the triggers. Test: Anchor Positioning, position auto-flip at viewport edges.</p>
+    <div class="tooltip-demo">
+      <tooltip-pk content="Top tooltip" data-testid="tooltip-top">
+        <span>Hover me (top)</span>
+      </tooltip-pk>
+      <tooltip-pk content="Bottom tooltip" position="bottom" data-testid="tooltip-bottom">
+        <span>Hover me (bottom)</span>
+      </tooltip-pk>
+      <tooltip-pk content="Left tooltip" position="left" data-testid="tooltip-left">
+        <span>Hover me (left)</span>
+      </tooltip-pk>
+      <tooltip-pk content="Right tooltip" position="right" data-testid="tooltip-right">
+        <span>Hover me (right)</span>
+      </tooltip-pk>
+    </div>
+  </div>
+
+  <!-- Notification Section -->
+  <div class="test-section">
+    <h2>Notification Component (S9-04)</h2>
+    <p>Click to show notifications. Test: autodismiss (5s), hover pause, manual dismiss.</p>
+    <div class="notification-demo">
+      <button class="notif-trigger-btn" id="notif-auto-trigger" data-testid="notif-auto-trigger">
+        Show Autodismiss Notification
+      </button>
+      <button class="notif-trigger-btn" id="notif-dismiss-trigger" data-testid="notif-dismiss-trigger" style="background: #f59e0b;">
+        Show Dismissible Notification
+      </button>
+      <div class="notif-container" id="notif-container" data-testid="notif-container"></div>
+    </div>
+  </div>
+
+  <!-- Hidden container for dynamically created notifications -->
+  <div id="notification-area" data-testid="notification-area"></div>
+
+  <script type="module">
+    import PseudoKit from '/src/client/pseudo-kit-client.js';
+
+    // Register all 4 migrated components
+    const components = [
+      { name: 'modal-pk', src: '/src/pseudo-assets/components/molecules/modal.html' },
+      { name: 'dropdown-pk', src: '/src/pseudo-assets/components/molecules/dropdown.html' },
+      { name: 'tooltip-pk', src: '/src/pseudo-assets/components/molecules/tooltip.html' },
+      { name: 'notification-pk', src: '/src/pseudo-assets/components/molecules/notification.html' },
+    ];
+
+    for (const comp of components) {
+      PseudoKit.register(comp);
+    }
+    PseudoKit.init(document.body);
+
+    // Modal trigger handler
+    const modalTrigger = document.querySelector('[data-testid="modal-trigger"]');
+    const modalComponent = document.querySelector('[data-testid="modal-component"]');
+    if (modalTrigger && modalComponent) {
+      modalTrigger.addEventListener('click', () => {
+        if (modalComponent.hasAttribute('open')) {
+          modalComponent.removeAttribute('open');
+        } else {
+          modalComponent.setAttribute('open', '');
+        }
+      });
+    }
+
+    // Notification trigger handlers
+    const notifAutoTrigger = document.getElementById('notif-auto-trigger');
+    const notifDismissTrigger = document.getElementById('notif-dismiss-trigger');
+    const notifArea = document.getElementById('notification-area');
+
+    if (notifAutoTrigger) {
+      notifAutoTrigger.addEventListener('click', () => {
+        const notif = document.createElement('notification-pk');
+        notif.setAttribute('variant', 'success');
+        notif.setAttribute('icon', '');
+        notif.setAttribute('dismissible', '');
+        notif.setAttribute('autodismiss', '');
+        notif.setAttribute('--dismiss-duration', '5s');
+        notif.setAttribute('data-testid', 'autodismiss-notif');
+        notif.textContent = 'This notification auto-dismisses in 5 seconds. Hover to pause.';
+        notifArea.appendChild(notif);
+      });
+    }
+
+    if (notifDismissTrigger) {
+      notifDismissTrigger.addEventListener('click', () => {
+        const notif = document.createElement('notification-pk');
+        notif.setAttribute('variant', 'info');
+        notif.setAttribute('icon', '');
+        notif.setAttribute('dismissible', '');
+        notif.setAttribute('data-testid', 'dismissible-notif');
+        notif.textContent = 'This notification can be manually dismissed.';
+        notifArea.appendChild(notif);
+      });
+    }
+  </script>
+</body>
+</html>
