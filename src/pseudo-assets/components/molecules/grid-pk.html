@@ -1,0 +1,193 @@
+<!--
+  @component grid-pk
+  @layer molecules
+
+  @prop {'auto'|'lanes'|'masonry'} [display='auto'] - Grid display mode
+  @prop {number|'auto'} [cols=3] - Number of columns (or 'auto' for responsive)
+  @prop {string} [gap='1rem'] - Gap between grid items
+  @prop {string} [minItemWidth='200px'] - Minimum width for auto-fit columns
+  @prop {boolean} [containerQueries=true] - Enable container queries for responsive behavior
+
+  @slot default - Grid items (direct children are grid items)
+-->
+<template>
+  <div class="grid" role="region" aria-label="Grid layout">
+    <slot></slot>
+  </div>
+</template>
+
+<style>
+  @layer components {
+    @scope (.grid) {
+      :scope {
+        --grid-cols: var(--cols, 3);
+        --grid-gap: var(--gap, 1rem);
+        --grid-min-width: var(--min-item-width, 200px);
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(var(--grid-min-width), 1fr));
+        gap: var(--grid-gap);
+        width: 100%;
+      }
+
+      /* Container type for responsive behavior */
+      @supports (container-type: inline-size) {
+        :scope {
+          container-type: inline-size;
+        }
+      }
+
+      /* Responsive sizing via container queries */
+      @supports (container-type: inline-size) {
+        /* Small containers: 1 column */
+        @container (max-width: 399px) {
+          :scope {
+            --grid-cols: 1;
+            grid-template-columns: 1fr;
+          }
+        }
+
+        /* Medium containers: 2 columns */
+        @container (min-width: 400px) and (max-width: 767px) {
+          :scope {
+            --grid-cols: 2;
+            grid-template-columns: repeat(2, 1fr);
+          }
+        }
+
+        /* Large containers: 3 columns */
+        @container (min-width: 768px) {
+          :scope {
+            --grid-cols: 3;
+            grid-template-columns: repeat(3, 1fr);
+          }
+        }
+
+        /* Extra-large containers: 4 columns */
+        @container (min-width: 1200px) {
+          :scope {
+            --grid-cols: 4;
+            grid-template-columns: repeat(4, 1fr);
+          }
+        }
+      }
+
+      /* Fallback: viewport media queries when container queries not supported */
+      @supports not (container-type: inline-size) {
+        /* Mobile: 1 column */
+        @media (max-width: 399px) {
+          :scope {
+            grid-template-columns: 1fr;
+          }
+        }
+
+        /* Tablet: 2 columns */
+        @media (min-width: 400px) and (max-width: 767px) {
+          :scope {
+            grid-template-columns: repeat(2, 1fr);
+          }
+        }
+
+        /* Desktop: 3 columns */
+        @media (min-width: 768px) {
+          :scope {
+            grid-template-columns: repeat(3, 1fr);
+          }
+        }
+
+        /* Large desktop: 4 columns */
+        @media (min-width: 1200px) {
+          :scope {
+            grid-template-columns: repeat(4, 1fr);
+          }
+        }
+      }
+
+      /* Item styling */
+      :scope > * {
+        min-width: 0; /* Allow items to shrink below content size */
+        overflow: hidden;
+      }
+
+      /* Auto-fit mode: equal-height masonry columns */
+      :scope[display="lanes"],
+      :scope[display="masonry"] {
+        grid-auto-flow: dense;
+      }
+
+      /* Gap sizing variants */
+      :scope[gap="sm"] {
+        --grid-gap: .5rem;
+      }
+      :scope[gap="md"] {
+        --grid-gap: 1rem;
+      }
+      :scope[gap="lg"] {
+        --grid-gap: 1.5rem;
+      }
+      :scope[gap="xl"] {
+        --grid-gap: 2rem;
+      }
+
+      /* Alignment options */
+      :scope[align="center"] {
+        justify-items: center;
+      }
+      :scope[align="start"] {
+        justify-items: start;
+      }
+      :scope[align="stretch"] {
+        justify-items: stretch;
+      }
+
+      /* Vertical alignment */
+      :scope[valign="center"] {
+        align-items: center;
+      }
+      :scope[valign="start"] {
+        align-items: start;
+      }
+      :scope[valign="stretch"] {
+        align-items: stretch;
+      }
+
+      /* Reduced motion */
+      @media (prefers-reduced-motion: reduce) {
+        :scope {
+          transition: none;
+        }
+        :scope > * {
+          animation: none;
+        }
+      }
+    }
+  }
+</style>
+
+<script>
+// Forward attributes to grid element
+const grid = el.querySelector('.grid');
+if (grid) {
+  const fwd = ['display', 'cols', 'gap', 'minItemWidth', 'align', 'valign', 'containerQueries'];
+  fwd.forEach(attr => { 
+    if (el.hasAttribute(attr)) {
+      grid.setAttribute(attr, el.getAttribute(attr));
+    }
+  });
+
+  // Map component props to CSS custom properties
+  if (el.hasAttribute('cols')) {
+    const cols = el.getAttribute('cols');
+    if (cols !== 'auto') {
+      grid.style.setProperty('--cols', cols);
+    }
+  }
+
+  if (el.hasAttribute('gap')) {
+    grid.style.setProperty('--gap', el.getAttribute('gap'));
+  }
+
+  if (el.hasAttribute('minItemWidth')) {
+    grid.style.setProperty('--min-item-width', el.getAttribute('minItemWidth'));
+  }
+}
+</script>
