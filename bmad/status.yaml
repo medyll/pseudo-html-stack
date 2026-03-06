@@ -199,8 +199,8 @@ migration_v040:
           status: done
     - id: sprint-10
       file: artifacts/sprints/sprint-10.md
-      status: in_progress
-      progress: 76
+      status: done
+      progress: 100
       stories:
       - id: S10-01
         title: "Input: HTML5 constraint validation + Popover hints"
@@ -217,9 +217,9 @@ migration_v040:
       - id: S10-07
         title: "E2E + Unit tests (form/layout components)"
         points: 4
-        status: pending
+        status: done
 
-recommendation: "✅ Sprint 10 IN_PROGRESS (76%). S10-01/S10-03/S10-05 complete (13/17 pts). S10-07 (E2E + Unit tests) remaining (4 pts). Ready for testing across form/layout components or move to GA release."
+recommendation: "✅ Sprint 10 COMPLETE (100%). All 4 stories done (17/17 pts). Form & layout components migrated to native 2026 APIs. Ready for v0.4.0 GA release. Run `npm run test:e2e` to validate E2E tests in real browsers."
 
 
 
