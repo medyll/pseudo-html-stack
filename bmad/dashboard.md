@@ -94,9 +94,16 @@ pseudo-kit-react/ (new — v0.1.0)
 
 **Peer dep:** `pseudo-html-kit` | **Browser min:** Chrome 118 / FF 128 / Safari 17.4
 
----
+## ✅ Sprint 10 — Form Controls & Layout (Pending) — STORIES READY
 
-## ✅ Sprint 09 — API Migration (2026 HTML/CSS) — ALL COMPLETE
+| Story | Epic | Points | Status |
+|:------|:-----|:------:|:------:|
+| [S10-01](artifacts/stories/S10-01.md) | Form | Input validation (constraint API) | 5 | ⏳ Pending |
+| [S10-03](artifacts/stories/S10-03.md) | Form | Checkbox/Radio (:checked + indeterminate) | 3 | ⏳ Pending |
+| [S10-05](artifacts/stories/S10-05.md) | Layout | Grid Lanes + Container Queries | 5 | ⏳ Pending |
+| [S10-07](artifacts/stories/S10-07.md) | Testing | E2E + Unit tests (form/layout) | 4 | ⏳ Pending |
+
+**17 / 17 points pending (ready to start). Estimated duration: 8 dev-days (2 weeks).**
 
 | Story | Epic | Points | Status |
 |:------|:-----|:------:|:------:|

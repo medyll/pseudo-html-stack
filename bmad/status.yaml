@@ -202,7 +202,7 @@ migration_v040:
       status: pending
       progress: 0
       stories:
-        - id: S10-01
+      - id: S10-01
           title: "Input: HTML5 constraint validation + Popover hints"
           points: 5
           status: pending
