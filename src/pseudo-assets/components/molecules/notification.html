@@ -24,6 +24,21 @@
 </template>
 
 <style>
+  @keyframes pk-notif-dismiss {
+    0% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    90% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-1rem);
+    }
+  }
+
   @scope (.notification) {
     :scope {
       display: flex;
@@ -34,6 +49,24 @@
       border: 1px solid transparent;
       background-color: var(--color-surface-2, #f8fafc);
       font-size: var(--text-sm, .875rem);
+    }
+
+    /* Autodismiss animation */
+    :scope[autodismiss] {
+      animation: pk-notif-dismiss var(--dismiss-duration, 5s) ease-out forwards;
+    }
+
+    /* Pause animation on hover or focus-within */
+    :scope[autodismiss]:hover,
+    :scope[autodismiss]:focus-within {
+      animation-play-state: paused;
+    }
+
+    /* Interest Invokers enhancement (Chrome 146+) */
+    @supports selector(:interest) {
+      :scope[autodismiss]:interest {
+        animation-play-state: paused;
+      }
     }
 
     /* Variants */
@@ -90,3 +123,36 @@
     :scope:not([dismissible]) .notification__dismiss { display: none; }
   }
 </style>
+
+<script>
+const notification = el.querySelector('.notification');
+if (!notification) return;
+
+// Handle dismiss button click
+const dismissBtn = notification.querySelector('.notification__dismiss');
+if (dismissBtn) {
+  dismissBtn.addEventListener('click', () => {
+    el.remove();
+  });
+}
+
+// Handle animation end for autodismiss
+if (el.hasAttribute('autodismiss')) {
+  const onAnimationEnd = () => {
+    el.remove();
+  };
+  notification.addEventListener('animationend', onAnimationEnd, { once: true });
+  
+  // If autodismiss is removed while animation is running, clean up listener
+  const observer = new MutationObserver((mutations) => {
+    for (const mutation of mutations) {
+      if (mutation.type === 'attributes' && mutation.attributeName === 'autodismiss') {
+        if (!el.hasAttribute('autodismiss')) {
+          notification.removeEventListener('animationend', onAnimationEnd);
+        }
+      }
+    }
+  });
+  observer.observe(el, { attributes: true, attributeFilter: ['autodismiss'] });
+}
+</script>

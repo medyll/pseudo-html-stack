@@ -27,6 +27,11 @@
       align-items: center;
     }
 
+    .tooltip__trigger {
+      /* Anchor point for tooltip positioning (CSS Anchor Positioning) */
+      anchor-name: --tooltip-anchor;
+    }
+
     .tooltip__content {
       position: absolute;
       z-index: var(--z-tooltip, 600);
@@ -43,10 +48,25 @@
       opacity: 0;
       visibility: hidden;
       transition: opacity .15s, visibility .15s;
-      /* default: top */
+      
+      /* Fallback for older browsers: default top positioning */
       bottom: calc(100% + .4rem);
       left: 50%;
       transform: translateX(-50%);
+    }
+
+    /* CSS Anchor Positioning (Chrome 146+, experimental) */
+    @supports (position-anchor: var(--test)) {
+      .tooltip__content {
+        position: fixed;
+        position-anchor: --tooltip-anchor;
+        position-try-fallbacks: flip-block;
+        inset-area: block-start;
+        margin-block-end: .4rem;
+        left: auto;
+        bottom: auto;
+        transform: none;
+      }
     }
 
     /* Arrow */
@@ -77,6 +97,16 @@
       border-top-color: transparent;
     }
 
+    /* With anchor positioning: override position attribute with inset-area */
+    @supports (position-anchor: var(--test)) {
+      :scope[position="bottom"] .tooltip__content {
+        inset-area: block-end;
+        margin-block-start: .4rem;
+        margin-block-end: auto;
+        top: auto;
+      }
+    }
+
     /* Left */
     :scope[position="left"] .tooltip__content {
       bottom: auto;
@@ -97,6 +127,17 @@
       border-top-color: transparent;
     }
 
+    @supports (position-anchor: var(--test)) {
+      :scope[position="left"] .tooltip__content {
+        inset-area: inline-start;
+        margin-inline-end: .4rem;
+        margin-block-end: auto;
+        right: auto;
+        top: auto;
+        transform: none;
+      }
+    }
+
     /* Right */
     :scope[position="right"] .tooltip__content {
       bottom: auto;
@@ -113,6 +154,17 @@
       border-right-width: 4px;
       border-right-color: var(--color-text, #1a202c);
       border-top-color: transparent;
+    }
+
+    @supports (position-anchor: var(--test)) {
+      :scope[position="right"] .tooltip__content {
+        inset-area: inline-end;
+        margin-inline-start: .4rem;
+        margin-block-end: auto;
+        left: auto;
+        top: auto;
+        transform: none;
+      }
     }
 
     /* Show on hover/focus */

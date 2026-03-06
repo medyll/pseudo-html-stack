@@ -48,6 +48,10 @@
       outline: 2px solid var(--color-primary, #3b82f6);
       outline-offset: 2px;
     }
+    .dropdown__trigger:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
 
     .dropdown__arrow {
       font-size: .7em;
@@ -67,7 +71,7 @@
       border: 1px solid var(--color-border, #e2e8f0);
       border-radius: var(--radius-md, .375rem);
       box-shadow: 0 4px 16px rgba(0,0,0,.1);
-      /* closed by default */
+      /* closed by default (fallback for no popover) */
       display: none;
     }
 
@@ -76,8 +80,78 @@
       right: 0;
     }
 
-    /* open state via attribute */
+    /* CSS-only open state (fallback when Popover API not supported) */
     :scope[open] .dropdown__menu { display: block; }
     :scope[open] .dropdown__arrow { transform: rotate(180deg); }
+
+    /* Native Popover API state (Chrome 146+) */
+    .dropdown__menu:popover-open { display: block; }
+    :scope .dropdown__menu:popover-open ~ .dropdown__arrow { transform: rotate(180deg); }
   }
 </style>
+
+<script>
+const trigger = el.querySelector('.dropdown__trigger');
+const menu = el.querySelector('.dropdown__menu');
+if (!trigger || !menu) return;
+
+// Generate unique ID for this dropdown instance
+const uid = `dd-${Math.random().toString(36).slice(2, 9)}`;
+
+// Feature detection: Popover API support
+const supportsPopover = 'popover' in HTMLElement.prototype;
+
+if (supportsPopover) {
+  // Popover API path (Chrome 146+, Firefox 128+)
+  menu.popover = 'auto';
+  menu.id = uid;
+  trigger.popovertarget = uid;
+  
+  // Listen to toggle event and sync state
+  menu.addEventListener('toggle', (e) => {
+    const isOpen = e.newState === 'open';
+    trigger.setAttribute('aria-expanded', isOpen);
+    if (isOpen) {
+      el.setAttribute('open', '');
+    } else {
+      el.removeAttribute('open');
+    }
+  });
+  
+  // Programmatic open/close via host [open] attribute
+  const observer = new MutationObserver(() => {
+    const shouldBeOpen = el.hasAttribute('open');
+    const isOpen = menu.matches(':popover-open');
+    if (shouldBeOpen && !isOpen) {
+      menu.showPopover();
+    } else if (!shouldBeOpen && isOpen) {
+      menu.hidePopover();
+    }
+  });
+  observer.observe(el, { attributes: true, attributeFilter: ['open'] });
+} else {
+  // Fallback: CSS-based toggle + manual JS
+  trigger.addEventListener('click', (e) => {
+    if (el.hasAttribute('open')) {
+      el.removeAttribute('open');
+      trigger.setAttribute('aria-expanded', 'false');
+    } else {
+      el.setAttribute('open', '');
+      trigger.setAttribute('aria-expanded', 'true');
+    }
+  });
+  
+  // Click outside to close
+  document.addEventListener('click', (e) => {
+    if (el.hasAttribute('open') && !el.contains(e.target)) {
+      el.removeAttribute('open');
+      trigger.setAttribute('aria-expanded', 'false');
+    }
+  });
+}
+
+// Disable trigger if host has disabled attribute
+if (el.hasAttribute('disabled')) {
+  trigger.disabled = true;
+}
+</script>

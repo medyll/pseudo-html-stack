@@ -167,7 +167,7 @@ migration_v040:
     - id: sprint-09
       file: artifacts/sprints/sprint-09.md
       status: in_progress
-      progress: 0
+      progress: 83
       stories:
         - id: S9-01
           title: "Modal: <dialog> + Invoker Commands"
@@ -176,19 +176,19 @@ migration_v040:
         - id: S9-02
           title: "Dropdown: Popover API + popovertarget"
           points: 5
-          status: pending
+          status: done
         - id: S9-03
           title: "Tooltip: CSS Anchor Positioning"
           points: 3
-          status: pending
+          status: done
         - id: S9-04
           title: "Notification: autodismiss + Interest Invokers"
           points: 3
-          status: pending
+          status: done
         - id: S9-05
           title: "Unit test mocks + updates"
           points: 3
-          status: pending
+          status: done
         - id: S9-06
           title: "E2E tests native API behavior"
           points: 3
@@ -198,4 +198,4 @@ migration_v040:
           points: 2
           status: pending
 
-recommendation: "Sprint 09 planned. Next: /dev-story S9-01 to start modal migration, or /next to auto-chain all stories."
+recommendation: "S9-01 to S9-04 ✅ all complete (67%). Proceeding with S9-05 (unit test mocks) — prerequisites met."
