@@ -12,7 +12,7 @@
 | **pseudo-canvas** | ✅ Release ready | v0.3.0 | Part of monorepo |
 | **pseudo-stack-assets** | ✅ Release ready | v0.3.0 | Part of monorepo |
 | **pseudo-kit-react** | ✅ Scaffold | v0.1.0 | `src/pseudo-kit-react/` |
-| **v0.4.0-alpha** | 🆕 Ready | Alpha | [Release Notes](artifacts/release-notes-v0.4.0-alpha.md) |
+| **v0.4.0** | ✅ Released | v0.4.0 | [CHANGELOG-v0.4.0.md](CHANGELOG-v0.4.0.md) |
 
 **v0.3.0 ready** — Sprint 08 complete (9/9 stories). **v0.4.0-alpha ready** — Sprint 09 complete (7/7 stories, 4 components migrated to 2026 HTML/CSS APIs).
 
@@ -94,16 +94,16 @@ pseudo-kit-react/ (new — v0.1.0)
 
 **Peer dep:** `pseudo-html-kit` | **Browser min:** Chrome 118 / FF 128 / Safari 17.4
 
-## ✅ Sprint 10 — Form Controls & Layout (Pending) — STORIES READY
+## ✅ Sprint 10 — Form Controls & Layout — STORIES COMPLETE
 
 | Story | Epic | Points | Status |
 |:------|:-----|:------:|:------:|
-| [S10-01](artifacts/stories/S10-01.md) | Form | Input validation (constraint API) | 5 | ⏳ Pending |
-| [S10-03](artifacts/stories/S10-03.md) | Form | Checkbox/Radio (:checked + indeterminate) | 3 | ⏳ Pending |
-| [S10-05](artifacts/stories/S10-05.md) | Layout | Grid Lanes + Container Queries | 5 | ⏳ Pending |
-| [S10-07](artifacts/stories/S10-07.md) | Testing | E2E + Unit tests (form/layout) | 4 | ⏳ Pending |
+| [S10-01](artifacts/stories/S10-01.md) | Form | Input validation (constraint API) | 5 | ✅ Done |
+| [S10-03](artifacts/stories/S10-03.md) | Form | Checkbox/Radio (:checked + indeterminate) | 3 | ✅ Done |
+| [S10-05](artifacts/stories/S10-05.md) | Layout | Grid Lanes + Container Queries | 5 | ✅ Done |
+| [S10-07](artifacts/stories/S10-07.md) | Testing | E2E + Unit tests (form/layout) | 4 | ✅ Done |
 
-**17 / 17 points pending (ready to start). Estimated duration: 8 dev-days (2 weeks).**
+**17 / 17 points delivered. Sprint 10 Definition of Done met.**
 
 | Story | Epic | Points | Status |
 |:------|:-----|:------:|:------:|
