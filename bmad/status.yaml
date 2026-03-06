@@ -129,7 +129,7 @@ decisions:
   - barrel_meta: "index.js: components + frames URLs + componentsMeta + framesMeta"
   - ssr_marker: "data-pk-hydrated on each SSR-rendered component root"
 
-release_status: "✅ v0.3.0 released"
+release_status: "✅ v0.4.0 released"
 
 # v0.4.0 cycle — Phase 1: Interaction Components Migration
 migration_v040:
