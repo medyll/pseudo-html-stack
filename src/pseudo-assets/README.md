@@ -134,6 +134,59 @@ Each demo includes a ready-to-use `tokens.css`. You can use these directly or cr
 
 ---
 
+## Sprint 12 — v0.5.0 highlights
+
+Sprint 12 introduces three CSS-first components that showcase modern CSS 2026 features while remaining progressive-enhancement friendly.
+
+### carousel-pk
+A CSS Scroll Snap powered carousel with minimal JS for optional enhancements (autoplay). Usage:
+
+```html
+<carousel-pk id="hero-carousel">
+  <div slot="slide">Slide 1 content</div>
+  <div slot="slide">Slide 2 content</div>
+  <div slot="slide">Slide 3 content</div>
+</carousel-pk>
+```
+
+Notes:
+- Keyboard navigation: Left/Right/Home/End moves focus between slides.
+- ARIA: component exposes role="region" and an accessible name.
+- SSR-friendly: marks up slides in a semantic order so content is discoverable without JS.
+
+### date-picker-pk
+Enhances native <input type="date"> where supported and provides an accessible calendar popover fallback.
+
+```html
+<date-picker-pk>
+  <input type="date" slot="input" />
+</date-picker-pk>
+```
+
+Notes:
+- Fallback calendar is keyboard accessible and dismissible with Escape.
+- Selected date is serialized into data attributes for SSR/CSR hydration.
+
+### color-swatch-pk
+A small palette component exposing keyboard and ARIA-friendly selection.
+
+```html
+<color-swatch-pk>
+  <button data-value="#ff0000">Red</button>
+  <button data-value="#00ff00">Green</button>
+  <button data-value="#0000ff">Blue</button>
+</color-swatch-pk>
+```
+
+Notes:
+- Arrow keys navigate swatches; Enter selects.
+- Emits selection via DOM events and reflects value for SSR.
+
+### Demos
+A minimal demo page is provided at `src/pseudo-assets/demos/s12/index.html` demonstrating usage snippets and how to register components with PseudoKit.
+
+---
+
 ## Page Frames
 
 Full HTML skeleton pages with named `<slot>` placeholders. Use as starting points for new pages.

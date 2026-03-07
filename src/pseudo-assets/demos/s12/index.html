@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Pseudo Assets — Sprint 12 Demos</title>
+  <link rel="stylesheet" href="tokens.css" />
+</head>
+<body>
+  <h1>Sprint 12 component demos (snippets)</h1>
+
+  <section>
+    <h2>carousel-pk (snippet)</h2>
+    <pre><code>&lt;carousel-pk id="hero-carousel"&gt;
+  &lt;div slot="slide"&gt;Slide 1&lt;/div&gt;
+  &lt;div slot="slide"&gt;Slide 2&lt;/div&gt;
+  &lt;div slot="slide"&gt;Slide 3&lt;/div&gt;
+&lt;/carousel-pk&gt;</code></pre>
+  </section>
+
+  <section>
+    <h2>date-picker-pk (snippet)</h2>
+    <pre><code>&lt;date-picker-pk&gt;
+  &lt;input type="date" slot="input" /&gt;
+&lt;/date-picker-pk&gt;</code></pre>
+  </section>
+
+  <section>
+    <h2>color-swatch-pk (snippet)</h2>
+    <pre><code>&lt;color-swatch-pk&gt;
+  &lt;button data-value="#ff0000"&gt;Red&lt;/button&gt;
+  &lt;button data-value="#00ff00"&gt;Green&lt;/button&gt;
+  &lt;button data-value="#0000ff"&gt;Blue&lt;/button&gt;
+&lt;/color-swatch-pk&gt;</code></pre>
+  </section>
+
+  <p>To run the live demos locally, register the components from the pseudo-assets barrel and serve this folder with a static server (npx serve).</p>
+
+  <script type="module">
+    // Example registration (adjust import paths for your setup)
+    // import PseudoKit from '../../client/pseudo-kit-client.js';
+    // import { components, componentNames } from '../index.js';
+    // PseudoKit.register({ name: componentNames.carousel, src: components.carousel }).init();
+  </script>
+</body>
+</html>

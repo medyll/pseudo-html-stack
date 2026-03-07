@@ -1,8 +1,8 @@
 # BMAD Auto-Discovery Connector
-# Generated: 2026-03-07T22:37:46.025Z
+# Generated: 2026-03-07T22:53:07.937Z
 # Do not edit manually — regenerate with: node bmad.mjs connector
 meta:
-  generated: '2026-03-07T22:37:46.025Z'
+  generated: '2026-03-07T22:53:07.937Z'
   bmad_version: 3.2.0
   project: pseudo-html-kit
   root: bmad/
