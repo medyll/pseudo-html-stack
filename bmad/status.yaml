@@ -1,4 +1,4 @@
-current_phase: "Phase 5 – Release (v0.4.0 GA)"
+current_phase: "Phase 4 – Implementation (v0.5.0)"
 progress: 100
 
 phases:
@@ -12,14 +12,14 @@ phases:
 
   - id: phase-2
     name: "Planning"
-    status: in_progress
+    status: done
     artifacts:
       - id: prd
         file: artifacts/prd.md
         status: done
       - id: prd-v0.5.0
         file: artifacts/prd-v0.5.0.md
-        status: in_progress
+        status: done
       - id: tech-spec
         file: artifacts/tech-spec.md
         status: done
@@ -37,8 +37,8 @@ phases:
 
   - id: phase-4
     name: "Implementation"
-    status: in_progress
-    progress: 0
+    status: done
+    progress: 100
     artifacts:
       - id: sprint-01
         file: artifacts/sprints/sprint-01.md
@@ -75,7 +75,7 @@ phases:
         status: done
       - id: sprint-12
         file: artifacts/sprints/sprint-12.md
-        status: pending
+        status: done
 
   - id: phase-5
     name: "Release"
