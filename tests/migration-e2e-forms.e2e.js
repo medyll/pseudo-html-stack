@@ -190,9 +190,9 @@ test.describe('S10: Form & Layout Component E2E Tests', () => {
       const input = page.locator('[data-testid="input-required"]');
       const form = page.locator('#input-form');
       
-      // Input should be valid (empty initially)
+      // Input should be invalid when empty (required)
       const validity = await input.evaluate((el) => el.validity.valid);
-      expect(validity).toBe(true);
+      expect(validity).toBe(false);
       
       // Mark as touched by focusing and blurring
       await input.focus();
@@ -301,16 +301,14 @@ test.describe('S10: Form & Layout Component E2E Tests', () => {
 
   test.describe('S10-03: Checkbox & Radio (Native :checked Pseudo-Class)', () => {
     test('checkbox starts unchecked', async ({ page }) => {
-      const checkbox = page.locator('[data-testid="checkbox-agree"]');
-      const input = checkbox.locator('input[type="checkbox"]');
+      const input = page.locator('[data-testid="checkbox-agree"]');
       
       const isChecked = await input.isChecked();
       expect(isChecked).toBe(false);
     });
 
     test('checkbox can be checked by user click', async ({ page }) => {
-      const checkbox = page.locator('[data-testid="checkbox-agree"]');
-      const input = checkbox.locator('input[type="checkbox"]');
+      const input = page.locator('[data-testid="checkbox-agree"]');
       
       await input.click();
       
@@ -319,7 +317,7 @@ test.describe('S10: Form & Layout Component E2E Tests', () => {
     });
 
     test('checkbox can be toggled multiple times', async ({ page }) => {
-      const input = page.locator('[data-testid="checkbox-agree"] input[type="checkbox"]');
+      const input = page.locator('[data-testid="checkbox-agree"]');
       
       // Click to check
       await input.click();
