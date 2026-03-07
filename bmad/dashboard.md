@@ -1,6 +1,6 @@
 # 📋 BMAD Dashboard — pseudo-html-kit
 
-> **Sync:** 2026-03-06 | **Phase:** Release (v0.3.0 + v0.4.0-alpha in progress) | **Progress:** 100% Sprint 08 + 100% Sprint 09 | **Team:** 3 devs | **Timeline:** 9 sprints × ~2 weeks
+> **Sync:** 2026-03-07 | **Phase:** ✅ v0.4.0 GA Released | **Progress:** Sprint 11 100% complete | **Team:** 1 dev | **Sprints:** 11 complete
 
 ---
 
@@ -8,13 +8,11 @@
 
 | Component | Status | Version | Link |
 |:---|:---:|:---:|:---|
-| **pseudo-kit** | ✅ Published | v0.2.0 | [npm](https://www.npmjs.com/package/pseudo-kit) |
-| **pseudo-canvas** | ✅ Release ready | v0.3.0 | Part of monorepo |
-| **pseudo-stack-assets** | ✅ Release ready | v0.3.0 | Part of monorepo |
-| **pseudo-kit-react** | ✅ Scaffold | v0.1.0 | `src/pseudo-kit-react/` |
-| **v0.4.0** | ✅ Released | v0.4.0 | [CHANGELOG-v0.4.0.md](CHANGELOG-v0.4.0.md) |
+| **pseudo-kit** | ✅ Released | v0.4.0 | [CHANGELOG-v0.4.0.md](../CHANGELOG-v0.4.0.md) |
+| **pseudo-stack-assets** | ✅ Released | v0.4.0 | Part of monorepo |
+| **git tag** | ✅ Tagged | v0.4.0 | CI handles publish |
 
-**v0.3.0 ready** — Sprint 08 complete (9/9 stories). **v0.4.0-alpha ready** — Sprint 09 complete (7/7 stories, 4 components migrated to 2026 HTML/CSS APIs).
+**v0.4.0 GA** — Sprint 11 complete (4/4 stories). Select/Combobox Listbox API, Textarea anchor hints, Accordion View Transitions. 432 tests passing.
 
 ---
 
