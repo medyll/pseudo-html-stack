@@ -273,7 +273,15 @@ async function _loadComponent(def) {
   const rawScriptAttrs = rawScriptMatch?.[1] ?? '';
   const rawScriptText  = rawScriptMatch?.[2]?.trim() ?? null;
 
-  const doc     = new DOMParser().parseFromString(html, 'text/html');
+  // HAPPY-DOM-02: happy-dom executes <script> content during DOMParser.parseFromString,
+  // causing ReferenceError when scripts reference component-context variables (e.g. `el`).
+  // Script content is already captured via rawScriptMatch above; strip the tag from the
+  // HTML string so DOMParser never sees (and never executes) it.
+  const htmlForParsing = rawScriptMatch
+    ? html.slice(0, rawScriptMatch.index) + html.slice(rawScriptMatch.index + rawScriptMatch[0].length)
+    : html;
+
+  const doc     = new DOMParser().parseFromString(htmlForParsing, 'text/html');
   const tpl     = doc.querySelector('template');
   const styleEl = doc.querySelector('style');
 

@@ -401,12 +401,12 @@ describe('input-pk', () => {
     obs.disconnect();
   });
 
-  it('contains .input__error for alert messages', async () => {
+  it('contains .input__error-fallback for alert messages', async () => {
     const obs = registerAndInit('input-pk', SRC, HTML);
     document.body.innerHTML = '<input-pk name="q"></input-pk>';
     PseudoKit.init(document.body);
     await flush();
-    const err = document.querySelector('.input__error');
+    const err = document.querySelector('.input__error-fallback');
     expect(err).toBeTruthy();
     expect(err.getAttribute('role')).toBe('alert');
     obs.disconnect();
