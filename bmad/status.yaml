@@ -1,4 +1,4 @@
-current_phase: "Phase 5 – Release (v0.3.0)"
+current_phase: "Phase 5 – Release (v0.4.0 GA)"
 progress: 100
 
 phases:
@@ -22,7 +22,7 @@ phases:
         status: done
       - id: roadmap
         file: artifacts/roadmap.md
-        status: pending
+        status: done
 
   - id: phase-3
     name: "Solutioning"
@@ -60,10 +60,19 @@ phases:
       - id: sprint-08
         file: artifacts/sprints/sprint-08.md
         status: done
+      - id: sprint-09
+        file: artifacts/sprints/sprint-09.md
+        status: done
+      - id: sprint-10
+        file: artifacts/sprints/sprint-10.md
+        status: done
+      - id: sprint-11
+        file: artifacts/sprints/sprint-11.md
+        status: done
 
   - id: phase-5
     name: "Release"
-    status: in_progress
+    status: done
     artifacts:
       - id: release-v0.3.0
         file: artifacts/release-notes-v0.3.0.md
@@ -71,7 +80,15 @@ phases:
       - id: changelog-v0.3.0
         file: CHANGELOG-v0.3.0.md
         status: done
-    # duplicate status key removed; pseudo_assets starts here
+      - id: release-v0.4.0-alpha
+        file: artifacts/release-notes-v0.4.0-alpha.md
+        status: done
+      - id: changelog-v0.4.0
+        file: CHANGELOG-v0.4.0.md
+        status: done
+      - id: release-v0.4.0
+        file: artifacts/release-notes-v0.4.0.md
+        status: done
 pseudo_assets:
   deliverables:
     - id: PKA-001
@@ -105,8 +122,8 @@ pseudo_assets:
 
 qa:
   test_plan: done
-  coverage: "509 tests — 208 node:test + 51 vitest (client) + 63 vitest (atoms) + 53 vitest (molecules) + 39 vitest (organisms) + 20 vitest (viewer unit) + 12 Playwright E2E (0 failures)"
-  last_run: "2026-03-28"
+  coverage: "432 passing — 211 node:test + 221 vitest (client+atoms+molecules+organisms+viewer) · 0 failures"
+  last_run: "2026-03-07"
   e2e_ready: true
   e2e_browsers: "Chromium, Firefox, WebKit"
   e2e_tests: "12 scenarios covering asset loading, UI interactions, error handling, accessibility"

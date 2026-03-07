@@ -1,20 +1,101 @@
 # 📋 BMAD Dashboard — pseudo-html-kit
 
-> **Sync:** 2026-03-07 | **Phase:** ✅ v0.4.0 GA Released | **Progress:** Sprint 11 100% complete | **Team:** 1 dev | **Sprints:** 11 complete
+> **Sync:** 2026-03-07 | **Phase:** ✅ v0.4.0 GA — All phases complete | **Tests:** 432 passing, 0 failures | **Components:** 52 | **Sprints:** 11/11 done
 
 ---
 
 ## 🚀 Release Status
 
-| Component | Status | Version | Link |
-|:---|:---:|:---:|:---|
+| Package | Status | Version | Notes |
+|:--------|:------:|:-------:|:------|
 | **pseudo-kit** | ✅ Released | v0.4.0 | [CHANGELOG-v0.4.0.md](../CHANGELOG-v0.4.0.md) |
-| **pseudo-stack-assets** | ✅ Released | v0.4.0 | Part of monorepo |
-| **git tag** | ✅ Tagged | v0.4.0 | CI handles publish |
-
-**v0.4.0 GA** — Sprint 11 complete (4/4 stories). Select/Combobox Listbox API, Textarea anchor hints, Accordion View Transitions. 432 tests passing.
+| **pseudo-stack-assets** | ✅ Released | v0.4.0 | 52 components, 20 frames, 3 demos |
+| **git tag** | ✅ v0.4.0 | — | CI handles npm publish |
 
 ---
+
+## 🏗️ Project Phases
+
+| Phase | Status | Artifact |
+|:------|:------:|:---------|
+| **1 – Analysis** | ✅ Done | [product-brief.md](artifacts/product-brief.md) |
+| **2 – Planning** | ✅ Done | [prd.md](artifacts/prd.md) · [tech-spec.md](artifacts/tech-spec.md) · [roadmap.md](artifacts/roadmap.md) |
+| **3 – Solutioning** | ✅ Done | [architecture.md](artifacts/architecture.md) |
+| **4 – Implementation** | ✅ Done | 11 sprints · 63 stories |
+| **5 – Release** | ✅ Done | v0.3.0 · v0.4.0-alpha · v0.4.0 GA |
+
+---
+
+## 🏃 Sprint History — All Complete
+
+| Sprint | Theme | Pts | Status |
+|:-------|:------|:---:|:------:|
+| [S1](artifacts/sprints/sprint-01.md) | Foundation & Atoms | 25 | ✅ |
+| [S2](artifacts/sprints/sprint-02.md) | Molecules | 21 | ✅ |
+| [S3](artifacts/sprints/sprint-03.md) | Organisms | 28 | ✅ |
+| [S4](artifacts/sprints/sprint-04.md) | Frames | 29 | ✅ |
+| [S5](artifacts/sprints/sprint-05.md) | Viewer | 28 | ✅ |
+| [S6](artifacts/sprints/sprint-06.md) | Netflix + Amazon demos | 22 | ✅ |
+| [S7](artifacts/sprints/sprint-07.md) | Facebook demo + SSR | 22 | ✅ |
+| [S8](artifacts/sprints/sprint-08.md) | Tests, A11y, Docs | 45 | ✅ |
+| [S9](artifacts/sprints/sprint-09.md) | Modal, Dropdown, Tooltip, Notification (2026 APIs) | 24 | ✅ |
+| [S10](artifacts/sprints/sprint-10.md) | Input, Checkbox/Radio, Grid (Constraint Validation, Container Queries) | 17 | ✅ |
+| [S11](artifacts/sprints/sprint-11.md) | Select, Combobox, Textarea, Accordion + v0.4.0 GA | 14 | ✅ |
+
+**Total: 275 pts — 63/63 stories — 0 pending**
+
+---
+
+## 📦 Asset Library
+
+| Layer | Count | New in v0.4.0 |
+|:------|:-----:|:-------------|
+| Atoms | 20 | `select-pk`, `checkbox-pk`, `radio-pk`, `input-pk` (Constraint Validation), `textarea-pk` (anchor hints) |
+| Molecules | 18 | `combobox-pk`, `modal-pk` (`<dialog>`), `dropdown-pk` (Popover), `tooltip-pk` (Anchor), `notification-pk` (Interest), `grid-pk` (CQ) |
+| Organisms | 14 | `accordion-pk` (View Transitions) |
+| Frames | 20 | — |
+| Demo Apps | 3 | Netflix · Amazon · Facebook |
+
+---
+
+## 🧪 Quality Gates
+
+| Check | Status | Details |
+|:------|:------:|:--------|
+| node:test | ✅ 211/211 | Server + shared + index |
+| vitest (atoms) | ✅ 69/69 | — |
+| vitest (molecules) | ✅ 57/57 | — |
+| vitest (organisms) | ✅ 44/44 | — |
+| vitest (client) | ✅ 51/51 | — |
+| **Total** | ✅ **432/432** | 0 failures |
+| E2E | ✅ 12 scenarios | Chromium · Firefox · WebKit |
+| A11y | ✅ 0 regressions | axe-core audit |
+
+---
+
+## 🗺️ Roadmap (next)
+
+| Version | Theme | Status |
+|:--------|:------|:------:|
+| **v0.5.0** | CSS 2026: carousel (Scroll Snap), date-picker, `text-wrap: balance`, CSS `if()` pass | 🔜 planned |
+| **v0.6.0** | DX: React adapter, Svelte 5 adapter, VSCode extension | 📋 planned |
+| **v1.0.0** | Stable API lock, full docs site, WCAG 2.2 AA audit | 📋 planned |
+
+See [roadmap.md](artifacts/roadmap.md) for full detail.
+
+---
+
+## 👉 Next Move
+
+**All sprints complete. v0.4.0 GA shipped.**
+
+```
+bmad plan prd        → draft v0.5.0 PRD (CSS 2026 theme)
+bmad sprint          → create Sprint 12 backlog from roadmap
+bmad audit --code    → baseline audit before v0.5.0
+bmad readme --full   → generate updated full README
+```
+
 
 ## 🏗️ Workflow Status
 

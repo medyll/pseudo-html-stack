@@ -1285,7 +1285,7 @@ Target: **100%** lines, functions, branches, statements on all modules.
 
 ## Asset Library — Pre-built Components
 
-The **pseudo-stack-assets** npm package includes 46 production-ready components, 20 page frame templates, and 3 complete demo apps (Netflix, Amazon, Facebook) — all built with pseudo-kit, zero external dependencies.
+The **pseudo-stack-assets** npm package includes 52 production-ready components, 20 page frame templates, and 3 complete demo apps (Netflix, Amazon, Facebook) — all built with pseudo-kit, zero external dependencies.
 
 ### Installation
 
@@ -1312,9 +1312,9 @@ PseudoKit.init();
 
 | Type | Count | Examples |
 |---|---|---|
-| **Atoms** | 17 | `button-pk`, `text-pk`, `icon-pk`, `divider-pk`, `badge-pk` |
-| **Molecules** | 16 | `card-pk`, `alert-pk`, `tooltip-pk`, `tabs-pk`, `navbar-pk` |
-| **Organisms** | 13 | `modal-pk`, `dropdown-pk`, `carousel-pk`, `accordion-pk` |
+| **Atoms** | 20 | `button-pk`, `input-pk`, `select-pk`, `textarea-pk`, `badge-pk` |
+| **Molecules** | 18 | `card-pk`, `combobox-pk`, `tooltip-pk`, `modal-pk`, `grid-pk` |
+| **Organisms** | 14 | `navbar-pk`, `accordion-pk`, `sidebar-pk`, `feed-post-pk`, `cart-summary-pk` |
 | **Frames** | 20 | Page skeleton templates (empty slots for content) |
 | **Demo Apps** | 3 | Netflix, Amazon, Facebook reference implementations |
 
@@ -1348,12 +1348,13 @@ pseudo-kit follows **Semantic Versioning (SemVer)**.
 
 ### Current Version
 
-**v0.2.0** — Production release (March 2026)
+**v0.4.0** — Production release (March 2026)
 
-- 259 tests passing (0 failures)
-- 46 pre-built components (pseudo-stack-assets)
+- 432 tests passing (0 failures)
+- 52 pre-built components (pseudo-stack-assets)
 - Full SSR support with hydration
 - CSS `@scope` isolation on all components
+- 2026 Web Platform APIs: `<dialog>`, Popover, Anchor Positioning, View Transitions, Listbox API, Constraint Validation, Interest Invokers
 
 See [CHANGELOG.md](CHANGELOG.md) for release history.
 
