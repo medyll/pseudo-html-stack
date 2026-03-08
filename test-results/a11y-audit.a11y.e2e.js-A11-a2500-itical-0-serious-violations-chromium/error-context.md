@@ -1,8 +1,296 @@
 # Page snapshot
 
 ```yaml
-- main [ref=e2]:
-  - generic [ref=e3]:
-    - generic [ref=e4]: "404"
-    - paragraph [ref=e5]: The requested path could not be found
+- generic [active] [ref=e1]:
+  - generic [ref=e2]: All components resolved
+  - main [ref=e3]:
+    - heading "Atoms" [level=2] [ref=e4]
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - generic [ref=e7]: avatar-pk
+        - generic "avatar" [ref=e9]:
+          - img "Jane Doe avatar" [ref=e11]
+      - generic [ref=e12]:
+        - generic [ref=e13]: badge-pk
+        - status [ref=e15]
+      - generic [ref=e16]:
+        - generic [ref=e17]: button-pk
+        - button "Save" [ref=e19] [cursor=pointer]:
+          - generic [ref=e20]: Save
+      - generic [ref=e22]: chip-pk
+      - generic [ref=e25]:
+        - generic [ref=e26]: divider-pk
+        - generic "Section divider" [ref=e27]:
+          - separator [ref=e28]:
+            - generic [ref=e29]: OR
+      - generic [ref=e30]:
+        - generic [ref=e31]: icon-pk
+        - img "Home icon" [ref=e33]:
+          - img [ref=e35]
+      - generic [ref=e37]:
+        - generic [ref=e38]: image-pk
+        - figure [ref=e40]
+      - generic [ref=e41]:
+        - generic [ref=e42]: input-pk
+        - generic [ref=e43]: Email address
+        - textbox "Email address" [ref=e47]:
+          - /placeholder: you@example.com
+      - generic [ref=e49]:
+        - generic [ref=e50]: label-pk
+        - generic [ref=e52]: Full name
+      - generic [ref=e53]:
+        - generic [ref=e54]: loader-pk
+        - generic "Loading content" [ref=e55]:
+          - status "Loading" [ref=e56]
+      - generic [ref=e60]:
+        - generic [ref=e61]: progress-bar-pk
+        - progressbar "Upload progress 65%" [ref=e63]:
+          - generic [ref=e66]: 65%
+      - generic [ref=e67]:
+        - generic [ref=e68]: rating-pk
+        - 'generic "Rating: 4 out of 5 stars" [ref=e69]':
+          - img "Rating" [ref=e70]:
+            - generic [ref=e71]: ★
+            - generic [ref=e72]: ★
+            - generic [ref=e73]: ★
+            - generic [ref=e74]: ★
+            - generic [ref=e75]: ★
+      - generic [ref=e78]: skeleton-pk
+      - generic [ref=e81]:
+        - generic [ref=e82]: spinner-pk
+        - status [ref=e84]:
+          - img [ref=e85]
+          - generic [ref=e88]: Loading
+      - generic [ref=e90]: tag-pk
+      - generic [ref=e93]:
+        - generic [ref=e94]: textarea-pk
+        - generic [ref=e95]: Bio
+        - textbox "Bio" [ref=e98]:
+          - /placeholder: Tell us about yourself
+      - generic [ref=e99]:
+        - generic [ref=e100]: toggle-pk
+        - generic [ref=e102] [cursor=pointer]:
+          - switch "Email notifications" [ref=e103]
+          - generic [ref=e107]: Email notifications
+    - heading "Molecules" [level=2] [ref=e108]
+    - generic [ref=e109]:
+      - generic [ref=e110]:
+        - generic [ref=e111]: breadcrumb-pk
+        - navigation "Breadcrumb" [ref=e113]:
+          - list [ref=e114]:
+            - listitem [ref=e115]:
+              - generic [ref=e116]:
+                - link "Home" [ref=e117] [cursor=pointer]:
+                  - /url: /
+                - generic [ref=e118]: ›
+                - link "Products" [ref=e119] [cursor=pointer]:
+                  - /url: /products
+                - generic [ref=e120]: ›
+                - generic [ref=e121]: Widget
+      - generic [ref=e122]:
+        - generic [ref=e123]: card-pk
+        - article [ref=e125]:
+          - heading "Card Title" [level=3] [ref=e129]
+          - paragraph [ref=e132]: Card body content with some useful information.
+          - button "Learn more" [ref=e136] [cursor=pointer]:
+            - generic [ref=e137]: Learn more
+      - generic [ref=e138]:
+        - generic [ref=e139]: card-media-pk
+        - figure [ref=e141]
+      - generic [ref=e144]:
+        - generic [ref=e145]: dropdown-pk
+        - button "Select option" [ref=e148] [cursor=pointer]:
+          - generic [ref=e150]: Select option
+          - generic [ref=e151]: ▾
+      - generic [ref=e152]:
+        - generic [ref=e153]: form-field-pk
+        - generic [ref=e155]:
+          - generic [ref=e159]: Username
+          - textbox "Username" [ref=e165]:
+            - /placeholder: Enter username
+          - paragraph
+          - alert
+      - generic [ref=e167]:
+        - generic [ref=e168]: list-item-pk
+        - list [ref=e169]:
+          - listitem [ref=e170]:
+            - generic "avatar" [ref=e175]:
+              - img "Alice Johnson avatar" [ref=e177]
+      - generic [ref=e179]:
+        - generic [ref=e180]: menu-item-pk
+        - menu "Actions menu" [ref=e181]:
+          - menuitem "Edit item" [ref=e183] [cursor=pointer]:
+            - img [ref=e187]:
+              - img [ref=e189]
+            - generic [ref=e192]: Edit item
+      - generic [ref=e193]:
+        - generic [ref=e194]: modal-pk
+        - generic "Confirm action"
+      - generic [ref=e195]:
+        - generic [ref=e196]: notification-pk
+        - alert [ref=e198]:
+          - generic [ref=e199]: Operation completed successfully.
+      - generic [ref=e200]:
+        - generic [ref=e201]: pagination-pk
+        - generic "Page navigation" [ref=e202]:
+          - navigation "Pagination" [ref=e203]:
+            - button "Previous page" [ref=e204] [cursor=pointer]: ‹
+            - list [ref=e205]:
+              - listitem [ref=e206]:
+                - button "1" [ref=e207] [cursor=pointer]
+              - listitem [ref=e208]:
+                - button "2" [ref=e209] [cursor=pointer]
+              - listitem [ref=e210]:
+                - button "3" [ref=e211] [cursor=pointer]
+            - button "Next page" [ref=e212] [cursor=pointer]: ›
+      - generic [ref=e213]:
+        - generic [ref=e214]: price-tag-pk
+        - generic [ref=e217]: $29.99
+      - generic [ref=e219]:
+        - generic [ref=e220]: product-tile-pk
+        - generic "Widget Pro" [ref=e221]:
+          - article [ref=e222]:
+            - img "Widget Pro product image" [ref=e225]
+            - button "Add to cart" [ref=e230] [cursor=pointer]:
+              - generic [ref=e231]: Add to cart
+      - generic [ref=e232]:
+        - generic [ref=e233]: search-bar-pk
+        - generic "Search products" [ref=e234]:
+          - search [ref=e235]:
+            - searchbox "Search" [ref=e236]
+      - generic [ref=e237]:
+        - generic [ref=e238]: tab-bar-pk
+        - generic "Product tabs" [ref=e239]:
+          - tablist [ref=e240]:
+            - tab "Overview" [selected] [ref=e241] [cursor=pointer]:
+              - generic [ref=e242]: Overview
+            - tab "Reviews" [ref=e243] [cursor=pointer]:
+              - generic [ref=e244]: Reviews
+            - tab "Specs" [ref=e245] [cursor=pointer]:
+              - generic [ref=e246]: Specs
+      - generic [ref=e247]:
+        - generic [ref=e248]: tooltip-pk
+        - tooltip "Hover me" [ref=e250]:
+          - button "Hover me" [ref=e254] [cursor=pointer]:
+            - generic [ref=e255]: Hover me
+      - generic [ref=e256]:
+        - generic [ref=e257]: user-info-pk
+        - generic [ref=e259]:
+          - generic "avatar" [ref=e263]:
+            - img "Alice Chen avatar" [ref=e265]
+          - generic [ref=e268]: Product Designer
+    - heading "Organisms" [level=2] [ref=e269]
+    - generic [ref=e270]:
+      - generic [ref=e271]:
+        - generic [ref=e272]: cart-summary-pk
+        - complementary [ref=e274]:
+          - heading "Order Summary" [level=2] [ref=e276]:
+            - generic [ref=e277]: Order Summary
+          - generic [ref=e280]: Widget × 2 — $59.98
+      - generic [ref=e284]:
+        - generic [ref=e285]: comment-thread-pk
+        - generic [ref=e287]:
+          - generic [ref=e291]: First comment text here.
+          - textbox "Write a comment" [ref=e294]:
+            - /placeholder: Write a comment…
+      - generic [ref=e295]:
+        - generic [ref=e296]: content-row-pk
+        - generic [ref=e300]:
+          - img "Thumbnail 1" [ref=e301]
+          - img "Thumbnail 2" [ref=e302]
+      - generic [ref=e303]:
+        - generic [ref=e304]: feed-post-pk
+        - article [ref=e306]:
+          - generic [ref=e307]:
+            - generic "avatar" [ref=e311]:
+              - img "Author avatar" [ref=e313]
+            - generic [ref=e316]:
+              - text: Jane Doe
+              - time [ref=e317]: Just now
+      - generic [ref=e320]:
+        - generic [ref=e321]: footer-pk
+        - generic [ref=e323]:
+          - generic [ref=e324]:
+            - generic [ref=e326]: Acme Inc.
+            - navigation "Footer navigation" [ref=e327]:
+              - generic [ref=e328]:
+                - link "About" [ref=e329] [cursor=pointer]:
+                  - /url: /about
+                - link "Privacy" [ref=e330] [cursor=pointer]:
+                  - /url: /privacy
+          - generic [ref=e332]: © 2026 Acme Inc. All rights reserved.
+      - generic [ref=e333]:
+        - generic [ref=e334]: hero-banner-pk
+        - generic [ref=e338]:
+          - heading "Welcome to Acme" [level=1] [ref=e341]
+          - button "Get started" [ref=e345] [cursor=pointer]:
+            - generic [ref=e346]: Get started
+      - generic [ref=e347]:
+        - generic [ref=e348]: navbar-pk
+        - generic [ref=e351]:
+          - link "Logo" [ref=e354] [cursor=pointer]:
+            - /url: /
+          - navigation "Main navigation" [ref=e355]:
+            - generic [ref=e356]:
+              - link "Products" [ref=e357] [cursor=pointer]:
+                - /url: /products
+              - link "Pricing" [ref=e358] [cursor=pointer]:
+                - /url: /pricing
+          - button "Sign in" [ref=e362] [cursor=pointer]:
+            - generic [ref=e363]: Sign in
+      - generic [ref=e364]:
+        - generic [ref=e365]: product-detail-pk
+        - generic [ref=e368]:
+          - img "Product detail image" [ref=e371]
+          - generic [ref=e372]:
+            - generic [ref=e375]:
+              - heading "Widget Pro" [level=1] [ref=e376]
+              - paragraph [ref=e377]: Professional-grade widget for modern workflows.
+            - button "Add to cart" [ref=e381] [cursor=pointer]:
+              - generic [ref=e382]: Add to cart
+      - generic [ref=e383]:
+        - generic [ref=e384]: profile-card-pk
+        - article [ref=e386]:
+          - generic [ref=e388]:
+            - generic "avatar" [ref=e392]:
+              - img "Alice Chen avatar" [ref=e394]
+            - generic:
+              - heading [level=2]
+              - paragraph
+            - button "Follow" [ref=e399] [cursor=pointer]:
+              - generic [ref=e400]: Follow
+      - generic [ref=e401]:
+        - generic [ref=e402]: sidebar-pk
+        - complementary [ref=e404]:
+          - generic [ref=e405]:
+            - generic [ref=e407]: Navigation
+            - navigation "Sidebar navigation" [ref=e408]:
+              - list [ref=e410]:
+                - listitem [ref=e411]:
+                  - link "Home" [ref=e412] [cursor=pointer]:
+                    - /url: /
+                - listitem [ref=e413]:
+                  - link "Products" [ref=e414] [cursor=pointer]:
+                    - /url: /products
+      - generic [ref=e416]:
+        - generic [ref=e417]: story-ring-pk
+        - generic "Stories" [ref=e418]:
+          - generic [ref=e422] [cursor=pointer]:
+            - generic "avatar" [ref=e424]:
+              - img "Alice story" [ref=e426]
+            - generic [ref=e427]: Alice
+      - generic [ref=e428]:
+        - generic [ref=e429]: thumbnail-grid-pk
+        - generic "Photo gallery" [ref=e430]:
+          - generic [ref=e432]:
+            - img "Photo 1" [ref=e433]
+            - img "Photo 2" [ref=e434]
+            - img "Photo 3" [ref=e435]
+      - generic [ref=e436]:
+        - generic [ref=e437]: topbar-pk
+        - generic [ref=e439]:
+          - button "Go back" [ref=e442] [cursor=pointer]: ←
+          - generic [ref=e444]: Dashboard
+          - button "Menu" [ref=e448] [cursor=pointer]:
+            - generic [ref=e449]: Menu
 ```

@@ -34,7 +34,6 @@
     "test:all": "pnpm test && pnpm run test:client && pnpm run test:components && pnpm run test:viewer && pnpm run test:e2e",
     "test:coverage": "vitest run --coverage",
     "test:a11y": "playwright test --config playwright.a11y.config.js",
-    "serve:canvas": "npx serve src/pseudo-canvas/ -p 3000",
     "serve:src": "npx serve src/ -p 3001",
     "add-knowledge": "node scripts/add-knowledge-cli.js"
   },

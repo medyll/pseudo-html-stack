@@ -241,5 +241,6 @@ pseudo-kit-react/ (new — v0.1.0)
 1. **Publish v0.3.0** (complete from Sprint 08) — CI handles npm publish
 2. **Tag v0.4.0-alpha** — Release candidate for API migration
 3. **Plan Sprint 10** — Additional component migrations (forms, layout) or formal v0.4.0 GA
+4. **Start Sprint 13 — S13-01** — Hydration in progress (frontend-team)
 
 **Suggested:** Run `/next` for orchestrator next-step recommendation.

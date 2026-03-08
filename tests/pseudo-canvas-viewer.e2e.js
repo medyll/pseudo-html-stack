@@ -15,7 +15,7 @@ test.describe('pseudo-canvas-viewer E2E', () => {
   
   test.beforeEach(async ({ page }) => {
     // Navigate to viewer
-    await page.goto('/viewer/pseudo-canvas-viewer.html');
+    await page.goto('/pseudo-canvas/viewer/pseudo-canvas-viewer.html');
     // Wait for UI to initialize
     await page.waitForSelector('#btn-auto', { timeout: 5000 });
   });
@@ -279,7 +279,7 @@ test.describe('pseudo-canvas-viewer E2E', () => {
     });
     
     // Navigate and wait
-    await page.goto('/viewer/pseudo-canvas-viewer.html');
+    await page.goto('/pseudo-canvas/viewer/pseudo-canvas-viewer.html');
     await page.waitForTimeout(1000);
     
     // Should have no critical errors

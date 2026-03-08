@@ -254,7 +254,7 @@ migration_v040:
         points: 4
         status: done
 
-recommendation: "S13-01 started: Hydration in_progress (frontend-team). Next: run unit and client tests for hydration."
+recommendation: "Sprint-13 planned: start implementation with S13-01 (Hydration)."
 audit:
   baseline: true
   file: artifacts/audit-baseline-2026-03-07.md
