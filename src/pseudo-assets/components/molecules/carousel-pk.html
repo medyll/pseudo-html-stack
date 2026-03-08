@@ -1,0 +1,55 @@
+<!--
+  @component carousel-pk
+  @layer molecules
+  @slot default - slides (any element)
+-->
+<template>
+  <div class="carousel" role="group" aria-roledescription="carousel">
+    <div class="carousel__viewport">
+      <div class="carousel__track">
+        <slot></slot>
+      </div>
+    </div>
+    <div class="carousel__controls">
+      <button class="carousel__prev" aria-label="Previous slide">‹</button>
+      <button class="carousel__next" aria-label="Next slide">›</button>
+    </div>
+  </div>
+</template>
+
+<style>
+@scope (.carousel) {
+  :scope { --gap: .5rem; }
+  .carousel__viewport {
+    overflow: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+  .carousel__track {
+    display: flex;
+    gap: var(--gap);
+  }
+  ::slotted(*) {
+    scroll-snap-align: center;
+    flex: 0 0 80%;
+  }
+  .carousel__controls { display:flex; gap:.5rem; margin-top:.5rem; }
+}
+</style>
+
+<script>
+// Minimal behavior: wire prev/next to scroll the viewport by one child width
+const viewport = el.querySelector('.carousel__viewport');
+const prev = el.querySelector('.carousel__prev');
+const next = el.querySelector('.carousel__next');
+
+function _slide(delta) {
+  const children = viewport.querySelectorAll(':scope > .carousel__track > *');
+  if (!children.length) return;
+  // approximate by current scrollLeft + viewport clientWidth * sign
+  const step = viewport.clientWidth * 0.9 * Math.sign(delta);
+  viewport.scrollBy({ left: step, behavior: 'smooth' });
+}
+prev.addEventListener('click', () => _slide(-1));
+next.addEventListener('click', () => _slide(1));
+</script>
