@@ -38,18 +38,115 @@
 </style>
 
 <script>
-// Minimal behavior: wire prev/next to scroll the viewport by one child width
+// Accessibility polish: pagination dots, keyboard navigation, and aria-live announcements
 const viewport = el.querySelector('.carousel__viewport');
+const track = el.querySelector('.carousel__track');
 const prev = el.querySelector('.carousel__prev');
 const next = el.querySelector('.carousel__next');
 
-function _slide(delta) {
-  const children = viewport.querySelectorAll(':scope > .carousel__track > *');
-  if (!children.length) return;
-  // approximate by current scrollLeft + viewport clientWidth * sign
-  const step = viewport.clientWidth * 0.9 * Math.sign(delta);
-  viewport.scrollBy({ left: step, behavior: 'smooth' });
+// Announcer for screen readers
+let announcer = el.querySelector('.carousel__announcer');
+if (!announcer) {
+  announcer = document.createElement('div');
+  announcer.className = 'carousel__announcer';
+  announcer.setAttribute('aria-live', 'polite');
+  announcer.setAttribute('aria-atomic', 'true');
+  announcer.style.position = 'absolute';
+  announcer.style.left = '-9999px';
+  announcer.style.width = '1px';
+  announcer.style.height = '1px';
+  announcer.style.overflow = 'hidden';
+  el.appendChild(announcer);
 }
+
+// Pagination container
+let pagination = el.querySelector('.carousel__pagination');
+if (!pagination) {
+  pagination = document.createElement('div');
+  pagination.className = 'carousel__pagination';
+  pagination.setAttribute('role', 'tablist');
+  el.querySelector('.carousel__controls')?.after(pagination);
+}
+
+function _children() {
+  return Array.from(track.querySelectorAll(':scope > *'));
+}
+
+function _currentIndex() {
+  const children = _children();
+  if (!children.length) return -1;
+  // Find index of closest centered item by measuring scrollLeft
+  const scrollLeft = viewport.scrollLeft;
+  const widths = viewport.clientWidth;
+  // approximate center index
+  let best = 0, bestDist = Infinity;
+  children.forEach((c, i) => {
+    const left = c.offsetLeft;
+    const center = left - scrollLeft + c.offsetWidth / 2 - widths / 2;
+    const dist = Math.abs(center);
+    if (dist < bestDist) { bestDist = dist; best = i; }
+  });
+  return best;
+}
+
+function _updatePagination() {
+  const children = _children();
+  pagination.innerHTML = '';
+  children.forEach((c, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'carousel__dot';
+    btn.type = 'button';
+    btn.setAttribute('aria-label', `Go to slide ${i + 1}`);
+    btn.addEventListener('click', () => _goto(i));
+    pagination.appendChild(btn);
+  });
+  _highlightCurrentDot();
+}
+
+function _highlightCurrentDot() {
+  const idx = _currentIndex();
+  const dots = Array.from(pagination.children);
+  dots.forEach((d, i) => d.setAttribute('aria-pressed', i === idx ? 'true' : 'false'));
+}
+
+function _announce(text) {
+  announcer.textContent = text;
+}
+
+function _goto(index) {
+  const children = _children();
+  if (index < 0 || index >= children.length) return;
+  const target = children[index];
+  const left = target.offsetLeft - (viewport.clientWidth - target.offsetWidth) / 2;
+  viewport.scrollTo({ left, behavior: 'smooth' });
+  _announce(`Slide ${index + 1} of ${children.length}`);
+  setTimeout(_highlightCurrentDot, 300);
+}
+
+function _slide(delta) {
+  const idx = _currentIndex();
+  if (idx === -1) return;
+  _goto(idx + delta);
+}
+
 prev.addEventListener('click', () => _slide(-1));
 next.addEventListener('click', () => _slide(1));
+
+// Keyboard support on the viewport
+viewport.tabIndex = viewport.tabIndex || 0;
+viewport.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight') { e.preventDefault(); _slide(1); }
+  else if (e.key === 'ArrowLeft') { e.preventDefault(); _slide(-1); }
+  else if (e.key === 'Home') { e.preventDefault(); _goto(0); }
+  else if (e.key === 'End') { e.preventDefault(); _goto(_children().length - 1); }
+});
+
+// Rebuild pagination when DOM changes
+const mo = new MutationObserver(() => {
+  _updatePagination();
+});
+mo.observe(track, { childList: true });
+
+// Initial build
+_updatePagination();
 </script>
