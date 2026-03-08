@@ -1,0 +1,59 @@
+<!--
+  @component date-picker-pk
+  @layer molecules
+  @slot default - optional calendar content
+-->
+<template>
+  <div class="date-picker">
+    <input class="date-picker__input" type="date" aria-haspopup="dialog" aria-expanded="false" />
+    <div class="date-picker__popover" role="dialog" aria-modal="false" style="display:none" aria-hidden="true">
+      <div class="date-picker__calendar" role="grid"></div>
+    </div>
+  </div>
+</template>
+
+<style>
+@scope (.date-picker) {
+  :scope { position: relative; }
+  .date-picker__popover { position: absolute; top: 100%; left: 0; z-index: 1000; background: var(--color-surface-1,#fff); border: 1px solid var(--color-border,#cbd5e0); padding:.5rem; box-shadow: var(--shadow-md,0 6px 18px rgba(0,0,0,.12)); }
+  .date-picker__input { padding:.35rem .5rem; }
+}
+</style>
+
+<script>
+// Minimal enhancement: show popover fallback when browser doesn't support native date UI or when the input receives focus
+const input = el.querySelector('.date-picker__input');
+const pop = el.querySelector('.date-picker__popover');
+
+function _supportsNativeDate() {
+  const i = document.createElement('input');
+  i.type = 'date';
+  return i.type === 'date' && i.showPicker !== undefined;
+}
+
+function _open() {
+  if (typeof input.showPicker === 'function') {
+    try { input.showPicker(); return; } catch (e) { /* fall through to fallback */ }
+  }
+  pop.style.display = '';
+  pop.removeAttribute('aria-hidden');
+  input.setAttribute('aria-expanded', 'true');
+}
+function _close() {
+  pop.style.display = 'none';
+  pop.setAttribute('aria-hidden', 'true');
+  input.setAttribute('aria-expanded', 'false');
+}
+
+input.addEventListener('focus', () => { if (!_supportsNativeDate()) _open(); });
+input.addEventListener('click', () => { if (!_supportsNativeDate()) _open(); });
+
+// Simple calendar placeholder for tests — real calendar generation is out of scope for skeleton
+const calendar = el.querySelector('.date-picker__calendar');
+calendar.textContent = 'Calendar (placeholder)';
+
+// Close on outside click
+document.addEventListener('click', (ev) => {
+  if (!el.contains(ev.target)) _close();
+});
+</script>
