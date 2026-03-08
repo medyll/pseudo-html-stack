@@ -40,7 +40,12 @@ v0.5.0 focuses on shipping modern, low-JS UI components that leverage stable and
 - S12-02 — carousel-pk: keyboard + touch + a11y polish (3 pts)
 - S12-03 — date-picker-pk: calendar popover + fallback (5 pts)
 - S12-04 — color-swatch-pk: component + tests (3 pts)
-- S12-05 — docs + demos + PR (2 pts)
+- S12-05 — docs + demos + PR (2 pts) — done
+
+## Demo
+
+A small static demo page (pseudo-assets/demos/v0.5-demo.html) showcases the new components for v0.5.0: carousel-pk, date-picker-pk, and color-swatch-pk. The demo is static and links to local component files to make manual QA and visual checks simple.
+
 
 ## Deliverables
 - bmad/artifacts/prd-v0.5.0.md (final PRD)

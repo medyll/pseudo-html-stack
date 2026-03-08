@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>pseudo-html-kit v0.5.0 demo</title>
+</head>
+<body>
+  <h1>pseudo-html-kit v0.5.0 demo</h1>
+
+  <section>
+    <h2>Carousel (carousel-pk)</h2>
+    <carousel-pk>
+      <div slot="slide">Slide 1</div>
+      <div slot="slide">Slide 2</div>
+      <div slot="slide">Slide 3</div>
+    </carousel-pk>
+  </section>
+
+  <section>
+    <h2>Date picker (date-picker-pk)</h2>
+    <date-picker-pk>
+      <input type="date" name="when" />
+    </date-picker-pk>
+  </section>
+
+  <section>
+    <h2>Color swatch (color-swatch-pk)</h2>
+    <color-swatch-pk>
+      <button data-value="#ff0000" aria-selected="true" style="background:#ff0000;width:32px;height:32px;border-radius:6px;border:1px solid #ccc"></button>
+      <button data-value="#00ff00" style="background:#00ff00;width:32px;height:32px;border-radius:6px;border:1px solid #ccc"></button>
+      <button data-value="#0000ff" style="background:#0000ff;width:32px;height:32px;border-radius:6px;border:1px solid #ccc"></button>
+    </color-swatch-pk>
+  </section>
+
+  <p>Static demo linking to local component files.</p>
+</body>
+</html>
