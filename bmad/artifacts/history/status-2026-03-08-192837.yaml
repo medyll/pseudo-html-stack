@@ -1,0 +1,6 @@
+# Snapshot of bmad/status.yaml — 2026-03-08 19:28:37 UTC
+
+changelog:
+  - s13-03-triage-notification marked done
+  - s13-03-fix-migration-e2e-flaky-chromium moved to in_progress
+  - dashboard and status recommendation updated to point to implementation

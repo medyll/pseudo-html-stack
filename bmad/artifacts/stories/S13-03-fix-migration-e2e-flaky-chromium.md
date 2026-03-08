@@ -20,10 +20,10 @@ Acceptance criteria
 
 Tasks
 -----
-1. s13-03-triage-dropdown — reproduce dropdown/menu visibility and determine root cause (selectors vs popover state)
-2. s13-03-triage-notification — reproduce notification autodismiss/dismiss timing; ensure dismiss button visible and autodismiss reliable
-3. s13-03-fix-integration-overlay — reproduce integration overlay and implement ordering/z-index or test ordering fix
-4. s13-03-fix-migration-e2e-flaky-chromium — implement fixes, update tests, and re-run Chromium Playwright suite
+1. s13-03-triage-dropdown (in_progress) — reproduce dropdown/menu visibility and determine root cause (selectors vs popover state) — owner: frontend-team
+2. s13-03-triage-notification (done) — reproduce notification autodismiss/dismiss timing; ensure dismiss button visible and autodismiss reliable — owner: frontend-team
+3. s13-03-fix-integration-overlay (in_progress) — reproduce integration overlay and implement ordering/z-index or test ordering fix — owner: frontend-team
+4. s13-03-fix-migration-e2e-flaky-chromium (in_progress) — implement fixes, update tests, and prepare changes for review — owner: frontend-team
 
 Notes
 -----

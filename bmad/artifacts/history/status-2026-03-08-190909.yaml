@@ -1,0 +1,7 @@
+# Snapshot of bmad/status.yaml — 2026-03-08 19:09:09 UTC
+
+recommendation: "S13-03 in_progress: triage-dropdown, triage-notification, fix-integration-overlay in_progress. Next: s13-03-triage-notification (frontend-team)."
+
+# Short changelog:
+# - s13-03 story moved to in_progress and subtasks set to in_progress
+# - E2E-FLAKY-01 recorded in bugs

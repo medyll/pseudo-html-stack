@@ -242,6 +242,6 @@ pseudo-kit-react/ (new — v0.1.0)
 2. **Tag v0.4.0-alpha** — Release candidate for API migration
 3. **Plan Sprint 10** — Additional component migrations (forms, layout) or formal v0.4.0 GA
 4. **Start Sprint 13 — S13-01** — Hydration in progress (frontend-team)
-5. **Start Sprint 13 — S13-03** — Fix migration E2E flaky tests (Chromium) — in_progress (frontend-team)
+5. **Start Sprint 13 — S13-03** — Fix migration E2E flaky tests (Chromium) — in_progress (frontend-team) — subtasks: triage-dropdown (in_progress), triage-notification (done), fix-integration-overlay (in_progress) — implementation started — PR draft created (bmad/artifacts/S13-03-pr-draft.md)
 
 **Suggested:** Run `/next` for orchestrator next-step recommendation.

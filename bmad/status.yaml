@@ -274,7 +274,7 @@ migration_v040:
         points: 4
         status: done
 
-recommendation: "S13-03 started: Fix migration E2E flaky tests (Chromium) — s13-03-triage-dropdown in_progress. Next: triage dropdown (frontend-team)."
+recommendation: "S13-03 in_progress: triage-dropdown, triage-notification, fix-integration-overlay in_progress. Next: s13-03-fix-migration-e2e-flaky-chromium (frontend-team). PR draft created at bmad/artifacts/S13-03-pr-draft.md. Run headed Chromium locally and attach logs/screenshots."
 audit:
   baseline: true
   file: artifacts/audit-baseline-2026-03-07.md
