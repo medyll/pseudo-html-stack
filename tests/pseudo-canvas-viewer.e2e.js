@@ -132,7 +132,7 @@ test.describe('pseudo-canvas-viewer E2E', () => {
   
   test('E2E-T6: handle query parameters on load', async ({ page }) => {
     // Navigate with canvas query param
-    await page.goto('/viewer/pseudo-canvas-viewer.html?canvas=../pseudo-canvas-demo.html');
+    await page.goto('/pseudo-canvas/viewer/pseudo-canvas-viewer.html?canvas=../pseudo-canvas-demo.html');
     
     // Page should load without errors
     await expect(page).toHaveTitle(/pseudo-canvas-viewer/i);

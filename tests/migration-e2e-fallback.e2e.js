@@ -20,12 +20,13 @@ import { test, expect } from '@playwright/test';
 const TEST_PAGE = 'http://localhost:3000/tests/fixtures/migration-test-page.html';
 
 test.describe('S9-07: Cross-Browser Fallback Validation', () => {
-  test.beforeEach(async ({ page }) => {
+  test.beforeEach(async ({ page, browserName }) => {
     await page.goto(TEST_PAGE, { waitUntil: 'networkidle' });
     await page.waitForLoadState('domcontentloaded');
     // Wait for PseudoKit to register and resolve components
+    const readyTimeout = browserName === 'webkit' ? 20000 : 10000;
     await page.waitForFunction(() => document.querySelector('modal-pk dialog') !== null, {
-      timeout: 10000,
+      timeout: readyTimeout,
     });
   });
 

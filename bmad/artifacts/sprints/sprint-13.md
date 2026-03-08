@@ -9,8 +9,13 @@ stories:
 - id: S13-01
   title: "Hydration: Fix SSR↔CSR handshake mismatches"
   points: 5
-  status: pending
+  status: in_progress
   owner: "frontend-team"
+- id: S13-01-fix-e2e
+  title: "Fix pseudo-canvas-viewer E2E failure (hydration)"
+  points: 3
+  status: pending
+  owner: "developer"
 - id: S13-02
   title: "Select/Listbox migration to new Listbox API"
   points: 5

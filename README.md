@@ -154,6 +154,8 @@ The **pseudo-canvas-viewer** is a Figma-style component preview tool. It require
 npm run serve:canvas
 # → Serves on http://localhost:3000
 # → Open: http://localhost:3000/viewer/pseudo-canvas-viewer.html
+
+Note: This project targets Chromium as the primary browser runtime. Some features rely on modern CSS/HTML APIs (Anchor Positioning, Popover API, Interest Invokers) and may not fully work in WebKit/older Firefox. WebKit compatibility tests are deferred.
 ```
 
 ### Creating a Component

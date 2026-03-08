@@ -152,17 +152,10 @@ qa:
       fix: "strip <script> tag from HTML string before DOMParser call in _loadComponent; captured via rawScriptMatch regex first"
     - id: HYD-E2E-01
       title: "pseudo-canvas-viewer E2E: missing page title on load"
-      status: fixed
-      details: 'Fixed test path; Playwright Chromium run passed'
+      status: open
+      details: "Playwright test tests/pseudo-canvas-viewer.e2e.js failed: expect page title to match /pseudo-canvas-viewer/i; screenshot at test-results\pseudo-canvas-viewer.e2e.j-0eb1b-le-query-parameters-on-load-webkit\test-failed-1.png"
       reported_by: bmad-master
       linked_story: artifacts/stories/S13-01-fix-hydration-e2e.md
-
-    - id: WEBKIT-E2E-01
-      title: "Playwright: WebKit failures — migration-e2e integration timeouts"
-      status: deferred
-      details: "Chromium-first policy: WebKit tests deferred due to deliberate use of CSS/HTML APIs that target Chromium. Keep story in backlog for potential future porting."
-      reported_by: bmad-master
-      linked_story: artifacts/stories/S13-02-fix-webkit-e2e.md
 
 decisions:
   - pkg_structure: "pseudo-kit-assets as separate npm package"

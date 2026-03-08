@@ -68,7 +68,7 @@
 | vitest (organisms) | ✅ 44/44 | — |
 | vitest (client) | ✅ 51/51 | — |
 | **Total** | ✅ **432/432** | 0 failures |
-| E2E | ✅ 12 scenarios | Chromium · Firefox · WebKit |
+| E2E | ✅ 12 scenarios | Chromium (primary) · Firefox/WebKit (deferred) |
 | A11y | ✅ 0 regressions | axe-core audit |
 
 ---
@@ -227,7 +227,7 @@ pseudo-kit-react/ (new — v0.1.0)
 | Smoke Tests | ✅ 4/5 passing (page load, component registration, zero errors) |
 | Cross-browser | ✅ Chromium, Firefox 128+, Safari 17.4+ |
 | A11y | 0 regressions |
-| Open bugs | 0 |
+| Open bugs | 1 |
 
 **v0.4.0-alpha Quality Gates:** All ✅ — Ready for alpha release
 

@@ -159,8 +159,8 @@ qa:
 
     - id: WEBKIT-E2E-01
       title: "Playwright: WebKit failures — migration-e2e integration timeouts"
-      status: deferred
-      details: "Chromium-first policy: WebKit tests deferred due to deliberate use of CSS/HTML APIs that target Chromium. Keep story in backlog for potential future porting."
+      status: open
+      details: "Playwright WebKit run produced timeouts in tests/migration-e2e.e2e.js; see test-results\\migration-e2e.e2e.js-S9-06-e5428--and-interact-independently-webkit\\test-failed-1.png"
       reported_by: bmad-master
       linked_story: artifacts/stories/S13-02-fix-webkit-e2e.md
 
