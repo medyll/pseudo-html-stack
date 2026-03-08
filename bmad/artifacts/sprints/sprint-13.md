@@ -10,18 +10,22 @@ stories:
   title: "Hydration: Fix SSR↔CSR handshake mismatches"
   points: 5
   status: pending
+  owner: "frontend-team"
 - id: S13-02
   title: "Select/Listbox migration to new Listbox API"
   points: 5
   status: pending
+  owner: "frontend-team"
 - id: S13-03
   title: "Tests: add e2e and unit coverage for hydration & parsing edge cases"
   points: 3
   status: pending
+  owner: "qa-team"
 - id: S13-04
   title: "Cross-browser fallback validation & bug fixes"
   points: 3
   status: pending
+  owner: "frontend-team"
 
 # Notes
 Based on bmad/artifacts/prd-next.md
