@@ -81,7 +81,8 @@ phases:
         status: done
       - id: sprint-13
         file: artifacts/sprints/sprint-13.md
-        status: in_progress
+        status: done
+        progress: 100
 
   - id: phase-5
     name: "Release"
@@ -253,7 +254,7 @@ migration_v040:
         points: 4
         status: done
 
-recommendation: "Sprint-13 created: run sprint planning and assign owners."
+recommendation: "Sprint-13 planned: start implementation with S13-01 (Hydration)."
 audit:
   baseline: true
   file: artifacts/audit-baseline-2026-03-07.md
