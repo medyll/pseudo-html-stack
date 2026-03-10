@@ -1,0 +1,92 @@
+/*
+ * skins/facebook.css — skin Facebook / Meta
+ * Dépend de : theme/theme.css  (layers theme.reset, theme.tokens, theme.palette déclarés)
+ * Usage : <html data-skin="facebook">
+ */
+
+@layer skin {
+
+  @scope ([data-skin="facebook"]) {
+    :scope {
+      color-scheme: light;
+
+      /* ── Primaire ── */
+      --color-primary:          #1877f2;
+      --color-primary-hover:    hsl(from #1877f2 h s calc(l - 6%));
+      --color-primary-contrast: #ffffff;
+      --color-primary-muted:    hsl(from #1877f2 h s calc(l + 30%));
+
+      --color-primary-alpha-hover:   alpha(var(--color-primary), var(--alpha-hover));
+      --color-primary-alpha-focus:   alpha(var(--color-primary), var(--alpha-focus));
+      --color-primary-alpha-pressed: alpha(var(--color-primary), var(--alpha-pressed));
+
+      /* ── Sémantiques ── */
+      --color-danger:        #f02849;
+      --color-danger-hover:  hsl(from #f02849 h s calc(l - 8%));
+      --color-danger-alpha:  alpha(var(--color-danger), var(--alpha-focus));
+
+      --color-success:       #42b72a;
+      --color-success-hover: hsl(from #42b72a h s calc(l - 8%));
+      --color-success-alpha: alpha(var(--color-success), var(--alpha-focus));
+
+      --color-info:          #1877f2;
+      --color-info-hover:    hsl(from #1877f2 h s calc(l - 6%));
+      --color-info-alpha:    alpha(var(--color-info), var(--alpha-focus));
+
+      /* ── Surfaces ── */
+      --color-surface:       #ffffff;
+      --color-surface-2:     #f0f2f5;
+      --color-surface-3:     #e4e6eb;
+      --color-border:        #e4e6eb;
+      --color-border-strong: #ccd0d5;
+
+      /* ── Texte ── */
+      --color-text:          #050505;
+      --color-text-muted:    #65676b;
+      --color-text-disabled: #bcc0c4;
+      --color-text-inverse:  #ffffff;
+
+      /* ── Overlays ── */
+      --scrim:              alpha(#000000, var(--alpha-scrim));
+      --color-glass:        alpha(#ffffff, 0.90);
+      --color-glass-border: alpha(#000000, 0.08);
+
+      /* ── Shadows ── */
+      --shadow-color:  220 5% 20%;
+      --shadow-sm:   0 1px 2px   hsl(var(--shadow-color) / 0.10);
+      --shadow-md:   0 2px 8px   hsl(var(--shadow-color) / 0.14);
+      --shadow-lg:   0 4px 16px  hsl(var(--shadow-color) / 0.18);
+      --shadow-xl:   0 8px 32px  hsl(var(--shadow-color) / 0.22);
+
+      /* ── Marque ── */
+      --font-sans:   -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif;
+      --radius-sm:   .375rem;
+      --radius-md:   .5rem;
+      --radius-lg:   .75rem;
+      --radius-xl:   1rem;
+      --radius-full: 9999px;
+
+      /* ── Layout ── */
+      --page-x:   1rem;
+      --page-max: 1400px;
+
+      /* ── Z-index ── */
+      --z-navbar: 100;
+    }
+  }
+
+  [data-skin="facebook"] {
+    background-color: var(--color-surface-2);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+  }
+
+  @scope ([data-skin="facebook"]) {
+    a { color: var(--color-primary); }
+    a:hover { text-decoration: none; }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-thumb { background: #c5c6c7; border-radius: 3px; }
+  }
+
+}

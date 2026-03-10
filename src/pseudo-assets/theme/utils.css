@@ -1,0 +1,78 @@
+/*
+ * utils.css — mixins @function CSS natifs
+ *
+ * Dépend de : theme/theme.css (tokens --alpha-*, --shadow-*, --duration-*, --easing-*)
+ * Chargé après theme.css, avant les skins.
+ *
+ * Usage :
+ *   <link rel="stylesheet" href=".../theme/theme.css">
+ *   <link rel="stylesheet" href=".../theme/utils.css">
+ */
+
+/**
+ * alpha($color, $opacity)
+ * Applique une transparence à n'importe quelle couleur via relative color syntax.
+ * Fonctionne sur hex, hsl, rgb, oklch, var(--token), light-dark()…
+ *
+ * @param $color   — toute valeur couleur CSS valide
+ * @param $opacity — valeur entre 0 et 1, ou token --alpha-*
+ *
+ * Exemple :
+ *   background: alpha(var(--color-primary), 0.12);
+ *   border:     1px solid alpha(var(--color-text), var(--alpha-focus));
+ */
+@function alpha($color, $opacity) {
+  @return hsl(from $color h s l / $opacity);
+}
+
+/**
+ * elevation($level)
+ * Shadow sémantique 0–4 mappée sur les tokens --shadow-*.
+ *
+ * Exemple :
+ *   box-shadow: elevation(2);
+ */
+@function elevation($level) {
+  @if $level == 0 { @return none; }
+  @if $level == 1 { @return var(--shadow-sm); }
+  @if $level == 2 { @return var(--shadow-md); }
+  @if $level == 3 { @return var(--shadow-lg); }
+  @return var(--shadow-xl);
+}
+
+/**
+ * focus-ring($color)
+ * Focus visible ring cohérent basé sur alpha().
+ *
+ * Exemple :
+ *   box-shadow: focus-ring(var(--color-primary));
+ */
+@function focus-ring($color: var(--color-primary)) {
+  @return 0 0 0 3px alpha($color, var(--alpha-focus));
+}
+
+/**
+ * transition($props…)
+ * Transition standard basée sur --duration-normal + --easing-default.
+ *
+ * Exemple :
+ *   transition: transition(background-color, box-shadow);
+ */
+@function transition($props: all) {
+  @return $props var(--duration-normal) var(--easing-default);
+}
+
+/**
+ * brand-gradient($dir)
+ * Dégradé de marque dérivé de --color-primary (hue +30 auto).
+ *
+ * Exemple :
+ *   background: brand-gradient(to right);
+ */
+@function brand-gradient($dir: 135deg) {
+  @return linear-gradient(
+    $dir,
+    var(--color-primary),
+    hsl(from var(--color-primary) calc(h + 30) s l)
+  );
+}

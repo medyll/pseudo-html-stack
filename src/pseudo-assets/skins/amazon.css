@@ -1,0 +1,91 @@
+/*
+ * skins/amazon.css — skin Amazon
+ * Dépend de : theme/theme.css  (layers theme.reset, theme.tokens, theme.palette déclarés)
+ * Usage : <html data-skin="amazon">
+ */
+
+@layer skin {
+
+  @scope ([data-skin="amazon"]) {
+    :scope {
+      color-scheme: light;
+
+      /* ── Primaire ── */
+      --color-primary:          #ff9900;
+      --color-primary-hover:    hsl(from #ff9900 h s calc(l - 8%));
+      --color-primary-contrast: #111111;
+      --color-primary-muted:    hsl(from #ff9900 h s calc(l + 25%));
+
+      --color-primary-alpha-hover:   alpha(var(--color-primary), var(--alpha-hover));
+      --color-primary-alpha-focus:   alpha(var(--color-primary), var(--alpha-focus));
+      --color-primary-alpha-pressed: alpha(var(--color-primary), var(--alpha-pressed));
+
+      /* ── Sémantiques ── */
+      --color-danger:        #c45500;
+      --color-danger-hover:  hsl(from #c45500 h s calc(l - 8%));
+      --color-danger-alpha:  alpha(var(--color-danger), var(--alpha-focus));
+
+      --color-success:       #067d62;
+      --color-success-hover: hsl(from #067d62 h s calc(l - 8%));
+      --color-success-alpha: alpha(var(--color-success), var(--alpha-focus));
+
+      --color-info:          #0066c0;
+      --color-info-hover:    hsl(from #0066c0 h s calc(l - 8%));
+      --color-info-alpha:    alpha(var(--color-info), var(--alpha-focus));
+
+      /* ── Surfaces ── */
+      --color-surface:       #ffffff;
+      --color-surface-2:     #f3f3f3;
+      --color-surface-3:     #eaeded;
+      --color-border:        #dddddd;
+      --color-border-strong: #aaaaaa;
+
+      /* ── Texte ── */
+      --color-text:          #111111;
+      --color-text-muted:    #565959;
+      --color-text-disabled: #aaaaaa;
+      --color-text-inverse:  #ffffff;
+
+      /* ── Overlays ── */
+      --scrim:              alpha(#000000, var(--alpha-scrim));
+      --color-glass:        alpha(#ffffff, 0.90);
+      --color-glass-border: alpha(#000000, 0.10);
+
+      /* ── Shadows ── */
+      --shadow-color:  220 5% 30%;
+      --shadow-sm:   0 1px 2px   hsl(var(--shadow-color) / 0.10);
+      --shadow-md:   0 3px 8px   hsl(var(--shadow-color) / 0.14);
+      --shadow-lg:   0 6px 20px  hsl(var(--shadow-color) / 0.18);
+      --shadow-xl:   0 12px 40px hsl(var(--shadow-color) / 0.22);
+
+      /* ── Marque ── */
+      --font-sans:   'Amazon Ember', Arial, sans-serif;
+      --radius-sm:   .2rem;
+      --radius-md:   .3rem;
+      --radius-lg:   .4rem;
+      --radius-xl:   .4rem;
+      --radius-full: 9999px;
+
+      /* ── Layout ── */
+      --page-x:   1.5rem;
+      --page-max: 1500px;
+    }
+  }
+
+  [data-skin="amazon"] {
+    background-color: #eaeded;
+    color: var(--color-text);
+    font-family: var(--font-sans);
+  }
+
+  @scope ([data-skin="amazon"]) {
+    a { color: var(--color-info); }
+    a:hover { color: var(--color-danger); text-decoration: underline; }
+
+    button[variant="primary"] { border-radius: var(--radius-full); }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-thumb { background: #aaa; border-radius: 3px; }
+  }
+
+}

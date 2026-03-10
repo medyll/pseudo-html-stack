@@ -1,0 +1,91 @@
+/*
+ * skins/netflix.css — skin Netflix
+ * Dépend de : theme/theme.css  (layers theme.reset, theme.tokens, theme.palette déclarés)
+ * Usage : <html data-skin="netflix">
+ */
+
+@layer skin {
+
+  @scope ([data-skin="netflix"]) {
+    :scope {
+      color-scheme: dark;
+
+      /* ── Primaire ── */
+      --color-primary:          #e50914;
+      --color-primary-hover:    hsl(from #e50914 h s calc(l - 8%));
+      --color-primary-contrast: #ffffff;
+      --color-primary-muted:    hsl(from #e50914 h s calc(l + 20%));
+
+      --color-primary-alpha-hover:   alpha(var(--color-primary), var(--alpha-hover));
+      --color-primary-alpha-focus:   alpha(var(--color-primary), var(--alpha-focus));
+      --color-primary-alpha-pressed: alpha(var(--color-primary), var(--alpha-pressed));
+
+      /* ── Sémantiques ── */
+      --color-danger:        #e50914;
+      --color-danger-hover:  hsl(from #e50914 h s calc(l - 8%));
+      --color-danger-alpha:  alpha(var(--color-danger), var(--alpha-focus));
+
+      --color-success:       #46d369;
+      --color-success-hover: hsl(from #46d369 h s calc(l - 8%));
+      --color-success-alpha: alpha(var(--color-success), var(--alpha-focus));
+
+      --color-info:          #54b3d6;
+      --color-info-hover:    hsl(from #54b3d6 h s calc(l - 8%));
+      --color-info-alpha:    alpha(var(--color-info), var(--alpha-focus));
+
+      /* ── Surfaces ── */
+      --color-surface:       #141414;
+      --color-surface-2:     #181818;
+      --color-surface-3:     #252525;
+      --color-border:        #333333;
+      --color-border-strong: #444444;
+
+      /* ── Texte ── */
+      --color-text:          #ffffff;
+      --color-text-muted:    #999999;
+      --color-text-disabled: #666666;
+      --color-text-inverse:  #141414;
+
+      /* ── Overlays ── */
+      --overlay-dark:       alpha(#000000, 0.75);
+      --scrim:              alpha(#000000, 0.85);
+      --color-glass:        alpha(#181818, 0.90);
+      --color-glass-border: alpha(#ffffff, 0.08);
+
+      /* ── Shadows ── */
+      --shadow-color:  0 0% 0%;
+      --shadow-sm:   0 1px 3px   hsl(var(--shadow-color) / 0.40);
+      --shadow-md:   0 4px 12px  hsl(var(--shadow-color) / 0.50);
+      --shadow-lg:   0 8px 28px  hsl(var(--shadow-color) / 0.60);
+      --shadow-xl:   0 16px 56px hsl(var(--shadow-color) / 0.70);
+
+      /* ── Marque ── */
+      --font-sans:   'Netflix Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      --radius-sm:   .2rem;
+      --radius-md:   .25rem;
+      --radius-lg:   .25rem;
+      --radius-xl:   .3rem;
+      --radius-full: .2rem;
+
+      /* ── Layout ── */
+      --page-x:   4vw;
+      --page-max: 1440px;
+    }
+  }
+
+  [data-skin="netflix"] {
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+  }
+
+  @scope ([data-skin="netflix"]) {
+    a { color: inherit; }
+    a:hover { text-decoration: none; opacity: .8; }
+
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #555; border-radius: 3px; }
+  }
+
+}
