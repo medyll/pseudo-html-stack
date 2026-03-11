@@ -150,7 +150,10 @@ input.setAttribute('aria-controls', uid);
 const name = el.getAttribute('name');
 if (name) hidden.setAttribute('name', name);
 if (el.getAttribute('placeholder')) input.placeholder = el.getAttribute('placeholder');
-if (el.hasAttribute('disabled')) input.setAttribute('disabled', '');
+if (el.hasAttribute('disabled')) {
+  input.setAttribute('disabled', '');
+  toggle.setAttribute('disabled', '');
+}
 if (el.hasAttribute('required')) hidden.setAttribute('required', '');
 
 // Build options from slotted <option> elements

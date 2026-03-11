@@ -37,6 +37,7 @@ export const componentNames = {
   input:        'input-pk',
   label:        'label-pk',
   loader:       'loader-pk',
+  progress:     'progress-pk',
   progressBar:  'progress-bar-pk',
   rating:       'rating-pk',
   skeleton:     'skeleton-pk',
@@ -79,6 +80,7 @@ export const componentNames = {
   topbar:         'topbar-pk',
   carousel:       'carousel-pk',
   accordion:      'accordion-pk',
+  tabs:           'tabs-pk',
 };
 
 // ── Component URLs ─────────────────────────────────────────────────────────
@@ -94,6 +96,7 @@ export const components = {
   input:        r('./components/atoms/input-pk.html'),
   label:        r('./components/atoms/label-pk.html'),
   loader:       r('./components/atoms/loader.html'),
+  progress:     r('./components/atoms/progress-pk.html'),
   progressBar:  r('./components/atoms/progress-bar.html'),
   rating:       r('./components/atoms/rating.html'),
   skeleton:     r('./components/atoms/skeleton.html'),
@@ -139,6 +142,7 @@ export const components = {
   topbar:         r('./components/organisms/topbar.html'),
   carousel:       r('./components/organisms/carousel-pk.html'),
   accordion:      r('./components/organisms/accordion-pk.html'),
+  tabs:           r('./components/organisms/tabs-pk.html'),
   colorSwatch:    r('./components/molecules/color-swatch-pk.html'),
 };
 
@@ -179,6 +183,7 @@ export const componentsMeta = {
   input:        { props: 'type:enum(text|email|password|number|search|tel|url)?; name:string; id:string?; placeholder:string?; value:string?; disabled:boolean?; required:boolean?; error:string?; size:enum(sm|md|lg)?', slots: 'prefix, suffix', layer: 'atoms' },
   label:        { props: 'for:string?; required:boolean?; text:string?', slots: 'default', layer: 'atoms' },
   loader:       { props: 'size:enum(sm|md|lg)?; label:string?; overlay:boolean?', slots: '', layer: 'atoms' },
+  progress:     { props: 'value:number?; max:number?; label:string?; variant:enum(default|primary|success|warning|danger)?; size:enum(sm|md|lg)?', slots: '', layer: 'atoms' },
   progressBar:  { props: 'value:number; max:number?; label:string?; variant:enum(default|primary|success|warning|danger)?; size:enum(sm|md|lg)?; animated:boolean?', slots: '', layer: 'atoms' },
   rating:       { props: 'value:number; max:number?; readonly:boolean?; size:enum(sm|md|lg)?; label:string?', slots: '', layer: 'atoms' },
   skeleton:     { props: 'width:string?; height:string?; variant:enum(text|circle|rect)?; lines:number?; animated:boolean?', slots: '', layer: 'atoms' },
@@ -225,6 +230,7 @@ export const componentsMeta = {
   topbar:         { props: 'elevated:boolean?', slots: 'leading, title, actions', layer: 'organisms' },
   carousel:       { props: 'autoplay:boolean?; interval:number?', slots: 'default', layer: 'organisms' },
   accordion:      { props: 'exclusive:boolean?', slots: 'default', layer: 'organisms' },
+  tabs:           { props: 'variant:enum(line|pill|boxed)?; active:string?', slots: 'tabs, panels', layer: 'organisms' },
 };
 
 // ── Frame Metadata ─────────────────────────────────────────────────────────

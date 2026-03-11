@@ -103,6 +103,12 @@ phases:
       - id: release-v0.4.0
         file: artifacts/release-notes-v0.4.0.md
         status: done
+      - id: release-v0.5.0
+        file: artifacts/release-notes-v0.5.0.md
+        status: done
+      - id: changelog-v0.5.0
+        file: CHANGELOG-v0.5.0.md
+        status: done
 pseudo_assets:
   deliverables:
     - id: PKA-001
@@ -136,8 +142,8 @@ pseudo_assets:
 
 qa:
   test_plan: done
-  coverage: "432 passing — 211 node:test + 221 vitest (client+atoms+molecules+organisms+viewer) · 0 failures"
-  last_run: "2026-03-07"
+  coverage: "597 passing — 226 node:test + 333 vitest + 38 E2E Chromium (18 migration + 20 form) · 0 failures"
+  last_run: "2026-03-10"
   e2e_ready: true
   e2e_browsers: "Chromium, Firefox, WebKit"
   e2e_tests: "12 scenarios covering asset loading, UI interactions, error handling, accessibility"
@@ -159,7 +165,8 @@ qa:
 
     - id: E2E-FLAKY-01
       title: "Chromium: migration-e2e flaky failures (dropdown/notification/integration)"
-      status: open
+      status: fixed
+      fix: "dropdown.html: use setAttribute('popovertarget') instead of IDL property; notification: 3× fallback timer; integration test: sequential independent verification"
       details: "Intermittent dropdown/menu visibility, notification autodismiss/dismiss timing, and modal overlay intercepts observed in Chromium Playwright runs. See story: artifacts/stories/S13-03-fix-migration-e2e-flaky-chromium.md"
       reported_by: bmad-master
       linked_story: artifacts/stories/S13-03-fix-migration-e2e-flaky-chromium.md
@@ -184,7 +191,7 @@ decisions:
   - barrel_meta: "index.js: components + frames URLs + componentsMeta + framesMeta"
   - ssr_marker: "data-pk-hydrated on each SSR-rendered component root"
 
-release_status: "✅ v0.4.0 released"
+release_status: "✅ v0.5.0 released"
 
 # v0.4.0 cycle — Phase 1: Interaction Components Migration
 migration_v040:
@@ -274,7 +281,26 @@ migration_v040:
         points: 4
         status: done
 
-recommendation: "S13-03 in_progress: triage-dropdown, triage-notification, fix-integration-overlay in_progress. Next: s13-03-fix-migration-e2e-flaky-chromium (frontend-team). PR draft created at bmad/artifacts/S13-03-pr-draft.md. Run headed Chromium locally and attach logs/screenshots."
+sprint_13_stories:
+  - id: S13-01
+    title: "Hydration: Fix SSR↔CSR handshake mismatches"
+    status: done
+  - id: S13-03
+    title: "Fix migration E2E flaky tests (Chromium)"
+    status: done
+    subtasks:
+      triage-dropdown: done
+      triage-notification: done
+      fix-integration-overlay: done
+  - id: S13-04
+    title: "Cross-browser fallback validation & bug fixes"
+    status: done
+  - id: S13-05
+    title: "Theme & Skin System (CSS3/HTML5 native)"
+    status: done
+    story: artifacts/stories/S13-05-theme-skin-system.md
+
+recommendation: "Sprint 14: S14-01 through S14-04 all done. 597 tests passing. Sprint 14 complete — consider Sprint 15 planning."
 audit:
   baseline: true
   file: artifacts/audit-baseline-2026-03-07.md

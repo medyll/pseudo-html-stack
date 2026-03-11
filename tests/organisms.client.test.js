@@ -636,3 +636,121 @@ describe('topbar-pk', () => {
     obs.disconnect();
   });
 });
+
+// =============================================================================
+// tabs-pk
+// =============================================================================
+
+describe('tabs-pk', () => {
+  const HTML = readOrganism('tabs-pk.html');
+  const SRC  = 'components/tabs-pk.html';
+
+  it('resolves', async () => {
+    const obs = registerAndInit('tabs-pk', SRC, HTML);
+    document.body.innerHTML = `
+      <tabs-pk>
+        <button slot="tabs" data-panel="p1">Tab 1</button>
+        <div slot="panels" id="p1">Panel 1</div>
+      </tabs-pk>`;
+    PseudoKit.init(document.body);
+    await flush();
+    expect(document.querySelector('tabs-pk').dataset.pkResolved).toBe('true');
+    obs.disconnect();
+  });
+
+  it('stamps .tabs structure with nav and body', async () => {
+    const obs = registerAndInit('tabs-pk', SRC, HTML);
+    document.body.innerHTML = `
+      <tabs-pk>
+        <button slot="tabs" data-panel="p1">Tab 1</button>
+        <div slot="panels" id="p1">Panel 1</div>
+      </tabs-pk>`;
+    PseudoKit.init(document.body);
+    await flush();
+    expect(document.querySelector('.tabs')).toBeTruthy();
+    expect(document.querySelector('.tabs__nav')).toBeTruthy();
+    expect(document.querySelector('.tabs__body')).toBeTruthy();
+    obs.disconnect();
+  });
+
+  it('activates first tab by default (aria-selected="true")', async () => {
+    const obs = registerAndInit('tabs-pk', SRC, HTML);
+    document.body.innerHTML = `
+      <tabs-pk>
+        <button slot="tabs" data-panel="p1">Tab 1</button>
+        <button slot="tabs" data-panel="p2">Tab 2</button>
+        <div slot="panels" id="p1">Panel 1</div>
+        <div slot="panels" id="p2">Panel 2</div>
+      </tabs-pk>`;
+    PseudoKit.init(document.body);
+    await flush();
+    const tabs = document.querySelectorAll('button[role="tab"]');
+    expect(tabs[0].getAttribute('aria-selected')).toBe('true');
+    expect(tabs[1].getAttribute('aria-selected')).toBe('false');
+    obs.disconnect();
+  });
+
+  it('shows first panel and hides others', async () => {
+    const obs = registerAndInit('tabs-pk', SRC, HTML);
+    document.body.innerHTML = `
+      <tabs-pk>
+        <button slot="tabs" data-panel="p1">Tab 1</button>
+        <button slot="tabs" data-panel="p2">Tab 2</button>
+        <div slot="panels" id="p1">Panel 1</div>
+        <div slot="panels" id="p2">Panel 2</div>
+      </tabs-pk>`;
+    PseudoKit.init(document.body);
+    await flush();
+    expect(document.getElementById('p1').hasAttribute('hidden')).toBe(false);
+    expect(document.getElementById('p2').hasAttribute('hidden')).toBe(true);
+    obs.disconnect();
+  });
+
+  it('wires ARIA roles and relationships', async () => {
+    const obs = registerAndInit('tabs-pk', SRC, HTML);
+    document.body.innerHTML = `
+      <tabs-pk>
+        <button slot="tabs" data-panel="p1">Tab 1</button>
+        <div slot="panels" id="p1">Panel 1</div>
+      </tabs-pk>`;
+    PseudoKit.init(document.body);
+    await flush();
+    const tab   = document.querySelector('button[role="tab"]');
+    const panel = document.getElementById('p1');
+    expect(tab.getAttribute('aria-controls')).toBe('p1');
+    expect(panel.getAttribute('role')).toBe('tabpanel');
+    expect(panel.getAttribute('aria-labelledby')).toBe(tab.id);
+    obs.disconnect();
+  });
+
+  it('activates tab by [active] prop', async () => {
+    const obs = registerAndInit('tabs-pk', SRC, HTML);
+    document.body.innerHTML = `
+      <tabs-pk active="p2">
+        <button slot="tabs" data-panel="p1">Tab 1</button>
+        <button slot="tabs" data-panel="p2">Tab 2</button>
+        <div slot="panels" id="p1">Panel 1</div>
+        <div slot="panels" id="p2">Panel 2</div>
+      </tabs-pk>`;
+    PseudoKit.init(document.body);
+    await flush();
+    const tabs = document.querySelectorAll('button[role="tab"]');
+    expect(tabs[1].getAttribute('aria-selected')).toBe('true');
+    expect(document.getElementById('p2').hasAttribute('hidden')).toBe(false);
+    expect(document.getElementById('p1').hasAttribute('hidden')).toBe(true);
+    obs.disconnect();
+  });
+
+  it('sets data-ready="true" on init', async () => {
+    const obs = registerAndInit('tabs-pk', SRC, HTML);
+    document.body.innerHTML = `
+      <tabs-pk>
+        <button slot="tabs" data-panel="p1">Tab 1</button>
+        <div slot="panels" id="p1">Panel 1</div>
+      </tabs-pk>`;
+    PseudoKit.init(document.body);
+    await flush();
+    expect(document.querySelector('tabs-pk').getAttribute('data-ready')).toBe('true');
+    obs.disconnect();
+  });
+});

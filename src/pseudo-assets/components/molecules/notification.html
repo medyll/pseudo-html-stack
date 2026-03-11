@@ -136,23 +136,40 @@ if (dismissBtn) {
   });
 }
 
-// Handle animation end for autodismiss
+// Handle autodismiss: animationend + setTimeout fallback (for test environments
+// where CSS animations may not fire animationend reliably)
 if (el.hasAttribute('autodismiss')) {
-  const onAnimationEnd = () => {
+  let dismissed = false;
+  const dismiss = () => {
+    if (dismissed) return;
+    dismissed = true;
     el.remove();
   };
-  notification.addEventListener('animationend', onAnimationEnd, { once: true });
-  
-  // If autodismiss is removed while animation is running, clean up listener
-  const observer = new MutationObserver((mutations) => {
-    for (const mutation of mutations) {
-      if (mutation.type === 'attributes' && mutation.attributeName === 'autodismiss') {
-        if (!el.hasAttribute('autodismiss')) {
-          notification.removeEventListener('animationend', onAnimationEnd);
-        }
-      }
+
+  // Primary: CSS animation end
+  notification.addEventListener('animationend', dismiss, { once: true });
+
+  // Fallback: parse --dismiss-duration from computed style, default 5s.
+  // Set at 3× duration so the animation always fires first when running.
+  // This fallback only triggers in environments where animationend is suppressed
+  // (e.g., prefers-reduced-motion, headless CI with animations disabled).
+  const computedDuration = getComputedStyle(notification)
+    .getPropertyValue('--dismiss-duration').trim();
+  const durationMs = computedDuration
+    ? parseFloat(computedDuration) * (computedDuration.endsWith('ms') ? 1 : 1000)
+    : 5000;
+  const fallbackTimer = setTimeout(dismiss, durationMs * 3);
+
+  // If autodismiss attribute is removed, cancel both
+  const observer = new MutationObserver(() => {
+    if (!el.hasAttribute('autodismiss')) {
+      clearTimeout(fallbackTimer);
+      notification.removeEventListener('animationend', dismiss);
     }
   });
   observer.observe(el, { attributes: true, attributeFilter: ['autodismiss'] });
 }
+
+// Signal init complete
+el.setAttribute('data-ready', 'true');
 </script>

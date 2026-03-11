@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form Components E2E Test Page</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f5f5f5;
+      padding: 2rem;
+    }
+    .test-section {
+      background: white;
+      border-radius: 8px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      max-width: 480px;
+    }
+    .test-section h2 {
+      margin-bottom: 1rem;
+      font-size: 1.25rem;
+      color: #333;
+    }
+    .test-section p {
+      margin-bottom: 1rem;
+      color: #666;
+      font-size: 0.875rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Select Component -->
+  <div class="test-section">
+    <h2>Select Component (S11-01)</h2>
+    <p>Native &lt;select&gt; with custom styling. Test: option rendering, value selection, required validation.</p>
+    <select-pk name="language" data-testid="select-component" id="select-lang">
+      <option value="">-- Choose language --</option>
+      <option value="en">English</option>
+      <option value="fr">French</option>
+      <option value="de">German</option>
+      <option value="es">Spanish</option>
+    </select-pk>
+  </div>
+
+  <!-- Required Select Component -->
+  <div class="test-section">
+    <h2>Select (required)</h2>
+    <p>Required select for native validation testing.</p>
+    <form id="required-select-form" novalidate>
+      <select-pk name="required-lang" data-testid="required-select-component" required id="select-required">
+        <option value="">-- Choose --</option>
+        <option value="en">English</option>
+        <option value="fr">French</option>
+      </select-pk>
+      <button type="submit" id="required-form-submit" style="margin-top:.5rem; padding:.4rem .8rem; cursor:pointer;">Submit</button>
+    </form>
+    <div id="required-form-result" data-testid="required-form-result"></div>
+  </div>
+
+  <!-- Combobox Component -->
+  <div class="test-section">
+    <h2>Combobox Component (S11-01)</h2>
+    <p>Filterable combobox with Popover API listbox. Test: filtering, selection, keyboard navigation.</p>
+    <combobox-pk name="country" data-testid="combobox-component" placeholder="Search country…">
+      <option value="fr">France</option>
+      <option value="de">Germany</option>
+      <option value="us">United States</option>
+      <option value="gb">United Kingdom</option>
+      <option value="jp">Japan</option>
+      <option value="ca">Canada</option>
+    </combobox-pk>
+  </div>
+
+  <!-- Disabled Combobox -->
+  <div class="test-section">
+    <h2>Combobox (disabled)</h2>
+    <p>Disabled state testing.</p>
+    <combobox-pk name="disabled-country" data-testid="combobox-disabled" disabled placeholder="Disabled…">
+      <option value="fr">France</option>
+    </combobox-pk>
+  </div>
+
+  <script type="module">
+    import PseudoKit from '/src/client/pseudo-kit-client.js';
+
+    const components = [
+      { name: 'select-pk',   src: '/src/pseudo-assets/components/atoms/select-pk.html' },
+      { name: 'combobox-pk', src: '/src/pseudo-assets/components/molecules/combobox-pk.html' },
+    ];
+
+    for (const comp of components) {
+      PseudoKit.register(comp);
+    }
+    PseudoKit.init(document.body);
+
+    // Required form validation feedback
+    const form = document.getElementById('required-select-form');
+    const result = document.getElementById('required-form-result');
+    if (form && result) {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const sel = form.querySelector('select');
+        if (!sel || !sel.value) {
+          result.textContent = 'validation-error';
+          result.setAttribute('data-state', 'error');
+        } else {
+          result.textContent = 'submitted:' + sel.value;
+          result.setAttribute('data-state', 'submitted');
+        }
+      });
+    }
+  </script>
+</body>
+</html>

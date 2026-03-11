@@ -103,21 +103,22 @@ const supportsPopover = 'popover' in HTMLElement.prototype;
 
 if (supportsPopover) {
   // Popover API path (Chrome 146+, Firefox 128+)
-  menu.popover = 'auto';
+  menu.setAttribute('popover', 'auto');
   menu.id = uid;
-  trigger.popovertarget = uid;
-  
+  trigger.setAttribute('popovertarget', uid);
+
   // Listen to toggle event and sync state
   menu.addEventListener('toggle', (e) => {
     const isOpen = e.newState === 'open';
-    trigger.setAttribute('aria-expanded', isOpen);
+    trigger.setAttribute('aria-expanded', String(isOpen));
+    el.setAttribute('data-state', isOpen ? 'open' : 'closed');
     if (isOpen) {
       el.setAttribute('open', '');
     } else {
       el.removeAttribute('open');
     }
   });
-  
+
   // Programmatic open/close via host [open] attribute
   const observer = new MutationObserver(() => {
     const shouldBeOpen = el.hasAttribute('open');
@@ -154,4 +155,8 @@ if (supportsPopover) {
 if (el.hasAttribute('disabled')) {
   trigger.disabled = true;
 }
+
+// Signal init complete — tests and external code can rely on data-ready
+el.setAttribute('data-ready', 'true');
+el.setAttribute('data-state', el.hasAttribute('open') ? 'open' : 'closed');
 </script>

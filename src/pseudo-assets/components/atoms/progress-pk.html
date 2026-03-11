@@ -1,0 +1,108 @@
+<!--
+  @component progress-pk
+  @layer atoms
+
+  @prop {number} [value] - Current progress value (0–max). Omit for indeterminate state.
+  @prop {number} [max=100] - Maximum value
+  @prop {'default'|'primary'|'success'|'warning'|'danger'} [variant='default'] - Colour variant
+  @prop {'sm'|'md'|'lg'} [size='md'] - Track height preset
+  @prop {string} [label] - Accessible label text (aria-label). Defaults to "Progress".
+-->
+<template>
+  <div class="progress" role="presentation">
+    <progress class="progress__track"></progress>
+  </div>
+</template>
+
+<style>
+  @scope (.progress) {
+    :scope {
+      display: block;
+      width: 100%;
+    }
+
+    .progress__track {
+      display: block;
+      width: 100%;
+      height: var(--progress-height, .5rem);
+      appearance: none;
+      -webkit-appearance: none;
+      border: none;
+      border-radius: var(--radius-full, 9999px);
+      overflow: hidden;
+      background-color: var(--color-surface-2, #e2e8f0);
+    }
+
+    /* Size presets */
+    :scope[size="sm"] .progress__track { height: .25rem; }
+    :scope[size="md"] .progress__track { height: .5rem; }
+    :scope[size="lg"] .progress__track { height: 1rem; }
+
+    /* WebKit fill */
+    .progress__track::-webkit-progress-bar {
+      background-color: var(--color-surface-2, #e2e8f0);
+      border-radius: var(--radius-full, 9999px);
+    }
+    .progress__track::-webkit-progress-value {
+      background-color: var(--color-text-muted, #94a3b8);
+      border-radius: var(--radius-full, 9999px);
+      transition: width .3s ease;
+    }
+
+    /* Firefox fill */
+    .progress__track::-moz-progress-bar {
+      background-color: var(--color-text-muted, #94a3b8);
+      border-radius: var(--radius-full, 9999px);
+    }
+
+    /* Variants */
+    :scope[variant="primary"] .progress__track::-webkit-progress-value,
+    :scope[variant="primary"] .progress__track::-moz-progress-bar {
+      background-color: var(--color-primary, #3b82f6);
+    }
+    :scope[variant="success"] .progress__track::-webkit-progress-value,
+    :scope[variant="success"] .progress__track::-moz-progress-bar {
+      background-color: var(--color-success, #22c55e);
+    }
+    :scope[variant="warning"] .progress__track::-webkit-progress-value,
+    :scope[variant="warning"] .progress__track::-moz-progress-bar {
+      background-color: var(--color-warning, #f59e0b);
+    }
+    :scope[variant="danger"] .progress__track::-webkit-progress-value,
+    :scope[variant="danger"] .progress__track::-moz-progress-bar {
+      background-color: var(--color-danger, #ef4444);
+    }
+
+    /* Indeterminate animation */
+    @keyframes progress-indeterminate {
+      0%   { transform: translateX(-100%); }
+      100% { transform: translateX(400%); }
+    }
+    :scope[indeterminate] .progress__track::-webkit-progress-value {
+      animation: progress-indeterminate 1.5s ease-in-out infinite;
+      width: 25% !important;
+    }
+  }
+</style>
+
+<script>
+const track = el.querySelector('.progress__track');
+if (!track) { el.setAttribute('data-ready', 'true'); return; }
+
+const max   = parseFloat(el.getAttribute('max'))  || 100;
+const value = el.getAttribute('value');
+const label = el.getAttribute('label') || 'Progress';
+
+track.setAttribute('max', max);
+track.setAttribute('aria-label', label);
+
+if (value !== null) {
+  const v = parseFloat(value);
+  track.setAttribute('value', isNaN(v) ? 0 : Math.min(Math.max(v, 0), max));
+} else {
+  // Indeterminate: no value attribute on <progress>
+  el.setAttribute('indeterminate', '');
+}
+
+el.setAttribute('data-ready', 'true');
+</script>

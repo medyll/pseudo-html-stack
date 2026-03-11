@@ -1,6 +1,6 @@
 {
   "name": "pseudo-stack",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Vanilla HTML component system for pseudo-HTML layout descriptors. No build step. No framework.",
   "type": "module",
   "license": "MIT",
@@ -24,7 +24,7 @@
     "validate:json": "node src/server/canvas-validator.js --json",
     "normalize": "node src/server/canvas-normalize.js",
     "normalize:write": "node src/server/canvas-normalize.js --in-place",
-    "test": "node --test tests/registry-shared.test.js tests/state-shared.test.js tests/pseudo-kit-server.test.js tests/canvas-validator.test.js tests/canvas-normalize.test.js tests/pseudo-assets-index.test.js",
+    "test": "node --test tests/registry-shared.test.js tests/state-shared.test.js tests/pseudo-kit-server.test.js tests/canvas-validator.test.js tests/canvas-normalize.test.js tests/pseudo-assets-index.test.js tests/render-hydration.server.test.js",
     "test:client": "vitest run tests/pseudo-kit-client.client.test.js",
     "test:components": "vitest run tests/atoms.client.test.js tests/molecules.client.test.js",
     "test:viewer": "vitest run tests/pseudo-canvas-viewer.client.test.js",

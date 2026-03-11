@@ -1,6 +1,6 @@
 # S13-03 — Fix migration E2E flaky tests (Chromium)
 
-Status: in_progress
+Status: done
 Owner: frontend-team
 
 
@@ -20,10 +20,10 @@ Acceptance criteria
 
 Tasks
 -----
-1. s13-03-triage-dropdown (in_progress) — reproduce dropdown/menu visibility and determine root cause (selectors vs popover state) — owner: frontend-team
-2. s13-03-triage-notification (done) — reproduce notification autodismiss/dismiss timing; ensure dismiss button visible and autodismiss reliable — owner: frontend-team
-3. s13-03-fix-integration-overlay (in_progress) — reproduce integration overlay and implement ordering/z-index or test ordering fix — owner: frontend-team
-4. s13-03-fix-migration-e2e-flaky-chromium (in_progress) — implement fixes, update tests, and prepare changes for review — owner: frontend-team
+1. s13-03-triage-dropdown (done) — Root cause: `trigger.popovertarget = uid` (IDL) doesn't reflect to HTML attribute in Playwright Chromium; fixed with `trigger.setAttribute('popovertarget', uid)` in dropdown.html
+2. s13-03-triage-notification (done) — autodismiss fallback timer set to 3× duration to avoid interfering with hover-pause test
+3. s13-03-fix-integration-overlay (done) — redesigned test to verify independent operation instead of simultaneous state (popover auto light-dismiss is correct browser behavior)
+4. s13-03-fix-migration-e2e-flaky-chromium (done) — all 18/18 Chromium E2E tests passing
 
 Notes
 -----

@@ -26,6 +26,10 @@ pseudo-kit is a runtime for **pseudo-HTML** — a language-agnostic interface de
 - [Reactive state](#reactive-state)
 - [Events](#events)
 - [Theme system](#theme-system)
+  - [theme.css — tokens + reset + palette](#themecss--tokens--reset--palette)
+  - [utils.css — native CSS @function mixins](#utilscss--native-css-function-mixins)
+  - [Skins — brand overrides](#skins--brand-overrides)
+  - [Creating a custom skin](#creating-a-custom-skin)
 - [CSS architecture](#css-architecture)
   - [@layer](#layer)
   - [@scope](#scope)
@@ -493,36 +497,85 @@ Events are `bubbles: true, composed: true` by default.
 
 ## Theme system
 
-Theme switching requires zero JavaScript. A hidden checkbox drives the theme via CSS `:has()`:
+pseudo-kit ships a ready-to-use CSS theme engine in `src/pseudo-assets/theme/`. No build step, no preprocessor.
+
+### theme.css — tokens + reset + palette
+
+Add it once as your foundation:
 
 ```html
-<!-- App root — place before everything -->
-<input type="checkbox" id="theme-toggle" hidden />
-
-<!-- button-theme component is a <label> bound to the checkbox -->
-<button-theme />
-<!-- renders as: <label for="theme-toggle">Toggle theme</label> -->
+<link rel="stylesheet" href="/src/pseudo-assets/theme/theme.css">
 ```
 
-```css
-/* Dark theme — default */
-:root {
-  --color-bg:            #0f0f0f;
-  --color-text:          #e5e5e5;
-  --color-primary:       #3b82f6;
-  --color-secondary:     #94a3b8;
-  --color-accent:        #fbbf24;
-  --color-complementary: #34d399;
-}
+What it provides:
 
-/* Light theme — toggled by checkbox */
-:root:has(#theme-toggle:checked) {
-  --color-bg:            #ffffff;
-  --color-text:          #1a1a1a;
-  --color-primary:       #2563eb;
-  --color-secondary:     #64748b;
-  --color-accent:        #f59e0b;
-  --color-complementary: #10b981;
+| Layer | Content |
+|---|---|
+| `theme.reset` | `box-sizing`, margin/padding reset, `font-inherit`, scrollbar styling |
+| `theme.tokens` | Spacing scale (`--space-*`), typography (`--text-*`), z-index, animation durations, border radii, alpha values |
+| `theme.palette` | Default colour palette via `light-dark()` — automatic light/dark mode; semantic tokens: `--color-primary`, `--color-surface`, `--color-text`, shadows |
+| `skin` | Reserved layer for brand skin overrides |
+
+The layer order (`@layer theme.reset, theme.tokens, theme.palette, skin`) means any skin loaded later wins without `!important`.
+
+### utils.css — native CSS `@function` mixins
+
+```html
+<link rel="stylesheet" href="/src/pseudo-assets/theme/utils.css">
+```
+
+Five native CSS functions (no preprocessor):
+
+```css
+/* Transparency */
+background: alpha(var(--color-primary), 0.15);
+
+/* Elevation shadows */
+box-shadow: elevation(2);
+
+/* Accessible focus ring */
+outline: focus-ring();
+
+/* Consistent transitions */
+transition: transition(opacity, transform);
+
+/* Brand gradient */
+background: brand-gradient(135deg);
+```
+
+### Skins — brand overrides
+
+Skins override the token palette for a specific brand. Apply with a `data-skin` attribute — scoped via `@layer skin { @scope }` so they never leak outside the container.
+
+```html
+<!-- Load the skin stylesheet -->
+<link rel="stylesheet" href="/src/pseudo-assets/skins/netflix.css">
+
+<!-- Apply to any container (or <body>) -->
+<div data-skin="netflix">
+  <button-pk>Watch Now</button-pk>
+</div>
+```
+
+Available skins: **netflix** · **amazon** · **facebook**
+
+Each skin overrides `color-scheme`, `--color-primary`, surfaces, and text colours. Components inside the container automatically pick up the new tokens.
+
+### Creating a custom skin
+
+```css
+/* my-brand.css */
+@layer skin {
+  @scope ([data-skin="my-brand"]) {
+    :scope {
+      color-scheme: light;
+      --color-primary:       #e91e63;
+      --color-surface:       #fff8f9;
+      --color-surface-2:     #fce4ec;
+      --color-text:          #1a0010;
+      --color-text-muted:    #9c6070;
+    }
+  }
 }
 ```
 
@@ -955,7 +1008,7 @@ const html = await PseudoKitServer.renderComponent(
 Output:
 
 ```html
-<chat-bubble role="coherence-alert">
+<chat-bubble role="coherence-alert" data-pk-hydrated="true">
   <div class="bubble-body">
     <pk-slot style="display:contents"
              data-slot-component="chat-bubble"
@@ -967,7 +1020,7 @@ Output:
 </chat-bubble>
 ```
 
-The client detects the `<pk-slot>` and skips re-stamping. Scripts are evaluated client-side after hydration.
+The server adds `data-pk-hydrated="true"` on every component with a template. The client detects this marker (or the `<pk-slot>` wrapper as a fallback), skips re-stamping to avoid double-rendering, and still evaluates scripts and processes loops client-side.
 
 ### State hydration
 

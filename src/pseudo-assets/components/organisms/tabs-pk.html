@@ -1,0 +1,235 @@
+<!--
+  @component tabs-pk
+  @layer organisms
+
+  @prop {'line'|'pill'|'boxed'} [variant='line'] - Visual style of the tab strip
+  @prop {string} [active] - id of the panel to show on init (defaults to first panel)
+
+  @slot tabs   - `<button data-panel="id">Label</button>` triggers; one per tab
+  @slot panels - `<div id="id">Content</div>` panels; id must match button data-panel
+-->
+<template>
+  <div class="tabs">
+    <div class="tabs__nav" role="tablist">
+      <slot name="tabs"></slot>
+    </div>
+    <div class="tabs__body">
+      <slot name="panels"></slot>
+    </div>
+  </div>
+</template>
+
+<style>
+  @scope (.tabs) {
+    :scope {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    /* ── Tab strip ─────────────────────────────────────────────────────────── */
+
+    .tabs__nav {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      border-bottom: 2px solid var(--color-border, #e2e8f0);
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .tabs__nav::-webkit-scrollbar { display: none; }
+
+    /* Pill variant */
+    :scope[variant="pill"] .tabs__nav {
+      gap: .25rem;
+      border-bottom: none;
+      background-color: var(--color-surface-2, #f1f5f9);
+      border-radius: var(--radius-full, 9999px);
+      padding: .25rem;
+    }
+
+    /* Boxed variant */
+    :scope[variant="boxed"] .tabs__nav {
+      gap: .25rem;
+      border-bottom: none;
+      border: 1px solid var(--color-border, #e2e8f0);
+      border-radius: var(--radius-md, .375rem);
+      padding: .25rem;
+    }
+
+    /* ── Tab buttons (stamped from slot at init) ───────────────────────────── */
+
+    .tabs__nav button[role="tab"] {
+      flex-shrink: 0;
+      padding: .6rem 1rem;
+      font-size: var(--text-sm, .875rem);
+      font-weight: 500;
+      color: var(--color-text-muted, #64748b);
+      background: none;
+      border: none;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: color .15s;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+    }
+    .tabs__nav button[role="tab"]:hover {
+      color: var(--color-text, #1a202c);
+    }
+    .tabs__nav button[role="tab"]:focus-visible {
+      outline: 2px solid var(--color-primary, #3b82f6);
+      outline-offset: 2px;
+      border-radius: var(--radius-sm, .25rem);
+    }
+    .tabs__nav button[role="tab"][aria-selected="true"] {
+      color: var(--color-primary, #3b82f6);
+      border-bottom-color: var(--color-primary, #3b82f6);
+    }
+
+    /* Pill active tab */
+    :scope[variant="pill"] .tabs__nav button[role="tab"] {
+      border-bottom: none;
+      margin-bottom: 0;
+      border-radius: var(--radius-full, 9999px);
+    }
+    :scope[variant="pill"] .tabs__nav button[role="tab"][aria-selected="true"] {
+      background-color: var(--color-surface, #fff);
+      color: var(--color-primary, #3b82f6);
+      box-shadow: 0 1px 3px rgba(0,0,0,.1);
+    }
+
+    /* Boxed active tab */
+    :scope[variant="boxed"] .tabs__nav button[role="tab"] {
+      border-bottom: none;
+      margin-bottom: 0;
+      border-radius: var(--radius-sm, .25rem);
+    }
+    :scope[variant="boxed"] .tabs__nav button[role="tab"][aria-selected="true"] {
+      background-color: var(--color-primary, #3b82f6);
+      color: #fff;
+    }
+
+    /* ── Panels ────────────────────────────────────────────────────────────── */
+
+    .tabs__body {
+      padding: 1rem 0;
+    }
+
+    .tabs__body [role="tabpanel"] {
+      outline: none;
+    }
+    .tabs__body [role="tabpanel"][hidden] {
+      display: none;
+    }
+
+    /* View Transition name for smooth panel switch */
+    .tabs__body [role="tabpanel"]:not([hidden]) {
+      view-transition-name: tabs-panel;
+    }
+
+    @keyframes tabs-fade-in {
+      from { opacity: 0; transform: translateY(.25rem); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Fallback animation when View Transitions not available */
+    .tabs__body [role="tabpanel"]:not([hidden]):not([data-vt]) {
+      animation: tabs-fade-in .15s ease-out;
+    }
+  }
+</style>
+
+<script>
+const nav    = el.querySelector('.tabs__nav');
+const body   = el.querySelector('.tabs__body');
+if (!nav || !body) return;
+
+// Collect slotted tab buttons and panels
+const tabs   = [...nav.querySelectorAll('button[data-panel]')];
+const panels = [...body.querySelectorAll('[id]')];
+
+if (!tabs.length || !panels.length) {
+  el.setAttribute('data-ready', 'true');
+  return;
+}
+
+// Wire ARIA roles and relationships
+tabs.forEach((tab, i) => {
+  const panelId = tab.dataset.panel;
+  const panel   = panels.find(p => p.id === panelId) || panels[i];
+  if (!panel) return;
+
+  tab.setAttribute('role', 'tab');
+  tab.setAttribute('id', tab.id || `${panelId}-tab`);
+  tab.setAttribute('aria-controls', panel.id);
+  tab.setAttribute('aria-selected', 'false');
+  tab.setAttribute('tabindex', '-1');
+
+  panel.setAttribute('role', 'tabpanel');
+  panel.setAttribute('aria-labelledby', tab.id);
+  panel.setAttribute('tabindex', '0');
+  panel.setAttribute('hidden', '');
+});
+
+// Activate a tab+panel pair
+function activate(tab) {
+  const panelId = tab.dataset.panel;
+  const panel   = panels.find(p => p.id === panelId);
+  if (!panel) return;
+
+  const doSwitch = () => {
+    tabs.forEach(t => {
+      t.setAttribute('aria-selected', 'false');
+      t.setAttribute('tabindex', '-1');
+    });
+    panels.forEach(p => p.setAttribute('hidden', ''));
+
+    tab.setAttribute('aria-selected', 'true');
+    tab.setAttribute('tabindex', '0');
+    panel.removeAttribute('hidden');
+  };
+
+  // View Transitions API for smooth panel switch
+  if (typeof document.startViewTransition === 'function') {
+    panel.setAttribute('data-vt', '');
+    document.startViewTransition(doSwitch).finished
+      .then(() => panel.removeAttribute('data-vt'))
+      .catch(() => panel.removeAttribute('data-vt'));
+  } else {
+    doSwitch();
+  }
+}
+
+// Keyboard navigation: ArrowRight, ArrowLeft, Home, End
+nav.addEventListener('keydown', (e) => {
+  const current = tabs.indexOf(document.activeElement);
+  if (current === -1) return;
+
+  let next = current;
+  if (e.key === 'ArrowRight') next = (current + 1) % tabs.length;
+  else if (e.key === 'ArrowLeft') next = (current - 1 + tabs.length) % tabs.length;
+  else if (e.key === 'Home') next = 0;
+  else if (e.key === 'End') next = tabs.length - 1;
+  else return;
+
+  e.preventDefault();
+  tabs[next].focus();
+  activate(tabs[next]);
+});
+
+// Click handling
+tabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    tab.focus();
+    activate(tab);
+  });
+});
+
+// Activate initial tab (from [active] prop, or first)
+const activeId  = el.getAttribute('active');
+const activeTab = (activeId && tabs.find(t => t.dataset.panel === activeId)) || tabs[0];
+activate(activeTab);
+
+// Signal init complete
+el.setAttribute('data-ready', 'true');
+</script>

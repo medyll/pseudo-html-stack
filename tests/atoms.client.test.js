@@ -838,6 +838,75 @@ describe('toggle-pk', () => {
 
 
 // =============================================================================
+// progress-pk
+// =============================================================================
+
+describe('progress-pk', () => {
+  const HTML = readAtom('progress-pk.html');
+  const SRC  = 'components/progress-pk.html';
+
+  it('resolves', async () => {
+    const obs = registerAndInit('progress-pk', SRC, HTML);
+    document.body.innerHTML = '<progress-pk value="50"></progress-pk>';
+    PseudoKit.init(document.body);
+    await flush();
+    expect(document.querySelector('progress-pk').dataset.pkResolved).toBe('true');
+    obs.disconnect();
+  });
+
+  it('stamps .progress wrapper with progress.progress__track', async () => {
+    const obs = registerAndInit('progress-pk', SRC, HTML);
+    document.body.innerHTML = '<progress-pk value="40"></progress-pk>';
+    PseudoKit.init(document.body);
+    await flush();
+    expect(document.querySelector('.progress')).toBeTruthy();
+    expect(document.querySelector('progress.progress__track')).toBeTruthy();
+    obs.disconnect();
+  });
+
+  it('sets value and max on native progress element', async () => {
+    const obs = registerAndInit('progress-pk', SRC, HTML);
+    document.body.innerHTML = '<progress-pk value="30" max="200"></progress-pk>';
+    PseudoKit.init(document.body);
+    await flush();
+    const track = document.querySelector('progress.progress__track');
+    expect(track.getAttribute('value')).toBe('30');
+    expect(track.getAttribute('max')).toBe('200');
+    obs.disconnect();
+  });
+
+  it('marks indeterminate when value is absent', async () => {
+    const obs = registerAndInit('progress-pk', SRC, HTML);
+    document.body.innerHTML = '<progress-pk></progress-pk>';
+    PseudoKit.init(document.body);
+    await flush();
+    const host  = document.querySelector('progress-pk');
+    const track = document.querySelector('progress.progress__track');
+    expect(host.hasAttribute('indeterminate')).toBe(true);
+    expect(track.hasAttribute('value')).toBe(false);
+    obs.disconnect();
+  });
+
+  it('sets aria-label from label prop (defaults to "Progress")', async () => {
+    const obs = registerAndInit('progress-pk', SRC, HTML);
+    document.body.innerHTML = '<progress-pk value="10" label="Upload progress"></progress-pk>';
+    PseudoKit.init(document.body);
+    await flush();
+    expect(document.querySelector('progress.progress__track').getAttribute('aria-label')).toBe('Upload progress');
+    obs.disconnect();
+  });
+
+  it('sets data-ready="true" on init', async () => {
+    const obs = registerAndInit('progress-pk', SRC, HTML);
+    document.body.innerHTML = '<progress-pk value="75"></progress-pk>';
+    PseudoKit.init(document.body);
+    await flush();
+    expect(document.querySelector('progress-pk').getAttribute('data-ready')).toBe('true');
+    obs.disconnect();
+  });
+});
+
+// =============================================================================
 // select-pk
 // =============================================================================
 

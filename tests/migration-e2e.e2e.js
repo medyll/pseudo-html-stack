@@ -20,41 +20,75 @@ import { test, expect } from '@playwright/test';
 const TEST_PAGE = 'http://localhost:3000/tests/fixtures/migration-test-page.html';
 
 test.describe('S9-06: Migration E2E Tests – Native API Behavior', () => {
-  // Helper to wait for readiness for a given Locator
-  async function waitForReady(page, locator) {
-    try {
-      await locator.waitFor({ state: 'visible', timeout: 5000 });
+  /**
+   * waitForReady — wait for a component locator to be interactive.
+   * Priority order:
+   *   1. data-ready attribute (set by component script on init complete)
+   *   2. Playwright built-in visible state
+   *   3. :popover-open (for popover menus)
+   *   4. aria-expanded="true" (for triggers reporting open state)
+   */
+  async function waitForReady(page, locator, timeout = 5000) {
+    const handle = await locator.elementHandle().catch(() => null);
+    if (!handle) {
+      // Element not yet in DOM — wait for it to appear
+      try { await locator.waitFor({ state: 'attached', timeout }); } catch (_) {}
       return;
-    } catch (e) {
-      // ignore and fallback to page-level polling
     }
-    const handle = await locator.elementHandle();
-    if (!handle) return;
     try {
       await page.waitForFunction((el) => {
-        try {
-          // broaden readiness: data-ready OR visible computed style OR popover-open OR aria-expanded on trigger OR presence in DOM with non-none display
-          const visible = window.getComputedStyle(el).display !== 'none';
-          const popoverOpen = (typeof el.matches === 'function' && el.matches(':popover-open'));
-          const hasPopoverAttr = (el.hasAttribute && el.hasAttribute('popover'));
-          const dialogOpen = (el.querySelector && el.querySelector('dialog')?.hasAttribute('open'));
-          const ariaExpanded = (el.getAttribute && el.getAttribute('aria-expanded') === 'true');
-          const hasDataReady = (el.hasAttribute && el.hasAttribute('data-ready'));
-          const hasChildrenVisible = (el.querySelector && Array.from(el.querySelectorAll('*')).some(c => window.getComputedStyle(c).display !== 'none'));
-          return hasDataReady || visible || popoverOpen || hasPopoverAttr || dialogOpen || ariaExpanded || hasChildrenVisible;
-        } catch (e) { return false; }
-      }, {}, handle);
-    } catch (e) {
-      // swallow timeout errors — let calling test assert final condition
-      return;
+        if (!el) return false;
+        if (el.hasAttribute('data-ready')) return true;
+        const style = window.getComputedStyle(el);
+        if (style.display !== 'none' && style.visibility !== 'hidden') return true;
+        if (typeof el.matches === 'function' && el.matches(':popover-open')) return true;
+        if (el.getAttribute('aria-expanded') === 'true') return true;
+        return false;
+      }, handle, { timeout });
+    } catch (_) {
+      // Timeout — let the calling assertion report the failure
     }
+  }
+
+  /**
+   * waitForDropdownOpen — waits specifically for dropdown menu to be in open state.
+   * Uses CSS selectors (no elementHandle) to avoid stale handle issues.
+   */
+  async function waitForDropdownOpen(page, dropdownLocator, timeout = 5000) {
+    // Try data-state="open" on the host element first (set by component toggle event)
+    const testid = await dropdownLocator.getAttribute('data-testid').catch(() => null);
+    if (testid) {
+      try {
+        await page.waitForSelector(`[data-testid="${testid}"][data-state="open"]`, { timeout });
+        return;
+      } catch (_) {}
+    }
+    // Fallback: :popover-open on menu or aria-expanded on trigger
+    try {
+      await page.waitForFunction(() => {
+        const menus = document.querySelectorAll('ul.dropdown__menu');
+        for (const menu of menus) {
+          if (typeof menu.matches === 'function' && menu.matches(':popover-open')) return true;
+          if (window.getComputedStyle(menu).display !== 'none') return true;
+        }
+        const triggers = document.querySelectorAll('button.dropdown__trigger');
+        for (const t of triggers) {
+          if (t.getAttribute('aria-expanded') === 'true') return true;
+        }
+        return false;
+      }, null, { timeout });
+    } catch (_) {}
   }
   test.skip(({ browserName }) => browserName !== 'chromium', 'Native API tests run only on Chromium (S9-06)');
   test.beforeEach(async ({ page }) => {
-    // Navigate to test page
     await page.goto(TEST_PAGE, { waitUntil: 'networkidle' });
-    // Wait for components to register
     await page.waitForLoadState('domcontentloaded');
+    // Wait for key interactive components to signal init complete via data-ready
+    await page.waitForFunction(() => {
+      const dropdown = document.querySelector('[data-testid="dropdown-component"]');
+      const trigger = document.querySelector('[data-testid="modal-trigger"]');
+      return dropdown?.hasAttribute('data-ready') && !!trigger;
+    }, { timeout: 10000 }).catch(() => {});
   });
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -163,23 +197,31 @@ test.describe('S9-06: Migration E2E Tests – Native API Behavior', () => {
       const dropdown = page.getByTestId('dropdown-component');
       const trigger = dropdown.locator('button.dropdown__trigger');
 
-      // Verify trigger exists
-      await expect(trigger).toBeVisible();
+      // Wait for component script to finish (popovertarget must be set before clicking)
+      await expect(trigger).toHaveAttribute('aria-expanded', 'false', { timeout: 5000 });
 
       // Click trigger to open
-      await waitForReady(page, trigger);
       await trigger.click();
-      await waitForReady(page, dropdown.locator('ul.dropdown__menu'));
+      // Use page.waitForFunction with a stable DOM poll — avoids handle staleness issues
+      await page.waitForFunction(() => {
+        const t = document.querySelector('[data-testid="dropdown-component"] button.dropdown__trigger');
+        const m = document.querySelector('[data-testid="dropdown-component"] ul.dropdown__menu');
+        if (!t || !m) return false;
+        if (t.getAttribute('aria-expanded') === 'true') return true;
+        if (typeof m.matches === 'function' && m.matches(':popover-open')) return true;
+        if (window.getComputedStyle(m).display !== 'none') return true;
+        return false;
+      }, null, { timeout: 5000 }).catch(() => {});
 
-      // Menu should be visible
+      // Menu should be in open state
       const menu = dropdown.locator('ul.dropdown__menu');
+      const hostState = await dropdown.getAttribute('data-state').catch(() => null);
       const isVisible = await menu.evaluate((el) => {
         const style = window.getComputedStyle(el);
-        return style.display !== 'none' || (typeof el.matches === 'function' && el.matches(':popover-open')) || el.hasAttribute('popover');
+        return style.display !== 'none' || (typeof el.matches === 'function' && el.matches(':popover-open'));
       });
-      const triggerAria = await trigger.getAttribute('aria-expanded').catch(() => null);
-      const ariaExpanded = triggerAria === 'true';
-      expect(isVisible || ariaExpanded).toBe(true);
+      const ariaExpanded = await trigger.getAttribute('aria-expanded').catch(() => null);
+      expect(hostState === 'open' || isVisible || ariaExpanded === 'true').toBe(true);
 
       // Click again to close
       await trigger.click();
@@ -357,9 +399,13 @@ test.describe('S9-06: Migration E2E Tests – Native API Behavior', () => {
       const trigger = page.getByTestId('notif-auto-trigger');
       const container = page.getByTestId('notification-area');
 
-      // Click trigger
+      // Click trigger and wait for notification to appear with data-ready
       await trigger.click();
-      await page.waitForTimeout(100);
+      await page.waitForFunction(() => {
+        const area = document.querySelector('[data-testid="notification-area"]');
+        const n = area?.querySelector('notification-pk');
+        return n && n.hasAttribute('data-ready');
+      }, { timeout: 5000 }).catch(() => {});
 
       // Notification should be visible
       let notif = container.locator('notification-pk');
@@ -480,36 +526,65 @@ test.describe('S9-06: Migration E2E Tests – Native API Behavior', () => {
     test('should allow modal and dropdown to coexist and interact independently', async ({
       page,
     }) => {
+      // This test verifies independent operation, not simultaneous open state.
+      // popover="auto" light-dismisses when an outside element (modal trigger) is clicked —
+      // this is correct browser behavior. We verify each component works on its own.
       const modalTrigger = page.getByTestId('modal-trigger');
-      const dropdownTrigger = page.getByTestId('dropdown-component').locator('button');
+      const dropdown = page.getByTestId('dropdown-component');
+      const dropdownTrigger = dropdown.locator('button.dropdown__trigger');
 
-      // Open dropdown first to avoid modal overlay intercepting pointer events
+      // 1. Verify dropdown can open and close independently
       await expect(dropdownTrigger).toBeVisible({ timeout: 5000 });
-      await waitForReady(page, dropdownTrigger);
       await dropdownTrigger.click();
-      await waitForReady(page, page.getByTestId('dropdown-component').locator('ul.dropdown__menu'));
+      await page.waitForFunction(() => {
+        const t = document.querySelector('[data-testid="dropdown-component"] button.dropdown__trigger');
+        const m = document.querySelector('[data-testid="dropdown-component"] ul.dropdown__menu');
+        if (!t || !m) return false;
+        if (t.getAttribute('aria-expanded') === 'true') return true;
+        if (typeof m.matches === 'function' && m.matches(':popover-open')) return true;
+        if (window.getComputedStyle(m).display !== 'none') return true;
+        return false;
+      }, null, { timeout: 5000 }).catch(() => {});
 
-      // Then open modal
+      const dropdownOpened = await dropdown.getAttribute('data-state').catch(() => null);
+      expect(dropdownOpened === 'open' ||
+        await dropdown.locator('ul.dropdown__menu').evaluate(el =>
+          typeof el.matches === 'function' && el.matches(':popover-open')
+        ).catch(() => false)
+      ).toBe(true);
+
+      // Close dropdown via click outside before opening modal
+      await page.keyboard.press('Escape');
+      await page.waitForFunction(
+        (host) => host?.getAttribute('data-state') !== 'open',
+        {},
+        await dropdown.elementHandle().catch(() => null),
+        { timeout: 3000 }
+      ).catch(() => {});
+
+      // 2. Verify modal can open independently
       await expect(modalTrigger).toBeVisible({ timeout: 5000 });
       await modalTrigger.click();
-      await page.waitForTimeout(100);
+      await page.waitForTimeout(200);
 
-      // Both should be visible
       const modalOpen = await page
         .getByTestId('modal-component')
         .evaluate((el) => el.querySelector('dialog')?.hasAttribute('open'));
-      const dropdownOpen = await page
-        .getByTestId('dropdown-component')
-        .locator('ul.dropdown__menu')
-        .evaluate((el) => {
-          const style = window.getComputedStyle(el);
-          return style.display !== 'none' || (typeof el.matches === 'function' && el.matches(':popover-open')) || el.hasAttribute('popover');
-        });
-      const dropdownTriggerAria = await page.getByTestId('dropdown-component').locator('button').getAttribute('aria-expanded').catch(() => null);
-      const dropdownAria = dropdownTriggerAria === 'true';
-
       expect(modalOpen).toBe(true);
-      expect(dropdownOpen || dropdownAria).toBe(true);
+
+      // Close modal
+      await page.keyboard.press('Escape');
+      await page.waitForTimeout(200);
+
+      // 3. Verify dropdown is still functional after modal was open
+      await dropdownTrigger.click();
+      await waitForDropdownOpen(page, dropdown);
+      const dropdownStillWorks = await dropdown.getAttribute('data-state').catch(() => null);
+      expect(dropdownStillWorks === 'open' ||
+        await dropdown.locator('ul.dropdown__menu').evaluate(el =>
+          typeof el.matches === 'function' && el.matches(':popover-open')
+        ).catch(() => false)
+      ).toBe(true);
     });
 
     test('should allow tooltips to show while notification is present', async ({ page }) => {
