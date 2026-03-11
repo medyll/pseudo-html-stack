@@ -1,0 +1,108 @@
+<!--
+  @component breadcrumb-pk
+  @layer molecules
+
+  @prop {string} [label='Breadcrumb'] - aria-label for the nav landmark
+  @prop {string} [separator='/'] - CSS content value for the separator (e.g. '›', '/')
+
+  @slot items - `<a href="...">Label</a>` or `<span>Label</span>` crumb items;
+                last item is automatically marked aria-current="page"
+-->
+<template>
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <ol class="breadcrumb__list">
+      <slot name="items"></slot>
+    </ol>
+  </nav>
+</template>
+
+<style>
+  @scope (.breadcrumb) {
+    :scope {
+      display: block;
+    }
+
+    .breadcrumb__list {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      font-size: var(--text-sm, .875rem);
+    }
+
+    .breadcrumb__item {
+      display: flex;
+      align-items: center;
+    }
+
+    /* Separator via pseudo-element */
+    .breadcrumb__item + .breadcrumb__item::before {
+      content: var(--breadcrumb-separator, '/');
+      padding: 0 .5rem;
+      color: var(--color-text-muted, #94a3b8);
+    }
+
+    .breadcrumb__item a {
+      color: var(--color-primary, #3b82f6);
+      text-decoration: none;
+      transition: color .15s;
+    }
+    .breadcrumb__item a:hover {
+      color: var(--color-primary-dark, #2563eb);
+      text-decoration: underline;
+    }
+    .breadcrumb__item a:focus-visible {
+      outline: 2px solid var(--color-primary, #3b82f6);
+      outline-offset: 2px;
+      border-radius: var(--radius-sm, .25rem);
+    }
+
+    /* Current page — last crumb */
+    .breadcrumb__item [aria-current="page"] {
+      color: var(--color-text, #1a202c);
+      font-weight: 500;
+      pointer-events: none;
+    }
+  }
+</style>
+
+<script>
+const nav  = el.querySelector('nav.breadcrumb');
+const list = el.querySelector('.breadcrumb__list');
+if (!nav || !list) { el.setAttribute('data-ready', 'true'); return; }
+
+// Apply label prop
+const label = el.getAttribute('label');
+if (label) nav.setAttribute('aria-label', label);
+
+// Collect slotted item elements (direct element children of the host with slot="items",
+// or fall back to scanning the list for already-slotted nodes)
+let items = [...el.querySelectorAll('[slot="items"]')];
+
+// Fallback: items are text/element nodes that were already placed in the list by PseudoKit
+if (!items.length) {
+  items = [...list.children].filter(n => n.tagName !== 'SLOT');
+}
+
+if (!items.length) { el.setAttribute('data-ready', 'true'); return; }
+
+// Wrap each item in an li.breadcrumb__item (if not already)
+items.forEach((item, i) => {
+  if (item.parentElement?.classList.contains('breadcrumb__item')) return;
+  const li = document.createElement('li');
+  li.className = 'breadcrumb__item';
+  item.replaceWith(li);
+  li.appendChild(item);
+  list.appendChild(li);
+
+  // Mark last item as current page
+  if (i === items.length - 1) {
+    item.setAttribute('aria-current', 'page');
+  }
+});
+
+el.setAttribute('data-ready', 'true');
+</script>

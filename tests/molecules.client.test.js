@@ -62,12 +62,12 @@ beforeEach(() => {
 // =============================================================================
 
 describe('breadcrumb-pk', () => {
-  const HTML = readMolecule('breadcrumb.html');
-  const SRC  = 'components/breadcrumb.html';
+  const HTML = readMolecule('breadcrumb-pk.html');
+  const SRC  = 'components/breadcrumb-pk.html';
 
   it('resolves', async () => {
     const obs = registerAndInit('breadcrumb-pk', SRC, HTML);
-    document.body.innerHTML = '<breadcrumb-pk></breadcrumb-pk>';
+    document.body.innerHTML = '<breadcrumb-pk><a slot="items" href="/">Home</a><span slot="items">Page</span></breadcrumb-pk>';
     PseudoKit.init(document.body);
     await flush();
     expect(document.querySelector('breadcrumb-pk').dataset.pkResolved).toBe('true');
@@ -76,7 +76,7 @@ describe('breadcrumb-pk', () => {
 
   it('stamps nav.breadcrumb with aria-label', async () => {
     const obs = registerAndInit('breadcrumb-pk', SRC, HTML);
-    document.body.innerHTML = '<breadcrumb-pk></breadcrumb-pk>';
+    document.body.innerHTML = '<breadcrumb-pk><a slot="items" href="/">Home</a><span slot="items">Page</span></breadcrumb-pk>';
     PseudoKit.init(document.body);
     await flush();
     const nav = document.querySelector('nav.breadcrumb');
@@ -87,10 +87,49 @@ describe('breadcrumb-pk', () => {
 
   it('contains ol.breadcrumb__list', async () => {
     const obs = registerAndInit('breadcrumb-pk', SRC, HTML);
-    document.body.innerHTML = '<breadcrumb-pk></breadcrumb-pk>';
+    document.body.innerHTML = '<breadcrumb-pk><a slot="items" href="/">Home</a><span slot="items">Page</span></breadcrumb-pk>';
     PseudoKit.init(document.body);
     await flush();
     expect(document.querySelector('ol.breadcrumb__list')).toBeTruthy();
+    obs.disconnect();
+  });
+
+  it('wraps items in li.breadcrumb__item elements', async () => {
+    const obs = registerAndInit('breadcrumb-pk', SRC, HTML);
+    document.body.innerHTML = '<breadcrumb-pk><a slot="items" href="/">Home</a><a slot="items" href="/cat">Category</a><span slot="items">Page</span></breadcrumb-pk>';
+    PseudoKit.init(document.body);
+    await flush();
+    const items = document.querySelectorAll('li.breadcrumb__item');
+    expect(items.length).toBe(3);
+    obs.disconnect();
+  });
+
+  it('marks last item with aria-current="page"', async () => {
+    const obs = registerAndInit('breadcrumb-pk', SRC, HTML);
+    document.body.innerHTML = '<breadcrumb-pk><a slot="items" href="/">Home</a><span slot="items">Current</span></breadcrumb-pk>';
+    PseudoKit.init(document.body);
+    await flush();
+    const items = document.querySelectorAll('li.breadcrumb__item');
+    const lastItem = items[items.length - 1].firstElementChild;
+    expect(lastItem.getAttribute('aria-current')).toBe('page');
+    obs.disconnect();
+  });
+
+  it('uses custom label prop for nav aria-label', async () => {
+    const obs = registerAndInit('breadcrumb-pk', SRC, HTML);
+    document.body.innerHTML = '<breadcrumb-pk label="You are here"><span slot="items">Home</span></breadcrumb-pk>';
+    PseudoKit.init(document.body);
+    await flush();
+    expect(document.querySelector('nav.breadcrumb').getAttribute('aria-label')).toBe('You are here');
+    obs.disconnect();
+  });
+
+  it('sets data-ready="true" on init', async () => {
+    const obs = registerAndInit('breadcrumb-pk', SRC, HTML);
+    document.body.innerHTML = '<breadcrumb-pk><span slot="items">Home</span></breadcrumb-pk>';
+    PseudoKit.init(document.body);
+    await flush();
+    expect(document.querySelector('breadcrumb-pk').getAttribute('data-ready')).toBe('true');
     obs.disconnect();
   });
 });

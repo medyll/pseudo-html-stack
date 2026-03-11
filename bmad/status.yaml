@@ -142,8 +142,8 @@ pseudo_assets:
 
 qa:
   test_plan: done
-  coverage: "597 passing — 226 node:test + 333 vitest + 38 E2E Chromium (18 migration + 20 form) · 0 failures"
-  last_run: "2026-03-10"
+  coverage: "623 passing — 226 node:test + 359 vitest (345 main + 14 react adapter) + 38 E2E Chromium · 0 failures"
+  last_run: "2026-03-11"
   e2e_ready: true
   e2e_browsers: "Chromium, Firefox, WebKit"
   e2e_tests: "12 scenarios covering asset loading, UI interactions, error handling, accessibility"
@@ -191,7 +191,7 @@ decisions:
   - barrel_meta: "index.js: components + frames URLs + componentsMeta + framesMeta"
   - ssr_marker: "data-pk-hydrated on each SSR-rendered component root"
 
-release_status: "✅ v0.5.0 released"
+release_status: "✅ v0.5.1 stable · v0.6.0-alpha released"
 
 # v0.4.0 cycle — Phase 1: Interaction Components Migration
 migration_v040:
@@ -300,7 +300,7 @@ sprint_13_stories:
     status: done
     story: artifacts/stories/S13-05-theme-skin-system.md
 
-recommendation: "Sprint 14: S14-01 through S14-04 all done. 597 tests passing. Sprint 14 complete — consider Sprint 15 planning."
+recommendation: "Sprint 16 complete. v0.6.0-alpha released. 623 tests passing. Next: Sprint 17 — pseudo-kit-svelte adapter or VSCode extension, or v0.6.0 GA release."
 audit:
   baseline: true
   file: artifacts/audit-baseline-2026-03-07.md

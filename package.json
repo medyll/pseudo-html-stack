@@ -1,9 +1,12 @@
 {
   "name": "pseudo-stack",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Vanilla HTML component system for pseudo-HTML layout descriptors. No build step. No framework.",
   "type": "module",
   "license": "MIT",
+  "bin": {
+    "pseudo-kit": "./bin/pseudo-kit-init.js"
+  },
   "exports": {
     ".": "./src/client/pseudo-kit-client.js",
     "./client": "./src/client/pseudo-kit-client.js",

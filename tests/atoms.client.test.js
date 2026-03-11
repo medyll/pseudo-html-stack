@@ -953,3 +953,89 @@ describe('select-pk', () => {
     obs.disconnect();
   });
 });
+
+// =============================================================================
+// slider-pk
+// =============================================================================
+
+describe('slider-pk', () => {
+  const HTML = readAtom('slider-pk.html');
+  const SRC  = 'components/slider-pk.html';
+
+  it('resolves', async () => {
+    const obs = registerAndInit('slider-pk', SRC, HTML);
+    document.body.innerHTML = '<slider-pk></slider-pk>';
+    PseudoKit.init(document.body);
+    await flush();
+    expect(document.querySelector('slider-pk').dataset.pkResolved).toBe('true');
+    obs.disconnect();
+  });
+
+  it('stamps .slider wrapper with input[type="range"].slider__input', async () => {
+    const obs = registerAndInit('slider-pk', SRC, HTML);
+    document.body.innerHTML = '<slider-pk></slider-pk>';
+    PseudoKit.init(document.body);
+    await flush();
+    expect(document.querySelector('.slider')).toBeTruthy();
+    const input = document.querySelector('input[type="range"].slider__input');
+    expect(input).toBeTruthy();
+    obs.disconnect();
+  });
+
+  it('forwards min, max, step from props', async () => {
+    const obs = registerAndInit('slider-pk', SRC, HTML);
+    document.body.innerHTML = '<slider-pk min="10" max="50" step="5"></slider-pk>';
+    PseudoKit.init(document.body);
+    await flush();
+    const input = document.querySelector('input.slider__input');
+    expect(input.getAttribute('min')).toBe('10');
+    expect(input.getAttribute('max')).toBe('50');
+    expect(input.getAttribute('step')).toBe('5');
+    obs.disconnect();
+  });
+
+  it('sets explicit value when provided', async () => {
+    const obs = registerAndInit('slider-pk', SRC, HTML);
+    document.body.innerHTML = '<slider-pk value="30"></slider-pk>';
+    PseudoKit.init(document.body);
+    await flush();
+    expect(document.querySelector('input.slider__input').getAttribute('value')).toBe('30');
+    obs.disconnect();
+  });
+
+  it('defaults value to midpoint when absent', async () => {
+    const obs = registerAndInit('slider-pk', SRC, HTML);
+    document.body.innerHTML = '<slider-pk min="0" max="100"></slider-pk>';
+    PseudoKit.init(document.body);
+    await flush();
+    expect(document.querySelector('input.slider__input').getAttribute('value')).toBe('50');
+    obs.disconnect();
+  });
+
+  it('disables inner input when disabled prop is set', async () => {
+    const obs = registerAndInit('slider-pk', SRC, HTML);
+    document.body.innerHTML = '<slider-pk disabled></slider-pk>';
+    PseudoKit.init(document.body);
+    await flush();
+    expect(document.querySelector('input.slider__input').hasAttribute('disabled')).toBe(true);
+    obs.disconnect();
+  });
+
+  it('sets aria-label from label prop', async () => {
+    const obs = registerAndInit('slider-pk', SRC, HTML);
+    document.body.innerHTML = '<slider-pk label="Volume"></slider-pk>';
+    PseudoKit.init(document.body);
+    await flush();
+    expect(document.querySelector('input.slider__input').getAttribute('aria-label')).toBe('Volume');
+    obs.disconnect();
+  });
+
+  it('sets data-ready="true" on init', async () => {
+    const obs = registerAndInit('slider-pk', SRC, HTML);
+    document.body.innerHTML = '<slider-pk></slider-pk>';
+    PseudoKit.init(document.body);
+    await flush();
+    expect(document.querySelector('slider-pk').getAttribute('data-ready')).toBe('true');
+    obs.disconnect();
+  });
+});

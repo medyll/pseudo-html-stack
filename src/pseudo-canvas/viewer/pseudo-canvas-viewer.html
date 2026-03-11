@@ -831,18 +831,62 @@ if (params.has('assets') && params.get('assets') === 'auto') {
 }
 
 if (params.has('canvas')) {
-  (async () => {
+  const canvasUrl = params.get('canvas');
+  let _watchAsset = null;
+
+  async function loadCanvasFile() {
     try {
-      const html = await fetch(params.get('canvas')).then(r => r.text());
-      const filename = params.get('canvas').split('/').pop();
+      const html = await fetch(canvasUrl, { cache: 'no-store' }).then(r => r.text());
+      const filename = canvasUrl.split('/').pop();
       const asset = await loader.loadFromText(html, filename);
       ui.renderTree();
       ui.select(asset);
-      ui.toast(`📄 Loaded ${filename}`);
+      return asset;
     } catch (e) {
       ui.toast('❌ Cannot load canvas: ' + e.message);
+      return null;
     }
+  }
+
+  (async () => {
+    _watchAsset = await loadCanvasFile();
+    if (_watchAsset) ui.toast(`📄 Loaded ${canvasUrl.split('/').pop()}`);
   })();
+
+  // Live reload: poll for changes via ETag / Last-Modified when ?watch=1
+  if (params.has('watch') && params.get('watch') !== '0') {
+    let _lastEtag = null;
+    let _lastModified = null;
+    const POLL_MS = 1000;
+
+    async function pollForChanges() {
+      try {
+        const res = await fetch(canvasUrl, { method: 'HEAD', cache: 'no-store' });
+        const etag    = res.headers.get('etag');
+        const lastMod = res.headers.get('last-modified');
+
+        const changed =
+          (etag     && etag     !== _lastEtag) ||
+          (lastMod  && lastMod  !== _lastModified) ||
+          (!etag && !lastMod && _lastEtag !== null); // server doesn't send headers — skip
+
+        if (changed || (_lastEtag === null && _lastModified === null)) {
+          _lastEtag     = etag;
+          _lastModified = lastMod;
+          if (changed && _lastEtag !== null) {
+            _watchAsset = await loadCanvasFile();
+            if (_watchAsset) ui.toast('🔄 Reloaded');
+          }
+        }
+      } catch (_) { /* server may be restarting — ignore */ }
+
+      setTimeout(pollForChanges, POLL_MS);
+    }
+
+    // Delay first poll until initial load completes
+    setTimeout(pollForChanges, POLL_MS);
+    ui.toast('👁 Watching for changes…');
+  }
 }
 
 // ── Button: load all ────────────────────────────────────
