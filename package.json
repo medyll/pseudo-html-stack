@@ -42,14 +42,16 @@
     "test:all": "pnpm test && pnpm run test:client && pnpm run test:components && pnpm run test:viewer && pnpm run test:e2e",
     "test:coverage": "vitest run --coverage",
     "test:a11y": "playwright test --config playwright.a11y.config.js",
-    "serve:src": "npx serve src/ -p 3001",
+    "serve": "serve src/www -p 3008",
+    "serve:src": "serve src/ -p 3008",
     "add-knowledge": "node scripts/add-knowledge-cli.js"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.1",
     "@playwright/test": "^1.58.2",
-    "happy-dom": "^14.0.0",
-    "vitest": "^2.0.0"
+    "happy-dom": "^20.8.3",
+    "serve": "^14.2.6",
+    "vitest": "^4.0.18"
   },
   "engines": {
     "node": ">=22.0.0"
