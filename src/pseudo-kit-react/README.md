@@ -1,6 +1,6 @@
 # pseudo-kit-react
 
-> Thin React 18 adapter for [pseudo-html-kit](https://github.com/your-org/pseudo-kit) components.  
+> Thin React 18 adapter for [pseudo-stack](https://github.com/your-org/pseudo-kit) components.  
 > Load and register pseudo-html components directly inside React apps — no build step.
 
 ---
@@ -59,7 +59,7 @@ function CardDemo() {
 
 ### `useComponent(url: string): { ready: boolean }`
 
-Loads and registers a single pseudo-html-kit component by URL.  
+Loads and registers a single pseudo-stack component by URL.  
 Returns `{ ready: false }` until the component is registered, then `{ ready: true }`.
 
 | Parameter | Type | Description |

@@ -1,4 +1,4 @@
-# pseudo-kit
+# pseudo-stack
 
 > Vanilla HTML component system. No build step. No framework. No dependencies.
 
@@ -12,15 +12,15 @@
 ## Installation
 
 ```bash
-npm install pseudo-html-kit
+npm install pseudo-stack
 # or
-pnpm add pseudo-html-kit
+pnpm add pseudo-stack
 ```
 
 **CDN (no install):**
 ```html
 <script type="module">
-  import PseudoKit from 'https://cdn.jsdelivr.net/npm/pseudo-html-kit/src/client/pseudo-kit-client.js';
+  import PseudoKit from 'https://cdn.jsdelivr.net/npm/pseudo-stack/src/client/pseudo-kit-client.js';
 </script>
 ```
 
@@ -64,7 +64,7 @@ pnpm add pseudo-html-kit
   <greeting name="Bob"></greeting>
 
   <script type="module">
-    import PseudoKit from 'pseudo-html-kit';
+    import PseudoKit from 'pseudo-stack';
 
     PseudoKit
       .register({ name: 'greeting', src: './components/greeting.html' })
@@ -127,7 +127,7 @@ Each component is a `.html` file with 3 blocks:
 | **Loops** | `<product-tile loop></product-tile>` → `PseudoKit.renderLoop('id', data)` |
 | **State** | `PseudoKit.state.focusMode = true` → CSS: `:root[data-focus-mode]` |
 | **Events** | `emit(el, 'name', detail)` |
-| **SSR** | `import { renderComponent } from 'pseudo-html-kit/server'` |
+| **SSR** | `import { renderComponent } from 'pseudo-stack/server'` |
 
 ---
 
@@ -165,15 +165,15 @@ Required: `adoptedStyleSheets`, `@scope`, `MutationObserver`, `<dialog>`, `popov
 
 ## Component Library (optional)
 
-Install `pseudo-kit-assets` for 61 pre-built components:
+Install `pseudo-stack-assets` for 61 pre-built components:
 
 ```bash
-npm install pseudo-kit-assets
+npm install pseudo-stack-assets
 ```
 
 ```javascript
-import PseudoKit from 'pseudo-html-kit';
-import { components } from 'pseudo-kit-assets';
+import PseudoKit from 'pseudo-stack';
+import { components } from 'pseudo-stack-assets';
 
 for (const def of components) {
   PseudoKit.register(def);

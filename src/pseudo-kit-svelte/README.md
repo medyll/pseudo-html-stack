@@ -1,6 +1,6 @@
 # pseudo-kit-svelte
 
-> Thin Svelte 5 adapter for [pseudo-html-kit](https://github.com/your-org/pseudo-kit) components.
+> Thin Svelte 5 adapter for [pseudo-stack](https://github.com/your-org/pseudo-kit) components.
 > Load and register pseudo-html components directly inside Svelte 5 apps — no build step.
 
 ---

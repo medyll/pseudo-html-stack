@@ -26,7 +26,7 @@
 - [Registering components](#registering-components)
   - [Manual registration](#manual-registration)
   - [Chained registration](#chained-registration)
-  - [Auto-registration with pseudo-kit-assets](#auto-registration-with-pseudo-kit-assets)
+  - [Auto-registration with pseudo-stack-assets](#auto-registration-with-pseudo-stack-assets)
 - [Slots](#slots)
   - [Default slot](#default-slot)
   - [Named slots](#named-slots)
@@ -48,7 +48,7 @@
   - [adoptedStyleSheets](#adoptedstylesheets)
   - [prefers-reduced-motion](#prefers-reduced-motion)
   - [focus-visible](#focus-visible)
-- [pseudo-kit-assets — component library](#pseudo-kit-assets)
+- [pseudo-stack-assets — component library](#pseudo-stack-assets)
   - [Atoms](#atoms)
   - [Molecules](#molecules)
   - [Organisms](#organisms)
@@ -107,7 +107,7 @@ This file is valid HTML. You can open it in a browser and the runtime will resol
 
 - A browser runtime (`pseudo-kit-client.js`) that resolves component tags into templates using fetch and MutationObserver
 - A Node.js server runtime (`pseudo-kit-server.js`) that renders components to HTML strings without a browser
-- A component library (`pseudo-kit-assets`) with 61 production-ready components across three layers
+- A component library (`pseudo-stack-assets`) with 61 production-ready components across three layers
 - Framework adapters for React and Svelte
 - A CLI for project initialization
 - A canvas viewer (`pseudo-canvas-viewer.html`) for visual design exploration
@@ -153,18 +153,18 @@ Required browser features: `adoptedStyleSheets`, `@scope`, CSS `@layer`, `popove
 
 **npm:**
 ```bash
-npm install pseudo-html-kit
+npm install pseudo-stack
 ```
 
 **pnpm:**
 ```bash
-pnpm add pseudo-html-kit
+pnpm add pseudo-stack
 ```
 
 **CDN (no install needed):**
 ```html
 <script type="module">
-  import PseudoKit from 'https://cdn.jsdelivr.net/npm/pseudo-html-kit/src/client/pseudo-kit-client.js';
+  import PseudoKit from 'https://cdn.jsdelivr.net/npm/pseudo-stack/src/client/pseudo-kit-client.js';
   // ... register and init
 </script>
 ```
@@ -214,7 +214,7 @@ The minimum viable setup: one HTML file, one component file, no server, no bundl
   <greeting name="Bob"></greeting>
 
   <script type="module">
-    import PseudoKit from './node_modules/pseudo-html-kit/src/client/pseudo-kit-client.js';
+    import PseudoKit from './node_modules/pseudo-stack/src/client/pseudo-kit-client.js';
 
     PseudoKit
       .register({ name: 'greeting', src: './components/greeting.html' })
@@ -357,7 +357,7 @@ This is useful for component libraries distributed as npm packages. Consumers im
 ### Manual registration
 
 ```javascript
-import PseudoKit from 'pseudo-html-kit';
+import PseudoKit from 'pseudo-stack';
 
 PseudoKit.register({ name: 'my-button', src: '/components/my-button.html' });
 PseudoKit.init();
@@ -381,13 +381,13 @@ PseudoKit
   .init();
 ```
 
-### Auto-registration with pseudo-kit-assets
+### Auto-registration with pseudo-stack-assets
 
-The `pseudo-kit-assets` package exports a registry index. Import it and register all components in one call:
+The `pseudo-stack-assets` package exports a registry index. Import it and register all components in one call:
 
 ```javascript
-import PseudoKit from 'pseudo-html-kit';
-import { components } from 'pseudo-kit-assets';
+import PseudoKit from 'pseudo-stack';
+import { components } from 'pseudo-stack-assets';
 // components is an array of { name, src } objects — one entry per component
 
 for (const def of components) {
@@ -399,7 +399,7 @@ PseudoKit.init();
 Or use `componentsMeta` for programmatic introspection:
 
 ```javascript
-import { componentsMeta } from 'pseudo-kit-assets';
+import { componentsMeta } from 'pseudo-stack-assets';
 // componentsMeta is an array of { name, src, layer, props, slots } objects
 ```
 
@@ -532,7 +532,7 @@ The `loop` attribute on a component tag marks it as a repeating template. The el
 
 **Script:**
 ```javascript
-import PseudoKit from 'pseudo-html-kit';
+import PseudoKit from 'pseudo-stack';
 
 PseudoKit.register({ name: 'product-tile', src: '/components/product-tile.html' }).init();
 
@@ -566,7 +566,7 @@ The global state proxy (`PseudoKit.state`) connects JavaScript state to CSS via 
 ### Writing state
 
 ```javascript
-import PseudoKit from 'pseudo-html-kit';
+import PseudoKit from 'pseudo-stack';
 
 // camelCase keys are converted to kebab-case data attributes
 PseudoKit.state.focusMode = true;
@@ -642,7 +642,7 @@ document.addEventListener('card:dismissed', (e) => {
 
 ## Theme system
 
-The `pseudo-kit-assets` package includes a theme system with three layers: base tokens, utility mixins, and brand skins.
+The `pseudo-stack-assets` package includes a theme system with three layers: base tokens, utility mixins, and brand skins.
 
 ### theme.css
 
@@ -654,7 +654,7 @@ The `pseudo-kit-assets` package includes a theme system with three layers: base 
 
 **Usage:**
 ```html
-<link rel="stylesheet" href="node_modules/pseudo-kit-assets/theme/theme.css">
+<link rel="stylesheet" href="node_modules/pseudo-stack-assets/theme/theme.css">
 ```
 
 **Available token categories:**
@@ -676,8 +676,8 @@ The `pseudo-kit-assets` package includes a theme system with three layers: base 
 
 **Usage:**
 ```html
-<link rel="stylesheet" href="node_modules/pseudo-kit-assets/theme/theme.css">
-<link rel="stylesheet" href="node_modules/pseudo-kit-assets/theme/utils.css">
+<link rel="stylesheet" href="node_modules/pseudo-stack-assets/theme/theme.css">
+<link rel="stylesheet" href="node_modules/pseudo-stack-assets/theme/utils.css">
 ```
 
 **Available mixins:**
@@ -709,9 +709,9 @@ A skin is a CSS file that overrides token values for a specific brand. Three ski
 ```html
 <html data-skin="netflix">
 <head>
-  <link rel="stylesheet" href="node_modules/pseudo-kit-assets/theme/theme.css">
-  <link rel="stylesheet" href="node_modules/pseudo-kit-assets/theme/utils.css">
-  <link rel="stylesheet" href="node_modules/pseudo-kit-assets/skins/netflix.css">
+  <link rel="stylesheet" href="node_modules/pseudo-stack-assets/theme/theme.css">
+  <link rel="stylesheet" href="node_modules/pseudo-stack-assets/theme/utils.css">
+  <link rel="stylesheet" href="node_modules/pseudo-stack-assets/skins/netflix.css">
 </head>
 ```
 
@@ -802,9 +802,9 @@ All interactive elements use `:focus-visible` instead of `:focus` to avoid showi
 
 ---
 
-## pseudo-kit-assets
+## pseudo-stack-assets
 
-The `pseudo-kit-assets` package contains 61 production-ready components, a theme system, demo apps, and the canvas viewer.
+The `pseudo-stack-assets` package contains 61 production-ready components, a theme system, demo apps, and the canvas viewer.
 
 ### Atoms
 
@@ -910,7 +910,7 @@ pseudo-kit supports server-side rendering via `pseudo-kit-server.js`. The server
 ### Server API
 
 ```javascript
-import PseudoKit from 'pseudo-html-kit/server';
+import PseudoKit from 'pseudo-stack/server';
 
 // Register components server-side
 PseudoKit.register({ name: 'navbar', src: './src/components/navbar.html' });
@@ -943,7 +943,7 @@ The output includes two hydration markers:
 **Inline state for hydration:**
 
 ```javascript
-import PseudoKit from 'pseudo-html-kit/server';
+import PseudoKit from 'pseudo-stack/server';
 
 const stateTag = PseudoKit.serializeStateToTag({ activeTab: 'home', userLoggedIn: true });
 // Returns: <script id="pk-state" type="application/json">{"activeTab":"home","userLoggedIn":true}</script>
@@ -1207,12 +1207,12 @@ The binary is exposed as `pseudo-kit` in `package.json` `bin`:
 
 ## Client API reference
 
-All methods are available on the default export from `pseudo-html-kit`.
+All methods are available on the default export from `pseudo-stack`.
 
 ```javascript
-import PseudoKit from 'pseudo-html-kit';
+import PseudoKit from 'pseudo-stack';
 // or
-import PseudoKit from 'pseudo-html-kit/client';
+import PseudoKit from 'pseudo-stack/client';
 ```
 
 ### PseudoKit.register(input)
@@ -1305,7 +1305,7 @@ PseudoKit.state.darkMode   = false;     // removes data-dark-mode
 ## Server API reference
 
 ```javascript
-import PseudoKit from 'pseudo-html-kit/server';
+import PseudoKit from 'pseudo-stack/server';
 ```
 
 ### PseudoKit.register(input)
@@ -1489,8 +1489,8 @@ All scripts are available via `pnpm run`:
 ### Setup
 
 ```bash
-git clone https://github.com/your-org/pseudo-html-kit.git
-cd pseudo-html-kit
+git clone https://github.com/your-org/pseudo-stack.git
+cd pseudo-stack
 pnpm install
 pnpm test
 ```
@@ -1498,7 +1498,7 @@ pnpm test
 ### Project structure
 
 ```
-pseudo-html-kit/
+pseudo-stack/
 ├── src/
 │   ├── client/               # Browser runtime (pseudo-kit-client.js)
 │   ├── server/               # Node.js runtime (pseudo-kit-server.js, canvas-validator.js, canvas-normalize.js)
