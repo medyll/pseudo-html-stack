@@ -1,6 +1,6 @@
 project:
-  name: pseudo-html-kit
-  version: "0.1.0"
+  name: pseudo-stack
+  version: "1.0.0"
   description: >
     Vanilla HTML component system for pseudo-HTML layout descriptors —
     no build step, no framework. Supports SSR (Node.js), client-side

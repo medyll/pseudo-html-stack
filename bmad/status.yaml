@@ -184,6 +184,23 @@ deferred_backlog:
     priority: "last — do not schedule until all other v1.0.0 goals are done"
     note: "Explicitly deprioritized by user on 2026-03-11"
 
+corrections_backlog:
+  decision_pkg_name: "pseudo-stack (locked 2026-05-18)"
+  detail: "artifacts/corrections-pkg-naming.md"
+  items:
+    - id: FIX-PKG-01
+      title: "Align README install snippet + CDN URL + bin key to pseudo-stack"
+      status: done
+      priority: high
+    - id: FIX-PKG-02
+      title: "Fix README assets package name: pseudo-kit-assets → pseudo-stack-assets"
+      status: done
+      priority: high
+    - id: FIX-PKG-03
+      title: "Bump peerDependencies lower bound to >=1.0.0"
+      status: done
+      priority: low
+
 decisions:
   - pkg_structure: "pseudo-kit-assets as separate npm package"
   - naming: "component files use -pk suffix to match their tag name (e.g. button-pk.html → <button-pk>)"
@@ -306,11 +323,29 @@ sprint_13_stories:
     status: done
     story: artifacts/stories/S13-05-theme-skin-system.md
 
-recommendation: "🎉 v1.0.0 RELEASED. Sprint 21 complete. All 21 sprints done. API locked. 61 components. WCAG 2.2 AA. 661+ tests. VSCode extension remains deferred (post-1.0.0 backlog)."
+recommendation: "🎉 v1.0.0 RELEASED + naming corrections complete (S22). All 22 sprints done. API locked. 61 components. WCAG 2.2 AA. 661+ tests. Package naming aligned to pseudo-stack across all files."
 audit:
   baseline: true
   file: artifacts/audit-baseline-2026-03-07.md
 
+
+sprint_22:
+  file: artifacts/sprints/sprint-22.md
+  status: done
+  progress: 100
+  stories:
+    - id: S22-01
+      title: "FIX-PKG-01: README + bin key → pseudo-stack"
+      points: 2
+      status: done
+    - id: S22-02
+      title: "FIX-PKG-02: README assets → pseudo-stack-assets"
+      points: 1
+      status: done
+    - id: S22-03
+      title: "FIX-PKG-03: peerDependencies lower bound → >=1.0.0"
+      points: 1
+      status: done
 
 sprint_11:
   file: artifacts/sprints/sprint-11.md
