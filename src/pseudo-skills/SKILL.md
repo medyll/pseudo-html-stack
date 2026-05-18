@@ -1,10 +1,16 @@
-# SKILL — Pseudo-HTML Layout Descriptor
+# SKILL — Pseudo-HTML Stack (Descriptor + Generators)
+
+> **Scope split:**
+> - **Pure tag taxonomy** (component / zone / group / atom naming, CSS `display` rule, no class/style on structural tags) lives in the **`pseudo-html`** skill at `~/.claude/skills/pseudo-html/SKILL.md`.
+> - **This file = stack layer**: bindings, states, behavior, command/action, repeat loops, component-registry, framework targets, migration. Mirrors the **`pseudo-stack`** skill at `~/.claude/skills/pseudo-stack/SKILL.md`.
 
 ## What is pseudo-HTML?
 
 Pseudo-HTML is a language-agnostic interface descriptor. It describes GUI layouts, components, their props, data, events, and behaviour — without styling or business logic. It serves as a single source of truth consumed by AI code generators, developers, and documentation tools.
 
 It is **not** valid HTML. It borrows HTML syntax for readability, but its semantics are its own.
+
+**Structural tag rules** (component/zone/group/atom, `-component` suffix, native+class for atoms) are out of scope here — see the `pseudo-html` skill. This document covers everything dynamic layered on top.
 
 ---
 
