@@ -57,7 +57,7 @@
     "@playwright/test": "^1.63.0",
     "happy-dom": "^20.14.5",
     "serve": "^14.2.6",
-    "vitest": "^4.1.11"
+    "vitest": "^5.0.2"
   },
   "engines": {
     "node": ">=22.0.0"
