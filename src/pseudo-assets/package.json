@@ -21,7 +21,7 @@
     "pseudo-stack": ">=1.0.0"
   },
   "devDependencies": {
-    "oxlint": "^1.53.0",
+    "oxlint": "^1.86.0",
     "pseudo-stack": "workspace:*"
   },
   "keywords": [
